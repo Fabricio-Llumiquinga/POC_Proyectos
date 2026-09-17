@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LA GUACA CR – Búsqueda Inteligente de Repuestos</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- ============ HEADER ============ -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <span class="logo-icon">🔧</span>
+                <span class="logo-text">LA GUACA <span class="logo-cr">CR</span></span>
+            </div>
+            <nav class="role-selector" id="roleNav">
+                <button class="role-btn active" data-role="landing">🏠 Inicio</button>
+                <button class="role-btn" data-role="cliente">🛒 Cliente Web</button>
+                <button class="role-btn" data-role="vendedor">💼 Vendedor POS</button>
+                <button class="role-btn" data-role="admin">📊 Administrador</button>
+            </nav>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+        </div>
+    </header>
+
+    <!-- ============ TOAST CONTAINER ============ -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- ============ LANDING ============ -->
+    <section id="view-landing" class="view active">
+        <div class="landing-hero">
+            <h1>Búsqueda Inteligente de Repuestos</h1>
+            <p class="subtitle">Encuentra el repuesto correcto por placa, vehículo, SKU o lenguaje natural</p>
+        </div>
+        <div class="benefits-grid">
+            <div class="benefit-card">
+                <span class="benefit-icon">✅</span>
+                <h3>Menos errores de repuesto</h3>
+                <p>El sistema valida compatibilidad automáticamente</p>
+            </div>
+            <div class="benefit-card">
+                <span class="benefit-icon">🚀</span>
+                <h3>Vendedores expertos desde el día uno</h3>
+                <p>Sin depender de conocimiento manual acumulado</p>
+            </div>
+            <div class="benefit-card">
+                <span class="benefit-icon">🌐</span>
+                <h3>Más catálogo disponible en línea</h3>
+                <p>Habilitación progresiva del ecommerce</p>
+            </div>
+            <div class="benefit-card">
+                <span class="benefit-icon">🔗</span>
+                <h3>Una sola lógica para POS y Web</h3>
+                <p>Motor unificado que responde a todos los canales</p>
+            </div>
+        </div>
+        <div class="landing-actions">
+            <button class="btn btn-primary btn-lg" onclick="setRole('cliente')">🛒 Iniciar como Cliente Web</button>
+            <button class="btn btn-secondary btn-lg" onclick="setRole('vendedor')">💼 Iniciar como Vendedor POS</button>
+        </div>
+    </section>
+
+    <!-- ============ CLIENTE WEB ============ -->
+    <section id="view-cliente" class="view">
+        <div class="search-tabs">
+            <button class="tab-btn active" data-tab="placa" data-context="cliente">🚗 Por Placa</button>
+            <button class="tab-btn" data-tab="garage" data-context="cliente">🔧 Por Vehículo</button>
+            <button class="tab-btn" data-tab="sku" data-context="cliente">🏷️ Por SKU</button>
+        </div>
+
+        <!-- Tab: Placa -->
+        <div class="tab-content active" id="tab-placa-cliente">
+            <div class="search-box">
+                <h2>Buscar por Placa de Costa Rica</h2>
+                <div class="input-group">
+                    <input type="text" id="placaInputCliente" placeholder="Ej: ABC123" maxlength="10" class="input-lg">
+                    <button class="btn btn-primary" onclick="buscarPlaca('cliente')">Consultar Placa</button>
+                </div>
+                <div class="placas-ejemplo">
+                    <span>Ejemplos:</span>
+                    <button class="chip" onclick="setPlaca('ABC123','cliente')">ABC123</button>
+                    <button class="chip" onclick="setPlaca('HIL2020','cliente')">HIL2020</button>
+                    <button class="chip" onclick="setPlaca('TUC919','cliente')">TUC919</button>
+                    <button class="chip" onclick="setPlaca('CIV717','cliente')">CIV717</button>
+                </div>
+            </div>
+            <div id="placaResultCliente" class="result-area"></div>
+        </div>
+
+        <!-- Tab: Garage -->
+        <div class="tab-content" id="tab-garage-cliente">
+            <div class="search-box">
+                <h2>Buscar por Vehículo</h2>
+                <div class="garage-selects">
+                    <select id="garageMarcaCliente" onchange="updateModelos('cliente')">
+                        <option value="">Seleccionar Marca</option>
+                    </select>
+                    <select id="garageModeloCliente" onchange="updateVersiones('cliente')" disabled>
+                        <option value="">Seleccionar Modelo</option>
+                    </select>
+                    <select id="garageVersionCliente" onchange="updateAnios('cliente')" disabled>
+                        <option value="">Seleccionar Versión</option>
+                    </select>
+                    <select id="garageAnioCliente" disabled>
+                        <option value="">Seleccionar Año</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" onclick="buscarGarage('cliente')">Buscar Repuestos Compatibles</button>
+            </div>
+            <div id="garageResultCliente" class="result-area"></div>
+        </div>
+
+
+
+        <!-- Tab: SKU -->
+        <div class="tab-content" id="tab-sku-cliente">
+            <div class="search-box">
+                <h2>Buscar por SKU Guaca</h2>
+                <div class="input-group">
+                    <input type="text" id="skuInputCliente" placeholder="Ej: GUA-FRE-001" class="input-lg">
+                    <button class="btn btn-primary" onclick="buscarSku('cliente')">Buscar SKU</button>
+                </div>
+                <div class="placas-ejemplo">
+                    <span>Ejemplos:</span>
+                    <button class="chip" onclick="setSku('GUA-FRE-001','cliente')">GUA-FRE-001</button>
+                    <button class="chip" onclick="setSku('GUA-SUS-004','cliente')">GUA-SUS-004</button>
+                    <button class="chip" onclick="setSku('GUA-FIL-009','cliente')">GUA-FIL-009</button>
+                </div>
+            </div>
+            <div id="skuResultCliente" class="result-area"></div>
+        </div>
+    </section>
+
+    <!-- ============ VENDEDOR POS ============ -->
+    <section id="view-vendedor" class="view">
+        <div class="pos-banner">
+            <p>💡 El vendedor trabaja en el POS; esta búsqueda simula el motor que devuelve el SKU correcto.</p>
+        </div>
+        <div class="search-tabs">
+            <button class="tab-btn active" data-tab="placa" data-context="vendedor">🚗 Por Placa</button>
+            <button class="tab-btn" data-tab="garage" data-context="vendedor">🔧 Por Vehículo</button>
+            <button class="tab-btn" data-tab="sku" data-context="vendedor">🏷️ Por SKU</button>
+        </div>
+
+        <!-- Tab: Placa Vendedor -->
+        <div class="tab-content active" id="tab-placa-vendedor">
+            <div class="search-box">
+                <h2>Consultar Placa</h2>
+                <div class="input-group">
+                    <input type="text" id="placaInputVendedor" placeholder="Ej: ABC123" maxlength="10" class="input-lg">
+                    <button class="btn btn-primary" onclick="buscarPlaca('vendedor')">Consultar Placa</button>
+                </div>
+                <div class="placas-ejemplo">
+                    <span>Ejemplos:</span>
+                    <button class="chip" onclick="setPlaca('ABC123','vendedor')">ABC123</button>
+                    <button class="chip" onclick="setPlaca('SEN616','vendedor')">SEN616</button>
+                    <button class="chip" onclick="setPlaca('KIA2020','vendedor')">KIA2020</button>
+                    <button class="chip" onclick="setPlaca('L2021','vendedor')">L2021</button>
+                </div>
+            </div>
+            <div id="placaResultVendedor" class="result-area"></div>
+        </div>
+
+        <!-- Tab: Garage Vendedor -->
+        <div class="tab-content" id="tab-garage-vendedor">
+            <div class="search-box">
+                <h2>Buscar por Vehículo</h2>
+                <div class="garage-selects">
+                    <select id="garageMarcaVendedor" onchange="updateModelos('vendedor')">
+                        <option value="">Seleccionar Marca</option>
+                    </select>
+                    <select id="garageModeloVendedor" onchange="updateVersiones('vendedor')" disabled>
+                        <option value="">Seleccionar Modelo</option>
+                    </select>
+                    <select id="garageVersionVendedor" onchange="updateAnios('vendedor')" disabled>
+                        <option value="">Seleccionar Versión</option>
+                    </select>
+                    <select id="garageAnioVendedor" disabled>
+                        <option value="">Seleccionar Año</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" onclick="buscarGarage('vendedor')">Buscar Repuestos</button>
+            </div>
+            <div id="garageResultVendedor" class="result-area"></div>
+        </div>
+
+
+
+        <!-- Tab: SKU Vendedor -->
+        <div class="tab-content" id="tab-sku-vendedor">
+            <div class="search-box">
+                <h2>Buscar por SKU Guaca</h2>
+                <div class="input-group">
+                    <input type="text" id="skuInputVendedor" placeholder="Ej: GUA-FRE-001" class="input-lg">
+                    <button class="btn btn-primary" onclick="buscarSku('vendedor')">Buscar SKU</button>
+                </div>
+                <div class="placas-ejemplo">
+                    <span>Ejemplos:</span>
+                    <button class="chip" onclick="setSku('GUA-MOT-010','vendedor')">GUA-MOT-010</button>
+                    <button class="chip" onclick="setSku('GUA-ELE-012','vendedor')">GUA-ELE-012</button>
+                    <button class="chip" onclick="setSku('GUA-DIR-015','vendedor')">GUA-DIR-015</button>
+                </div>
+            </div>
+            <div id="skuResultVendedor" class="result-area"></div>
+        </div>
+    </section>
+
+    <!-- ============ ADMIN / ANALÍTICA ============ -->
+    <section id="view-admin" class="view">
+        <h2 class="section-title">📊 Dashboard de Analítica</h2>
+        <div class="dashboard-grid">
+            <div class="dash-card">
+                <span class="dash-number" id="statTotalSearches">0</span>
+                <span class="dash-label">Búsquedas del día</span>
+            </div>
+            <div class="dash-card success">
+                <span class="dash-number" id="statSuccessSearches">0</span>
+                <span class="dash-label">Búsquedas exitosas</span>
+            </div>
+            <div class="dash-card danger">
+                <span class="dash-number" id="statFailedSearches">0</span>
+                <span class="dash-label">Sin resultado</span>
+            </div>
+            <div class="dash-card info">
+                <span class="dash-number" id="statCachedPlates">0</span>
+                <span class="dash-label">Placas desde caché</span>
+            </div>
+        </div>
+
+        <div class="dashboard-sections">
+            <div class="dash-section">
+                <h3>🔥 Top Términos Buscados</h3>
+                <div id="topTerms" class="dash-list"></div>
+            </div>
+            <div class="dash-section">
+                <h3>📦 Productos Más Consultados</h3>
+                <div id="topProducts" class="dash-list"></div>
+            </div>
+        </div>
+
+        <div class="dash-section full-width">
+            <h3>⚙️ Estado de Ingesta de Datos</h3>
+            <div class="pipeline-status">
+                <div class="pipeline-step done">
+                    <span class="pipeline-icon">🗄️</span>
+                    <span>SQL Server</span>
+                    <span class="pipeline-badge">Sincronizado</span>
+                </div>
+                <div class="pipeline-arrow">→</div>
+                <div class="pipeline-step done">
+                    <span class="pipeline-icon">🌊</span>
+                    <span>Lago de Datos</span>
+                    <span class="pipeline-badge">Activo</span>
+                </div>
+                <div class="pipeline-arrow">→</div>
+                <div class="pipeline-step done">
+                    <span class="pipeline-icon">🔍</span>
+                    <span>Índice de Búsqueda</span>
+                    <span class="pipeline-badge">Actualizado</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="dash-section full-width">
+            <h3>❌ Búsquedas Sin Resultado (para decisiones de catálogo)</h3>
+            <div id="failedSearchesTable" class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Término</th>
+                            <th>Canal</th>
+                            <th>Tipo</th>
+                            <th>Fecha/Hora</th>
+                        </tr>
+                    </thead>
+                    <tbody id="failedSearchesBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ MODAL DETALLE ============ -->
+    <div id="modalDetalle" class="modal">
+        <div class="modal-content modal-lg">
+            <button class="modal-close" onclick="closeModal('modalDetalle')">&times;</button>
+            <div id="modalDetalleBody"></div>
+        </div>
+    </div>
+
+    <!-- ============ MODAL JSON API ============ -->
+    <div id="modalJson" class="modal">
+        <div class="modal-content modal-lg">
+            <button class="modal-close" onclick="closeModal('modalJson')">&times;</button>
+            <h2>📡 Respuesta Simulada API JSON</h2>
+            <div id="modalJsonBody"></div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>LA GUACA CR – Mockup Comercial | Búsqueda Inteligente de Repuestos | Demo 2026</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
