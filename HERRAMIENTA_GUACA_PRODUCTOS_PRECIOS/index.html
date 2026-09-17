@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing Control Hub - La Guaca</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <span class="logo-icon">&#9670;</span>
+                    <span class="logo-text">Pricing Hub</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-view="dashboard">
+                    <span class="nav-icon">&#9632;</span> Dashboard Ejecutivo
+                </a>
+                <a href="#" class="nav-item" data-view="maestro">
+                    <span class="nav-icon">&#9776;</span> Maestro de Productos
+                </a>
+                <a href="#" class="nav-item" data-view="codigo-nuevo">
+                    <span class="nav-icon">&#10010;</span> Producto Código Nuevo
+                </a>
+                <a href="#" class="nav-item" data-view="usado-nuevo">
+                    <span class="nav-icon">&#9851;</span> Producto Usado Código Nuevo
+                </a>
+                <a href="#" class="nav-item" data-view="cambio-costo">
+                    <span class="nav-icon">&#8645;</span> Cambio de Costo
+                </a>
+                <a href="#" class="nav-item" data-view="homologacion">
+                    <span class="nav-icon">&#8596;</span> Homologación por Lado
+                </a>
+                <a href="#" class="nav-item" data-view="competencia">
+                    <span class="nav-icon">&#9733;</span> Monitoreo de Competencia
+                </a>
+                <a href="#" class="nav-item" data-view="investigacion">
+                    <span class="nav-icon">&#128269;</span> Investigación de Mercado
+                </a>
+                <a href="#" class="nav-item" data-view="ajustes">
+                    <span class="nav-icon">&#9881;</span> Ajustes de Precio
+                </a>
+                <a href="#" class="nav-item" data-view="aprobaciones">
+                    <span class="nav-icon">&#10004;</span> Aprobaciones
+                </a>
+                <a href="#" class="nav-item" data-view="api-pos">
+                    <span class="nav-icon">&#9889;</span> API Punto de Venta
+                </a>
+                <a href="#" class="nav-item" data-view="historico">
+                    <span class="nav-icon">&#128200;</span> Histórico y Tendencia
+                </a>
+                <a href="#" class="nav-item" data-view="reglas">
+                    <span class="nav-icon">&#128220;</span> Reglas y Parámetros
+                </a>
+                <a href="#" class="nav-item" data-view="chatbot">
+                    <span class="nav-icon">&#128172;</span> Chatbot IA
+                </a>
+                <a href="#" class="nav-item" data-view="arquitectura">
+                    <span class="nav-icon">&#127959;</span> Arquitectura Lago de Datos
+                </a>
+                <a href="#" class="nav-item" data-view="motor-pricing">
+                    <span class="nav-icon">&#9881;</span> Motor de Pricing
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-header">
+                <div class="header-left">
+                    <button class="menu-toggle" id="menuToggle">&#9776;</button>
+                    <h1 class="header-title">Pricing Control Hub</h1>
+                    <span class="header-subtitle">Plataforma Inteligente de Pricing - La Guaca</span>
+                </div>
+                <div class="header-right">
+                    <span class="connection-status online">
+                        <span class="status-dot"></span> Conectado
+                    </span>
+                    <span class="header-date" id="headerDate"></span>
+                    <span class="header-user">
+                        <span class="user-avatar">AG</span> Admin General
+                    </span>
+                </div>
+            </header>
+            <div class="content-area" id="contentArea"></div>
+        </main>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal" id="modalContent">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Detalle</h3>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+            <div class="modal-footer" id="modalFooter"></div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="js/data.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/views/dashboard.js"></script>
+    <script src="js/views/maestro.js"></script>
+    <script src="js/views/codigoNuevo.js"></script>
+    <script src="js/views/usadoNuevo.js"></script>
+    <script src="js/views/cambioCosto.js"></script>
+    <script src="js/views/homologacion.js"></script>
+    <script src="js/views/competencia.js"></script>
+    <script src="js/views/investigacion.js"></script>
+    <script src="js/views/ajustes.js"></script>
+    <script src="js/views/aprobaciones.js"></script>
+    <script src="js/views/apiPos.js"></script>
+    <script src="js/views/historico.js"></script>
+    <script src="js/views/reglas.js"></script>
+    <script src="js/views/chatbot.js"></script>
+    <script src="js/views/arquitectura.js"></script>
+    <script src="js/views/motorPricing.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
