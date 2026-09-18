@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Guaca - Plataforma de Solicitudes Administrativas y Financieras</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-card">
+            <div class="login-logo">
+                <div class="logo-icon">LG</div>
+                <h2>La Guaca</h2>
+                <p>Plataforma de Solicitudes Administrativas y Financieras</p>
+            </div>
+            <button class="btn-microsoft" onclick="simulateLogin()">
+                <svg width="20" height="20" viewBox="0 0 21 21"><rect x="1" y="1" width="9" height="9" fill="#f25022"/><rect x="11" y="1" width="9" height="9" fill="#7fba00"/><rect x="1" y="11" width="9" height="9" fill="#00a4ef"/><rect x="11" y="11" width="9" height="9" fill="#ffb900"/></svg>
+                Iniciar sesión con Microsoft 365
+            </button>
+            <div class="login-role-select" id="roleSelect" style="display:none;">
+                <label>Simular rol:</label>
+                <select id="loginRole">
+                    <option value="solicitante">Solicitante</option>
+                    <option value="supervisor">Supervisor / Aprobador</option>
+                    <option value="contabilidad">Contabilidad</option>
+                    <option value="tarjetas">Responsable Tarjetas / Compras</option>
+                    <option value="admin">Administrador</option>
+                </select>
+                <button class="btn-primary" onclick="enterApp()">Ingresar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="mainApp" class="main-app" style="display:none;">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">LG</div>
+                <span class="sidebar-title">La Guaca</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item nav-indicadores" data-view="dashboard" onclick="showView('dashboard')">
+                    <span class="nav-icon">📊</span> Indicadores
+                </a>
+                <a href="#" class="nav-item active" data-view="misSolicitudes" onclick="showView('misSolicitudes')">
+                    <span class="nav-icon">📋</span> Mis Solicitudes
+                </a>
+                <a href="#" class="nav-item" data-view="solicitudViaticos" onclick="showView('solicitudViaticos')">
+                    <span class="nav-icon">✈️</span> Solicitud de Viáticos
+                </a>
+                <a href="#" class="nav-item" data-view="reintegroViaticos" onclick="showView('reintegroViaticos')">
+                    <span class="nav-icon">💰</span> Reintegro de Viáticos
+                </a>
+                <a href="#" class="nav-item" data-view="cajaChica" onclick="showView('cajaChica')">
+                    <span class="nav-icon">🏦</span> Caja Chica
+                </a>
+                <a href="#" class="nav-item" data-view="tarjetaCorporativa" onclick="showView('tarjetaCorporativa')">
+                    <span class="nav-icon">💳</span> Tarjeta Corporativa
+                </a>
+                <a href="#" class="nav-item nav-supervisor" data-view="bandejaAprobaciones" onclick="showView('bandejaAprobaciones')">
+                    <span class="nav-icon">✅</span> Bandeja Aprobaciones
+                </a>
+                <a href="#" class="nav-item nav-tarjetas" data-view="bandejaTarjetas" onclick="showView('bandejaTarjetas')">
+                    <span class="nav-icon">🔖</span> Bandeja Tarjetas
+                </a>
+                <a href="#" class="nav-item nav-contabilidad" data-view="revisionContabilidad" onclick="showView('revisionContabilidad')">
+                    <span class="nav-icon">📑</span> Revisión Contabilidad
+                </a>
+                <a href="#" class="nav-item nav-admin" data-view="administrador" onclick="showView('administrador')">
+                    <span class="nav-icon">⚙️</span> Administrador
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">JR</div>
+                    <div class="user-details">
+                        <span class="user-name" id="userName">Juan Rodríguez</span>
+                        <span class="user-role" id="userRole">Solicitante</span>
+                    </div>
+                </div>
+                <button class="btn-logout" onclick="logout()">Salir</button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-bar">
+                <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+                <h1 id="viewTitle">Indicadores de Gestión</h1>
+                <div class="top-actions">
+                    <span class="current-date" id="currentDate"></span>
+                </div>
+            </header>
+
+            <div class="content-area" id="contentArea">
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay" style="display:none;">
+        <div class="modal" id="modalContent">
+            <div class="modal-header">
+                <h3 id="modalTitle">Detalle</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+            <div class="modal-footer" id="modalFooter"></div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
