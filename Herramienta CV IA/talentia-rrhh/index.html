@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TalentIA RRHH – Plataforma Inteligente de Perfilamiento de Candidatos</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="login-screen" class="login-screen">
+        <div class="login-container">
+            <div class="login-logo">
+                <i class="fas fa-brain"></i>
+                <h1>TalentIA RRHH</h1>
+                <p>Plataforma Inteligente de Perfilamiento de Candidatos</p>
+            </div>
+            <form id="login-form" class="login-form">
+                <div class="form-group">
+                    <label for="login-email">Correo electrónico</label>
+                    <input type="email" id="login-email" placeholder="usuario@empresa.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Contraseña</label>
+                    <input type="password" id="login-password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Iniciar Sesión</button>
+                <div id="login-error" class="login-error hidden">Credenciales inválidas</div>
+            </form>
+            <div class="login-footer">
+                <p>Demo: admin@rrhh.com / admin123</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="app" class="app hidden">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <i class="fas fa-brain"></i>
+                <span>TalentIA</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-section="dashboard">
+                    <i class="fas fa-chart-line"></i><span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-section="vacantes">
+                    <i class="fas fa-briefcase"></i><span>Vacantes</span>
+                </a>
+                <a href="#" class="nav-item" data-section="candidatos">
+                    <i class="fas fa-users"></i><span>Candidatos</span>
+                </a>
+                <a href="#" class="nav-item" data-section="centralizacion">
+                    <i class="fas fa-cloud-download-alt"></i><span>Centralización de CVs</span>
+                </a>
+                <a href="#" class="nav-item" data-section="plantillas">
+                    <i class="fas fa-file-alt"></i><span>Plantillas de Puesto</span>
+                </a>
+                <a href="#" class="nav-item" data-section="pool">
+                    <i class="fas fa-database"></i><span>Pool de Candidatos</span>
+                </a>
+                <a href="#" class="nav-item" data-section="trazabilidad">
+                    <i class="fas fa-history"></i><span>Trazabilidad</span>
+                </a>
+                <a href="#" class="nav-item" data-section="asistente">
+                    <i class="fas fa-comment-dots"></i><span>Asistente IA</span>
+                </a>
+                <a href="#" class="nav-item" data-section="configuracion">
+                    <i class="fas fa-cog"></i><span>Configuración</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-wrapper">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <button class="menu-toggle" id="menu-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h2 id="page-title">Dashboard</h2>
+                </div>
+                <div class="header-right">
+                    <div class="header-search">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Buscar...">
+                    </div>
+                    <div class="header-notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </div>
+                    <div class="header-user" id="header-user">
+                        <div class="user-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <span id="user-name">Admin</span>
+                        <button class="btn-logout" id="btn-logout" title="Cerrar sesión">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <main class="content" id="content">
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal Container -->
+    <div id="modal-overlay" class="modal-overlay hidden">
+        <div class="modal" id="modal-content">
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="js/data.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/vacantes.js"></script>
+    <script src="js/candidatos.js"></script>
+    <script src="js/plantillas.js"></script>
+    <script src="js/pool.js"></script>
+    <script src="js/trazabilidad.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
