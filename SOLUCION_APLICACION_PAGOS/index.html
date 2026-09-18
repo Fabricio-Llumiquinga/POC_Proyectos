@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💳 Aplicación Inteligente de Pagos y Conciliación Bancaria</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">💳</div>
+            <h2>Pagos & Conciliación</h2>
+            <p class="subtitle">Control Centralizado</p>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active" data-module="extractos">
+                <span class="nav-icon">🏦</span>
+                <span class="nav-text">Extractos Bancarios</span>
+            </a>
+            <a href="#" class="nav-item" data-module="pagos">
+                <span class="nav-icon">💳</span>
+                <span class="nav-text">Seguimiento de Pagos</span>
+            </a>
+            <a href="#" class="nav-item" data-module="kpis">
+                <span class="nav-icon">📊</span>
+                <span class="nav-text">KPIs y Reportes</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="sidebar-info">
+                <small>Integración API</small>
+                <span class="badge badge-success">Conectado</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="main-header">
+            <div class="header-left">
+                <button class="menu-toggle" id="menuToggle">☰</button>
+                <div>
+                    <h1>💳 Aplicación Inteligente de Pagos y Conciliación Bancaria</h1>
+                    <p class="header-subtitle">Control centralizado de extractos bancarios, comprobantes recibidos, conciliación y aplicación automática de pagos mediante integración API.</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <span class="header-date" id="currentDate"></span>
+                <span class="badge badge-info">Prototipo</span>
+            </div>
+        </header>
+
+
+
+        <!-- Module: Extractos Bancarios -->
+        <section class="module" id="module-extractos">
+            <div class="module-header">
+                <h2>🏦 Extractos Bancarios</h2>
+                <div class="module-actions">
+                    <button class="btn btn-primary" onclick="App.simularActualizacionAPI()">🔄 Actualizar extractos vía API</button>
+                    <button class="btn btn-secondary" onclick="App.mostrarModalCargaExtracto()">📤 Cargar extracto manual</button>
+                    <button class="btn btn-success" onclick="App.exportarExtractos()">📥 Exportar a Excel</button>
+                </div>
+            </div>
+
+            <!-- KPIs Extractos -->
+            <div class="kpi-grid" id="kpi-extractos"></div>
+
+            <!-- Filtros Extractos -->
+            <div class="filters-panel" id="filtros-extractos">
+                <div class="filters-header">
+                    <h3>🔍 Filtros</h3>
+                    <button class="btn btn-sm btn-secondary" onclick="App.limpiarFiltrosExtractos()">Limpiar</button>
+                </div>
+                <div class="filters-grid">
+                    <div class="filter-group">
+                        <label>Fecha desde</label>
+                        <input type="date" id="ext-fecha-desde">
+                    </div>
+                    <div class="filter-group">
+                        <label>Fecha hasta</label>
+                        <input type="date" id="ext-fecha-hasta">
+                    </div>
+                    <div class="filter-group">
+                        <label>Empresa</label>
+                        <select id="ext-empresa"><option value="">Todas</option></select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Banco</label>
+                        <select id="ext-banco"><option value="">Todos</option></select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Cuenta bancaria</label>
+                        <select id="ext-cuenta"><option value="">Todas</option></select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Estado</label>
+                        <select id="ext-estado"><option value="">Todos</option></select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Monto desde</label>
+                        <input type="number" id="ext-monto-desde" placeholder="0.00">
+                    </div>
+                    <div class="filter-group">
+                        <label>Monto hasta</label>
+                        <input type="number" id="ext-monto-hasta" placeholder="0.00">
+                    </div>
+                </div>
+                <div class="filters-actions">
+                    <button class="btn btn-primary" onclick="App.filtrarExtractos()">🔍 Buscar</button>
+                </div>
+            </div>
+
+            <!-- Tabla Extractos -->
+            <div class="table-container">
+                <div class="table-header">
+                    <div class="table-search">
+                        <input type="text" id="ext-busqueda-global" placeholder="🔍 Búsqueda global..." oninput="App.busquedaGlobalExtractos(this.value)">
+                    </div>
+                    <div class="table-info">
+                        <button class="btn btn-sm btn-primary" onclick="App.autoaplicarSeleccionMasiva()" id="btn-autoaplicar-masivo" style="display:none;">⚙️ Autoaplicar selección</button>
+                        <span id="ext-seleccionados" style="margin-right:8px;"></span>
+                        <span id="ext-total-registros">0 registros</span>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="data-table" id="tabla-extractos">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="ext-check-all" onchange="App.seleccionarTodosExtractos(this.checked)"></th>
+                                <th onclick="App.ordenarExtractos('fecha')">Fecha ↕</th>
+                                <th onclick="App.ordenarExtractos('empresa')">Empresa ↕</th>
+                                <th onclick="App.ordenarExtractos('banco')">Banco ↕</th>
+                                <th>Cuenta</th>
+                                <th>Moneda</th>
+                                <th>Referencia</th>
+                                <th>Descripción</th>
+                                <th>Tipo</th>
+                                <th onclick="App.ordenarExtractos('monto')">Monto ↕</th>
+                                <th>Estado</th>
+                                <th>Observación</th>
+                                <th>Método</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-extractos"></tbody>
+                    </table>
+                </div>
+                <div class="pagination" id="paginacion-extractos"></div>
+            </div>
+        </section>
+
+        <!-- Module: Seguimiento de Pagos -->
+        <section class="module hidden" id="module-pagos">
+            <div class="module-header">
+                <h2>💳 Seguimiento de Pagos</h2>
+                <div class="module-actions">
+                    <button class="btn btn-primary" onclick="App.mostrarModalIngresoPago()">➕ Ingreso manual de pago</button>
+                    <button class="btn btn-success" onclick="App.exportarPagos()">📥 Exportar a Excel</button>
+                </div>
+            </div>
+
+            <!-- KPIs Pagos -->
+            <div class="kpi-grid" id="kpi-pagos"></div>
+
+            <!-- Filtros Pagos -->
+            <div class="filters-panel" id="filtros-pagos">
+                <div class="filters-header">
+                    <h3>🔍 Filtros</h3>
+                    <button class="btn btn-sm btn-secondary" onclick="App.limpiarFiltrosPagos()">Limpiar</button>
+                </div>
+                <div class="filters-grid">
+                    <div class="filter-group">
+                        <label>Fecha desde</label>
+                        <input type="date" id="pag-fecha-desde">
+                    </div>
+                    <div class="filter-group">
+                        <label>Fecha hasta</label>
+                        <input type="date" id="pag-fecha-hasta">
+                    </div>
+                    <div class="filter-group">
+                        <label>Empresa</label>
+                        <select id="pag-empresa"><option value="">Todas</option></select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Banco</label>
+                        <select id="pag-banco"><option value="">Todos</option></select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Canal de recepción</label>
+                        <select id="pag-canal"><option value="">Todos</option></select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Estado</label>
+                        <select id="pag-estado"><option value="">Todos</option></select>
+                    </div>
+                </div>
+                <div class="filters-actions">
+                    <button class="btn btn-primary" onclick="App.filtrarPagos()">🔍 Buscar</button>
+                </div>
+            </div>
+
+            <!-- Tabla Pagos -->
+            <div class="table-container">
+                <div class="table-header">
+                    <div class="table-search">
+                        <input type="text" id="pag-busqueda-global" placeholder="🔍 Búsqueda global..." oninput="App.busquedaGlobalPagos(this.value)">
+                    </div>
+                    <div class="table-info">
+                        <span id="pag-total-registros">0 registros</span>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="data-table" id="tabla-pagos">
+                        <thead>
+                            <tr>
+                                <th onclick="App.ordenarPagos('fecha')">Fecha ↕</th>
+                                <th onclick="App.ordenarPagos('empresa')">Empresa ↕</th>
+                                <th>Canal</th>
+                                <th>Código cliente</th>
+                                <th>Banco</th>
+                                <th onclick="App.ordenarPagos('monto')">Monto ↕</th>
+                                <th>Estado</th>
+                                <th>Días pend.</th>
+                                <th>Observación</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-pagos"></tbody>
+                    </table>
+                </div>
+                <div class="pagination" id="paginacion-pagos"></div>
+            </div>
+        </section>
+
+        <!-- Module: KPIs y Reportes -->
+        <section class="module hidden" id="module-kpis">
+            <div class="module-header">
+                <h2>📊 KPIs y Reportes</h2>
+                <div class="module-actions">
+                    <button class="btn btn-success" onclick="App.exportarReporteExcel()">📥 Descargar Excel</button>
+                    <button class="btn btn-secondary" onclick="App.exportarReporteCSV()">📄 Descargar CSV</button>
+                </div>
+            </div>
+
+            <!-- KPIs principales -->
+            <div class="kpi-grid kpi-grid-large" id="kpi-reportes"></div>
+
+            <!-- Gráficos -->
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h3>📊 Pagos por Estado</h3>
+                    <div class="chart-container" id="chart-estados"></div>
+                </div>
+                <div class="chart-card">
+                    <h3>📈 Pagos Recibidos vs Aplicados por Día</h3>
+                    <div class="chart-container" id="chart-diario"></div>
+                </div>
+                <div class="chart-card">
+                    <h3>🏦 Pagos por Banco</h3>
+                    <div class="chart-container" id="chart-bancos"></div>
+                </div>
+                <div class="chart-card">
+                    <h3>🌐 Pagos por Canal de Recepción</h3>
+                    <div class="chart-container" id="chart-canales"></div>
+                </div>
+            </div>
+
+            <!-- Sección de Reportes -->
+            <div class="reportes-section">
+                <h3>📥 Consulta y descarga de reportes</h3>
+                <div class="filters-panel">
+                    <div class="filters-grid">
+                        <div class="filter-group">
+                            <label>Fecha desde</label>
+                            <input type="date" id="rep-fecha-desde">
+                        </div>
+                        <div class="filter-group">
+                            <label>Fecha hasta</label>
+                            <input type="date" id="rep-fecha-hasta">
+                        </div>
+                        <div class="filter-group">
+                            <label>Empresa</label>
+                            <select id="rep-empresa"><option value="">Todas</option></select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Banco</label>
+                            <select id="rep-banco"><option value="">Todos</option></select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Moneda</label>
+                            <select id="rep-moneda"><option value="">Todas</option></select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Estado</label>
+                            <select id="rep-estado"><option value="">Todos</option></select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Canal</label>
+                            <select id="rep-canal"><option value="">Todos</option></select>
+                        </div>
+                    </div>
+                    <div class="filters-actions">
+                        <button class="btn btn-primary" onclick="App.filtrarReportes()">🔍 Buscar</button>
+                        <button class="btn btn-secondary" onclick="App.limpiarFiltrosReportes()">🧹 Limpiar filtros</button>
+                        <button class="btn btn-success" onclick="App.exportarReporteExcel()">📥 Descargar Excel</button>
+                        <button class="btn btn-secondary" onclick="App.exportarReporteCSV()">📄 Descargar CSV</button>
+                    </div>
+                </div>
+
+                <!-- Tabla de reportes -->
+                <div class="table-container">
+                    <div class="table-header">
+                        <div class="table-search">
+                            <input type="text" id="rep-busqueda-global" placeholder="🔍 Búsqueda global..." oninput="App.busquedaGlobalReportes(this.value)">
+                        </div>
+                        <div class="table-info">
+                            <span id="rep-total-registros">0 registros</span>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table" id="tabla-reportes">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Empresa</th>
+                                    <th>Cliente</th>
+                                    <th>Código</th>
+                                    <th>Banco</th>
+                                    <th>Referencia</th>
+                                    <th>Monto</th>
+                                    <th>Moneda</th>
+                                    <th>Estado</th>
+                                    <th>Canal</th>
+                                    <th>Sistema</th>
+                                    <th>F. Aplicación</th>
+                                    <th>Resultado</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody-reportes"></tbody>
+                        </table>
+                    </div>
+                    <div class="pagination" id="paginacion-reportes"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Modal Genérico -->
+        <div class="modal-overlay hidden" id="modal-overlay">
+            <div class="modal" id="modal-content">
+                <div class="modal-header">
+                    <h3 id="modal-title">Detalle</h3>
+                    <button class="modal-close" onclick="App.cerrarModal()">&times;</button>
+                </div>
+                <div class="modal-body" id="modal-body"></div>
+                <div class="modal-footer" id="modal-footer"></div>
+            </div>
+        </div>
+
+        <!-- Toast Notifications -->
+        <div class="toast-container" id="toast-container"></div>
+
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
