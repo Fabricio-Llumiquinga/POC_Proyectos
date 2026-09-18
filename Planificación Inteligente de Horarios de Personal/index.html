@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morpho Smart Scheduling</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- LOGIN SCREEN -->
+    <div id="login-screen" class="login-screen">
+        <div class="login-container">
+            <div class="login-header">
+                <div class="login-logo">
+                    <span class="logo-icon">🦋</span>
+                    <h1>Morpho Smart Scheduling</h1>
+                </div>
+                <p class="login-subtitle">Planificación inteligente de horarios de personal</p>
+
+            </div>
+            <div class="login-form">
+                <div class="form-group">
+                    <label>Correo electrónico</label>
+                    <input type="email" id="login-email" placeholder="usuario@morphotravel.com" value="admin@morphotravel.com">
+                </div>
+                <div class="form-group">
+                    <label>Contraseña</label>
+                    <input type="password" id="login-password" placeholder="••••••••" value="demo2024">
+                </div>
+                <div class="form-group">
+                    <label>Rol</label>
+                    <select id="login-role">
+                        <option value="admin_regional">Administrador Regional</option>
+                        <option value="admin_pais">Administrador País</option>
+                        <option value="supervisor">Supervisor</option>
+                        <option value="colaborador">Colaborador</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary btn-block" onclick="doLogin()">Ingresar</button>
+                <div class="quick-access">
+                    <p>Acceso rápido:</p>
+                    <button class="btn btn-outline btn-sm" onclick="quickLogin('admin_regional')">Administrador Regional</button>
+                    <button class="btn btn-outline btn-sm" onclick="quickLogin('admin_pais')">Admin País Costa Rica</button>
+                    <button class="btn btn-outline btn-sm" onclick="quickLogin('supervisor')">Supervisor</button>
+                    <button class="btn btn-outline btn-sm" onclick="quickLogin('colaborador')">Colaborador</button>
+                </div>
+            </div>
+            <div class="login-footer">
+                <p>Morpho Travel · Planificación Inteligente de Horarios de Personal</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN APP -->
+    <div id="app" class="app hidden">
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <span class="logo-icon-sm">🦋</span>
+                <span class="sidebar-title">Morpho Smart</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a class="nav-item active" data-view="dashboard" onclick="navigateTo('dashboard')">
+                    <span class="nav-icon">📊</span> Dashboard
+                </a>
+                <a class="nav-item" data-view="config" onclick="navigateTo('config')">
+                    <span class="nav-icon">⚙️</span> Configuración
+                </a>
+                <a class="nav-item" data-view="planning" onclick="navigateTo('planning')">
+                    <span class="nav-icon">📅</span> Planificación
+                </a>
+                <a class="nav-item" data-view="engine" onclick="navigateTo('engine')">
+                    <span class="nav-icon">🧠</span> Motor Inteligente
+                </a>
+                <a class="nav-item" data-view="shifts" onclick="navigateTo('shifts')">
+                    <span class="nav-icon">🔄</span> Cambios de Turno
+                </a>
+                <a class="nav-item" data-view="planned-vs-real" onclick="navigateTo('planned-vs-real')">
+                    <span class="nav-icon">📈</span> Planificado vs Real
+                </a>
+                <a class="nav-item" data-view="geovictoria" onclick="navigateTo('geovictoria')">
+                    <span class="nav-icon">🔗</span> GeoVictoria
+                </a>
+                <a class="nav-item" data-view="catalogs" onclick="navigateTo('catalogs')">
+                    <span class="nav-icon">📋</span> Catálogos
+                </a>
+                <a class="nav-item" data-view="collaborator" onclick="navigateTo('collaborator')">
+                    <span class="nav-icon">👤</span> Vista Colaborador
+                </a>
+                <a class="nav-item" data-view="audit" onclick="navigateTo('audit')">
+                    <span class="nav-icon">📝</span> Bitácora
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <small>v1.0 · Piloto Costa Rica – Puntos de Venta</small>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <!-- HEADER -->
+            <header class="header">
+                <div class="header-left">
+                    <button class="btn-icon" onclick="toggleSidebar()">☰</button>
+                    <h2 id="page-title">Dashboard Ejecutivo</h2>
+                </div>
+                <div class="header-right">
+                    <div class="header-country">
+                        <select id="header-country" onchange="changeCountry(this.value)">
+                            <option value="costa_rica">🇨🇷 Costa Rica</option>
+                        </select>
+                    </div>
+                    <div class="header-role">
+                        <select id="header-role" onchange="changeRole(this.value)">
+                            <option value="admin_regional">Admin Regional</option>
+                            <option value="admin_pais">Admin País</option>
+                            <option value="supervisor">Supervisor</option>
+                            <option value="colaborador">Colaborador</option>
+                        </select>
+                    </div>
+                    <div class="header-user" id="header-user">
+                        <span class="user-avatar">👤</span>
+                        <span class="user-name">Admin</span>
+                    </div>
+                    <button class="btn btn-sm btn-outline" onclick="doLogout()">Salir</button>
+                </div>
+            </header>
+
+            <!-- VIEWS CONTAINER -->
+            <div class="content" id="content">
+            </div>
+        </main>
+    </div>
+
+    <!-- TOAST CONTAINER -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- MODAL -->
+    <div id="modal-overlay" class="modal-overlay hidden" onclick="closeModal(event)">
+        <div class="modal" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3 id="modal-title">Modal</h3>
+                <button class="btn-icon" onclick="closeModal()">✕</button>
+            </div>
+            <div class="modal-body" id="modal-body"></div>
+            <div class="modal-footer" id="modal-footer"></div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
