@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portal Vendedor - Solicitudes de Apertura de Cuentas</title>
+  <style>
+    :root{
+      --primary:#123A5D;
+      --primary-2:#0B2A45;
+      --accent:#F59E0B;
+      --bg:#F4F7FB;
+      --card:#FFFFFF;
+      --text:#1E293B;
+      --muted:#64748B;
+      --line:#E2E8F0;
+      --success:#16A34A;
+      --danger:#DC2626;
+      --info:#2563EB;
+      --shadow:0 18px 45px rgba(15,23,42,.08);
+      --radius:18px;
+    }
+
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+      font-family:Inter, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    body{
+      background:var(--bg);
+      color:var(--text);
+      min-height:100vh;
+    }
+
+    .main{
+      max-width:1450px;
+      margin:0 auto;
+      padding:28px;
+    }
+
+    .hero{
+      background:linear-gradient(135deg,var(--primary-2),var(--primary));
+      color:#fff;
+      border-radius:26px;
+      padding:28px;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:20px;
+      margin-bottom:22px;
+      box-shadow:var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .hero:after{
+      content:"";
+      position:absolute;
+      width:320px;
+      height:320px;
+      border-radius:50%;
+      right:-110px;
+      top:-150px;
+      background:rgba(255,255,255,.08);
+    }
+
+    .hero-content{
+      position:relative;
+      z-index:1;
+    }
+
+    .hero h1{
+      font-size:30px;
+      letter-spacing:-.03em;
+      margin-bottom:9px;
+    }
+
+    .hero p{
+      color:rgba(255,255,255,.78);
+      font-size:14px;
+      line-height:1.55;
+      max-width:840px;
+    }
+
+    .user-card{
+      position:relative;
+      z-index:1;
+      background:rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.18);
+      border-radius:18px;
+      padding:15px 17px;
+      min-width:240px;
+    }
+
+    .user-card small{
+      display:block;
+      color:rgba(255,255,255,.66);
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      font-weight:900;
+      margin-bottom:7px;
+    }
+
+    .user-card strong{
+      display:block;
+      font-size:16px;
+      margin-bottom:3px;
+    }
+
+    .user-card span{
+      color:rgba(255,255,255,.76);
+      font-size:12px;
+    }
+
+    .top-actions{
+      display:flex;
+      gap:10px;
+      margin-bottom:20px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .btn{
+      border:none;
+      border-radius:13px;
+      padding:11px 15px;
+      font-weight:800;
+      font-size:13px;
+      cursor:pointer;
+      transition:.2s ease;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      white-space:nowrap;
+    }
+
+    .btn-primary{
+      background:var(--primary);
+      color:#fff;
+      box-shadow:0 10px 18px rgba(18,58,93,.18);
+    }
+
+    .btn-primary:hover{
+      background:var(--primary-2);
+      transform:translateY(-1px);
+    }
+
+    .btn-accent{
+      background:var(--accent);
+      color:#fff;
+      box-shadow:0 10px 18px rgba(245,158,11,.22);
+    }
+
+    .btn-outline{
+      background:#fff;
+      color:var(--primary);
+      border:1px solid var(--line);
+    }
+
+    .btn-outline:hover{
+      border-color:var(--primary);
+      transform:translateY(-1px);
+    }
+
+    .grid-kpi{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:16px;
+      margin-bottom:20px;
+    }
+
+    .kpi-card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:18px;
+      box-shadow:var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .kpi-card:after{
+      content:"";
+      position:absolute;
+      width:100px;
+      height:100px;
+      border-radius:50%;
+      background:#E7F0F8;
+      right:-35px;
+      top:-35px;
+    }
+
+    .kpi-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      position:relative;
+      z-index:1;
+    }
+
+    .kpi-icon{
+      width:42px;
+      height:42px;
+      border-radius:14px;
+      background:#EEF5FC;
+      color:var(--primary);
+      display:grid;
+      place-items:center;
+      font-size:21px;
+    }
+
+    .kpi-tag{
+      font-size:12px;
+      font-weight:900;
+      padding:5px 8px;
+      border-radius:999px;
+      color:#166534;
+      background:#DCFCE7;
+    }
+
+    .kpi-value{
+      margin-top:15px;
+      font-size:27px;
+      font-weight:900;
+      color:var(--primary-2);
+      letter-spacing:-.03em;
+      position:relative;
+      z-index:1;
+    }
+
+    .kpi-label{
+      color:var(--muted);
+      font-size:13px;
+      margin-top:3px;
+      position:relative;
+      z-index:1;
+    }
+
+    .panel{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      margin-bottom:20px;
+      overflow:hidden;
+    }
+
+    .panel-header{
+      padding:18px 20px;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+    }
+
+    .panel-header h2{
+      font-size:17px;
+      color:var(--primary-2);
+    }
+
+    .panel-header span{
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .filters{
+      padding:18px 20px;
+      display:grid;
+      grid-template-columns:1.4fr repeat(4,minmax(150px,1fr));
+      gap:14px;
+      align-items:end;
+    }
+
+    .field label{
+      display:block;
+      font-size:12px;
+      color:var(--muted);
+      font-weight:900;
+      margin-bottom:7px;
+    }
+
+    .field input,
+    .field select,
+    .field textarea{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:13px;
+      padding:11px 12px;
+      font-size:13px;
+      outline:none;
+      color:var(--text);
+      background:#fff;
+      transition:.2s ease;
+    }
+
+    .field textarea{
+      min-height:86px;
+      resize:vertical;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus{
+      border-color:var(--primary);
+      box-shadow:0 0 0 4px rgba(18,58,93,.08);
+    }
+
+    .table-wrap{
+      overflow:auto;
+    }
+
+    table{
+      width:100%;
+      min-width:1120px;
+      border-collapse:collapse;
+    }
+
+    th{
+      background:#F8FAFC;
+      color:#475569;
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+      text-align:left;
+      padding:14px 16px;
+      border-bottom:1px solid var(--line);
+      white-space:nowrap;
+    }
+
+    td{
+      padding:15px 16px;
+      border-bottom:1px solid var(--line);
+      font-size:13px;
+      color:#334155;
+      vertical-align:middle;
+      white-space:nowrap;
+    }
+
+    tr:hover td{
+      background:#FBFDFF;
+    }
+
+    .client{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+    }
+
+    .client strong{
+      color:var(--primary-2);
+      font-size:13px;
+    }
+
+    .client span{
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .money{
+      font-weight:900;
+      color:var(--primary-2);
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      border-radius:999px;
+      padding:6px 10px;
+      font-size:12px;
+      font-weight:900;
+    }
+
+    .badge-success{
+      background:#DCFCE7;
+      color:#166534;
+    }
+
+    .badge-danger{
+      background:#FEE2E2;
+      color:#991B1B;
+    }
+
+    .badge-info{
+      background:#DBEAFE;
+      color:#1E40AF;
+    }
+
+    .badge-muted{
+      background:#E2E8F0;
+      color:#475569;
+    }
+
+    .icon-btn{
+      width:36px;
+      height:36px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:#fff;
+      cursor:pointer;
+      display:grid;
+      place-items:center;
+      transition:.2s ease;
+    }
+
+    .icon-btn:hover{
+      border-color:var(--primary);
+      background:#F8FAFC;
+      transform:translateY(-1px);
+    }
+
+    .empty-state{
+      display:none;
+      text-align:center;
+      color:var(--muted);
+      padding:34px 20px;
+    }
+
+    .empty-state strong{
+      display:block;
+      color:var(--primary-2);
+      margin-bottom:6px;
+    }
+
+    .modal{
+      position:fixed;
+      inset:0;
+      background:rgba(15,23,42,.58);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:50;
+      padding:22px;
+    }
+
+    .modal.open{
+      display:flex;
+    }
+
+    .modal-content{
+      background:#fff;
+      border-radius:22px;
+      width:min(760px,100%);
+      max-height:88vh;
+      overflow:auto;
+      box-shadow:0 30px 90px rgba(0,0,0,.28);
+    }
+
+    .modal-content.large{
+      width:min(940px,100%);
+    }
+
+    .modal-header{
+      padding:22px;
+      background:linear-gradient(135deg,var(--primary-2),var(--primary));
+      color:#fff;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:14px;
+    }
+
+    .modal-header h3{
+      font-size:19px;
+      margin-bottom:6px;
+    }
+
+    .modal-header p{
+      color:rgba(255,255,255,.78);
+      font-size:13px;
+    }
+
+    .close{
+      width:38px;
+      height:38px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.22);
+      background:rgba(255,255,255,.12);
+      color:#fff;
+      cursor:pointer;
+      font-size:18px;
+    }
+
+    .modal-body{
+      padding:22px;
+    }
+
+    .form-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:14px;
+    }
+
+    .form-grid .full{
+      grid-column:1 / -1;
+    }
+
+    .form-actions{
+      display:flex;
+      justify-content:flex-end;
+      gap:10px;
+      margin-top:18px;
+      padding-top:16px;
+      border-top:1px solid var(--line);
+    }
+
+    .notice{
+      border:1px solid #BFDBFE;
+      background:#EFF6FF;
+      color:#1E40AF;
+      border-radius:14px;
+      padding:12px 14px;
+      font-size:13px;
+      line-height:1.45;
+      margin-bottom:16px;
+    }
+
+    .detail-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:12px;
+      margin-bottom:20px;
+    }
+
+    .detail-card{
+      border:1px solid var(--line);
+      border-radius:15px;
+      padding:14px;
+      background:#F8FAFC;
+    }
+
+    .detail-card small{
+      display:block;
+      color:var(--muted);
+      font-weight:900;
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+      margin-bottom:5px;
+    }
+
+    .detail-card strong{
+      font-size:13px;
+      color:var(--primary-2);
+    }
+
+    .modal-table{
+      min-width:auto;
+    }
+
+    @media(max-width:1100px){
+      .grid-kpi{grid-template-columns:repeat(2,1fr);}
+      .filters{grid-template-columns:repeat(2,1fr);}
+      .hero{flex-direction:column;}
+    }
+
+    @media(max-width:720px){
+      .main{padding:18px;}
+      .grid-kpi{grid-template-columns:1fr;}
+      .filters{grid-template-columns:1fr;}
+      .form-grid{grid-template-columns:1fr;}
+      .detail-grid{grid-template-columns:1fr;}
+      .hero h1{font-size:23px;}
+      .top-actions{justify-content:stretch;}
+      .top-actions .btn{width:100%;}
+    }
+  </style>
+</head>
+<body>
+  <main class="main">
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Portal del vendedor · Apertura de cuentas</h1>
+        <p>
+          Vista para que el vendedor cree solicitudes de apertura y consulte únicamente el estado de sus solicitudes activas,
+          con filtros por fecha, cliente o código y estado de solicitud.
+        </p>
+      </div>
+      <div class="user-card">
+        <small>Vendedor autenticado</small>
+        <strong id="currentSellerName">María Fernández</strong>
+        <span>Consulta limitada a sus solicitudes</span>
+      </div>
+    </section>
+
+    <div class="top-actions">
+      <button class="btn btn-outline" onclick="resetFilters()">↻ Limpiar filtros</button>
+      <button class="btn btn-accent" onclick="exportCSV()">📤 Exportar mis solicitudes</button>
+      <button class="btn btn-primary" onclick="openNewRequest()">＋ Crear solicitud</button>
+    </div>
+
+    <section class="grid-kpi">
+      <article class="kpi-card">
+        <div class="kpi-head">
+          <div class="kpi-icon">📋</div>
+          <span class="kpi-tag">Activas</span>
+        </div>
+        <div class="kpi-value" id="kpiTotal">0</div>
+        <div class="kpi-label">Mis solicitudes activas</div>
+      </article>
+
+      <article class="kpi-card">
+        <div class="kpi-head">
+          <div class="kpi-icon">🔄</div>
+          <span class="kpi-tag" style="background:#DBEAFE;color:#1E40AF">Proceso</span>
+        </div>
+        <div class="kpi-value" id="kpiProcess">0</div>
+        <div class="kpi-label">En proceso</div>
+      </article>
+
+      <article class="kpi-card">
+        <div class="kpi-head">
+          <div class="kpi-icon">⚠️</div>
+          <span class="kpi-tag" style="background:#FEE2E2;color:#991B1B">Error</span>
+        </div>
+        <div class="kpi-value" id="kpiError">0</div>
+        <div class="kpi-label">Con novedad</div>
+      </article>
+
+      <article class="kpi-card">
+        <div class="kpi-head">
+          <div class="kpi-icon">💰</div>
+          <span class="kpi-tag">Monto</span>
+        </div>
+        <div class="kpi-value" id="kpiAmount">₡0</div>
+        <div class="kpi-label">Monto total solicitado</div>
+      </article>
+    </section>
+
+    <section class="panel">
+      <div class="panel-header">
+        <div>
+          <h2>Mis solicitudes de apertura</h2>
+          <span>Consulta el estado de las solicitudes registradas por el vendedor autenticado</span>
+        </div>
+        <span id="resultCounter">0 resultados</span>
+      </div>
+
+      <div class="filters">
+        <div class="field">
+          <label>Buscar cliente o código</label>
+          <input id="searchInput" type="text" placeholder="Ej. CL-10024, Comercial..." oninput="applyFilters()" />
+        </div>
+
+        <div class="field">
+          <label>Estado de solicitud</label>
+          <select id="statusFilter" onchange="applyFilters()">
+            <option value="">Todos</option>
+            <option value="Aperturada">Aperturada</option>
+            <option value="En proceso">En proceso</option>
+            <option value="Error">Error</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Fecha desde</label>
+          <input id="dateFrom" type="date" onchange="applyFilters()" />
+        </div>
+
+        <div class="field">
+          <label>Fecha hasta</label>
+          <input id="dateTo" type="date" onchange="applyFilters()" />
+        </div>
+
+        <div class="field">
+          <button class="btn btn-primary" style="width:100%" onclick="applyFilters()">🔎 Consultar</button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Solicitud</th>
+              <th>Fecha</th>
+              <th>Código cliente</th>
+              <th>Cliente</th>
+              <th>Monto solicitado</th>
+              <th>Estado</th>
+              <th>Resultado / novedad</th>
+              <th>Última actualización</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody id="requestTable"></tbody>
+        </table>
+      </div>
+
+      <div class="empty-state" id="emptyState">
+        <strong>No se encontraron solicitudes</strong>
+        Ajusta los filtros de búsqueda, fecha o estado.
+      </div>
+    </section>
+  </main>
+
+  <div class="modal" id="newRequestModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <h3>Crear solicitud de apertura</h3>
+          <p>Registra una nueva solicitud asociada al vendedor autenticado.</p>
+        </div>
+        <button class="close" onclick="closeModal('newRequestModal')">×</button>
+      </div>
+
+      <div class="modal-body">
+        <form id="newRequestForm">
+          <div class="notice">
+            La solicitud se creará con estado <strong>En proceso</strong> y quedará disponible en la tabla de seguimiento.
+          </div>
+
+          <div class="form-grid">
+            <div class="field">
+              <label>Código de cliente</label>
+              <input id="newCode" type="text" placeholder="Ej. CL-10034" required />
+            </div>
+
+            <div class="field">
+              <label>Monto en colones</label>
+              <input id="newAmount" type="number" min="1" step="1000" placeholder="Ej. 2500000" required />
+            </div>
+
+            <div class="field full">
+              <label>Observación para backoffice</label>
+              <textarea id="newObservation" placeholder="Detalle adicional u observación opcional para la solicitud..."></textarea>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-outline" onclick="closeModal('newRequestModal')">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Guardar solicitud</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="traceModal">
+    <div class="modal-content large">
+      <div class="modal-header">
+        <div>
+          <h3 id="traceTitle">Detalle de solicitud</h3>
+          <p id="traceSubtitle">Estado, datos principales y trazabilidad del proceso.</p>
+        </div>
+        <button class="close" onclick="closeModal('traceModal')">×</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="detail-grid" id="detailGrid"></div>
+
+        <table class="modal-table">
+          <thead>
+            <tr>
+              <th>Fecha / Hora</th>
+              <th>Etapa</th>
+              <th>Estado</th>
+              <th>Responsable</th>
+              <th>Detalle</th>
+            </tr>
+          </thead>
+          <tbody id="traceTable"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const CURRENT_SELLER = "María Fernández";
+
+    const requests = [
+      {
+        id:"AP-2026-0001",
+        date:"2026-05-21",
+        seller:"María Fernández",
+        code:"CL-10024",
+        client:"Comercial Luna S.A.",
+        amount:2350000,
+        status:"Aperturada",
+        result:"Cuenta creada correctamente",
+        lastRun:"2026-05-21 09:45",
+        trace:[
+          ["2026-05-21 08:12","Recepción de solicitud","Recibida","Sistema","Solicitud ingresada por el vendedor."],
+          ["2026-05-21 08:20","Validación de cliente","Completada","RPA","Cliente validado correctamente."],
+          ["2026-05-21 09:10","Apertura en SAP","Completada","RPA","Cuenta creada exitosamente."],
+          ["2026-05-21 09:45","Notificación","Enviada","Sistema","Confirmación enviada al vendedor."]
+        ]
+      },
+      {
+        id:"AP-2026-0004",
+        date:"2026-05-23",
+        seller:"María Fernández",
+        code:"CL-10027",
+        client:"Importadora Roble",
+        amount:3200000,
+        status:"Error",
+        result:"Datos del cliente incompletos para apertura",
+        lastRun:"2026-05-23 14:10",
+        trace:[
+          ["2026-05-23 13:32","Recepción de solicitud","Recibida","Sistema","Solicitud ingresada correctamente."],
+          ["2026-05-23 13:50","Validación de cliente","Error","RPA","Datos obligatorios del cliente no están completos."],
+          ["2026-05-23 14:10","Solicitud de corrección","Pendiente","Backoffice","Se requiere revisión de información."]
+        ]
+      },
+      {
+        id:"AP-2026-0009",
+        date:"2026-05-27",
+        seller:"María Fernández",
+        code:"CL-10032",
+        client:"Constructora Sur",
+        amount:4150000,
+        status:"En proceso",
+        result:"Validando información del cliente",
+        lastRun:"2026-05-27 09:20",
+        trace:[
+          ["2026-05-27 09:01","Recepción de solicitud","Recibida","Sistema","Solicitud recibida por canal comercial."],
+          ["2026-05-27 09:20","Validación de cliente","En proceso","RPA","Validando información del cliente."]
+        ]
+      },
+      {
+        id:"AP-2026-0011",
+        date:"2026-05-28",
+        seller:"María Fernández",
+        code:"CL-10036",
+        client:"Cliente pendiente de consulta",
+        amount:2750000,
+        status:"En proceso",
+        result:"Solicitud registrada, pendiente de validación de cliente",
+        lastRun:"2026-05-28 15:22",
+        trace:[
+          ["2026-05-28 15:22","Creación de solicitud","Registrada","Vendedor","Solicitud creada desde portal vendedor."],
+          ["2026-05-28 15:22","Validación de cliente","En proceso","Sistema","Pendiente de consulta en sistema fuente."]
+        ]
+      }
+    ];
+
+    let filtered = [];
+
+    function sellerRequests(){
+      return requests.filter(item => item.seller === CURRENT_SELLER);
+    }
+
+    function formatCurrency(value){
+      return new Intl.NumberFormat("es-CR", {
+        style:"currency",
+        currency:"CRC",
+        maximumFractionDigits:0
+      }).format(Number(value || 0));
+    }
+
+    function todayISO(){
+      return new Date().toISOString().slice(0,10);
+    }
+
+    function nowText(){
+      const d = new Date();
+      const pad = n => String(n).padStart(2,"0");
+      return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    }
+
+    function formatDate(date){
+      const [y,m,d] = date.split("-");
+      return `${d}/${m}/${y}`;
+    }
+
+    function nextId(){
+      const max = requests.reduce((acc,item) => {
+        const n = Number(item.id.split("-").pop());
+        return Math.max(acc,n);
+      },0);
+      return `AP-2026-${String(max + 1).padStart(4,"0")}`;
+    }
+
+    function badgeClass(status){
+      if(status === "Aperturada") return "badge badge-success";
+      if(status === "Error") return "badge badge-danger";
+      if(status === "En proceso") return "badge badge-info";
+      return "badge badge-muted";
+    }
+
+    function statusIcon(status){
+      if(status === "Aperturada") return "✅";
+      if(status === "Error") return "⚠️";
+      if(status === "En proceso") return "🔄";
+      return "•";
+    }
+
+    function renderTable(){
+      const tbody = document.getElementById("requestTable");
+      const empty = document.getElementById("emptyState");
+      const counter = document.getElementById("resultCounter");
+
+      tbody.innerHTML = "";
+
+      filtered.forEach(item => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td><strong>${item.id}</strong></td>
+          <td>${formatDate(item.date)}</td>
+          <td><strong>${item.code}</strong></td>
+          <td>
+            <div class="client">
+              <strong>${item.client}</strong>
+              <span>Vendedor: ${item.seller}</span>
+            </div>
+          </td>
+          <td class="money">${formatCurrency(item.amount)}</td>
+          <td><span class="${badgeClass(item.status)}">${statusIcon(item.status)} ${item.status}</span></td>
+          <td>${item.result}</td>
+          <td>${item.lastRun}</td>
+          <td><button class="icon-btn" title="Ver detalle" onclick="openTrace('${item.id}')">🧾</button></td>
+        `;
+        tbody.appendChild(row);
+      });
+
+      empty.style.display = filtered.length ? "none" : "block";
+      counter.textContent = `${filtered.length} resultado${filtered.length === 1 ? "" : "s"}`;
+      updateKpis();
+    }
+
+    function applyFilters(){
+      const search = document.getElementById("searchInput").value.toLowerCase().trim();
+      const status = document.getElementById("statusFilter").value;
+      const from = document.getElementById("dateFrom").value;
+      const to = document.getElementById("dateTo").value;
+
+      filtered = sellerRequests().filter(item => {
+        const matchesSearch = !search ||
+          item.code.toLowerCase().includes(search) ||
+          item.client.toLowerCase().includes(search) ||
+          item.id.toLowerCase().includes(search);
+
+        const matchesStatus = !status || item.status === status;
+        const matchesFrom = !from || item.date >= from;
+        const matchesTo = !to || item.date <= to;
+
+        return matchesSearch && matchesStatus && matchesFrom && matchesTo;
+      });
+
+      renderTable();
+    }
+
+    function resetFilters(){
+      document.getElementById("searchInput").value = "";
+      document.getElementById("statusFilter").value = "";
+      document.getElementById("dateFrom").value = "";
+      document.getElementById("dateTo").value = "";
+      filtered = sellerRequests();
+      renderTable();
+    }
+
+    function updateKpis(){
+      const mine = sellerRequests();
+      const amount = mine.reduce((acc,item) => acc + Number(item.amount || 0), 0);
+
+      document.getElementById("kpiTotal").textContent = mine.length;
+      document.getElementById("kpiProcess").textContent = mine.filter(item => item.status === "En proceso").length;
+      document.getElementById("kpiError").textContent = mine.filter(item => item.status === "Error").length;
+      document.getElementById("kpiAmount").textContent = formatCurrency(amount);
+    }
+
+    function openNewRequest(){
+      document.getElementById("newRequestForm").reset();
+      document.getElementById("newRequestModal").classList.add("open");
+    }
+
+    document.getElementById("newRequestForm").addEventListener("submit", function(e){
+      e.preventDefault();
+
+      const code = document.getElementById("newCode").value.trim();
+      const amount = Number(document.getElementById("newAmount").value);
+      const observation = document.getElementById("newObservation").value.trim();
+      const now = nowText();
+
+      if(!code || amount <= 0) return;
+
+      requests.unshift({
+        id:nextId(),
+        date:todayISO(),
+        seller:CURRENT_SELLER,
+        code,
+        client:"Cliente pendiente de consulta",
+        amount,
+        status:"En proceso",
+        result:"Solicitud creada por vendedor, pendiente de validación de cliente",
+        lastRun:now,
+        trace:[
+          [now,"Creación de solicitud","Registrada",CURRENT_SELLER, observation || "Solicitud creada desde portal vendedor."],
+          [now,"Validación de cliente","En proceso","Sistema","Pendiente de consulta en sistema fuente."]
+        ]
+      });
+
+      closeModal("newRequestModal");
+      applyFilters();
+    });
+
+    function openTrace(id){
+      const item = requests.find(x => x.id === id && x.seller === CURRENT_SELLER);
+      if(!item) return;
+
+      document.getElementById("traceTitle").textContent = `Detalle de solicitud ${item.id}`;
+      document.getElementById("traceSubtitle").textContent = `${item.code} · ${item.client} · ${item.status}`;
+
+      document.getElementById("detailGrid").innerHTML = `
+        <div class="detail-card"><small>Solicitud</small><strong>${item.id}</strong></div>
+        <div class="detail-card"><small>Código cliente</small><strong>${item.code}</strong></div>
+        <div class="detail-card"><small>Cliente</small><strong>${item.client}</strong></div>
+        <div class="detail-card"><small>Estado</small><strong>${item.status}</strong></div>
+        <div class="detail-card"><small>Monto solicitado</small><strong>${formatCurrency(item.amount)}</strong></div>
+        <div class="detail-card"><small>Fecha</small><strong>${formatDate(item.date)}</strong></div>
+        <div class="detail-card"><small>Última actualización</small><strong>${item.lastRun}</strong></div>
+        <div class="detail-card"><small>Vendedor</small><strong>${item.seller}</strong></div>
+      `;
+
+      document.getElementById("traceTable").innerHTML = item.trace.map(t => `
+        <tr>
+          <td>${t[0]}</td>
+          <td>${t[1]}</td>
+          <td><span class="${traceBadge(t[2])}">${t[2]}</span></td>
+          <td>${t[3]}</td>
+          <td>${t[4]}</td>
+        </tr>
+      `).join("");
+
+      document.getElementById("traceModal").classList.add("open");
+    }
+
+    function traceBadge(value){
+      const v = value.toLowerCase();
+      if(v.includes("completada") || v.includes("enviada") || v.includes("recibida") || v.includes("registrada")) return "badge badge-success";
+      if(v.includes("error")) return "badge badge-danger";
+      if(v.includes("proceso")) return "badge badge-info";
+      return "badge badge-muted";
+    }
+
+    function closeModal(id){
+      document.getElementById(id).classList.remove("open");
+    }
+
+    function exportCSV(){
+      const headers = [
+        "Solicitud",
+        "Fecha",
+        "Código cliente",
+        "Cliente",
+        "Monto solicitado",
+        "Estado",
+        "Resultado/Novedad",
+        "Última actualización"
+      ];
+
+      const rows = filtered.map(item => [
+        item.id,
+        item.date,
+        item.code,
+        item.client,
+        item.amount,
+        item.status,
+        item.result,
+        item.lastRun
+      ]);
+
+      const csv = [headers, ...rows]
+        .map(row => row.map(value => `"${String(value).replaceAll('"','""')}"`).join(","))
+        .join("\n");
+
+      const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "mis_solicitudes_apertura_cuentas.csv";
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+
+    document.querySelectorAll(".modal").forEach(modal => {
+      modal.addEventListener("click", function(e){
+        if(e.target.classList.contains("modal")){
+          e.target.classList.remove("open");
+        }
+      });
+    });
+
+    document.getElementById("currentSellerName").textContent = CURRENT_SELLER;
+    resetFilters();
+  </script>
+</body>
+</html>
