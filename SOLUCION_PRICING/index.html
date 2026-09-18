@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing Control Hub - La Guaca</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo"><span class="logo-icon">💰</span><span class="logo-text">Pricing Control Hub</span></div>
+                <small class="logo-subtitle">La Guaca - Costa Rica</small>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-view="dashboard"><span class="nav-icon">🏠</span><span class="nav-text">Dashboard</span></a>
+                <a href="#" class="nav-item" data-view="productos"><span class="nav-icon">📦</span><span class="nav-text">Maestro Productos</span></a>
+                <a href="#" class="nav-item" data-view="calcNuevo"><span class="nav-icon">🆕</span><span class="nav-text">Precio Código Nuevo</span></a>
+                <a href="#" class="nav-item" data-view="calcUsado"><span class="nav-icon">♻️</span><span class="nav-text">Precio Usado Nuevo</span></a>
+                <a href="#" class="nav-item" data-view="cambioCosto"><span class="nav-icon">📈</span><span class="nav-text">Cambio de Costo</span></a>
+                <a href="#" class="nav-item" data-view="homologacion"><span class="nav-icon">↔️</span><span class="nav-text">Homologación Lado</span></a>
+                <a href="#" class="nav-item" data-view="competencia"><span class="nav-icon">📡</span><span class="nav-text">Competencia</span></a>
+                <a href="#" class="nav-item" data-view="investigacion"><span class="nav-icon">🔬</span><span class="nav-text">Investigación Mercado</span></a>
+                <a href="#" class="nav-item" data-view="ajustes"><span class="nav-icon">⚙️</span><span class="nav-text">Ajustes de Precio</span></a>
+                <a href="#" class="nav-item" data-view="aprobaciones"><span class="nav-icon">✅</span><span class="nav-text">Aprobaciones</span></a>
+                <a href="#" class="nav-item" data-view="integracion"><span class="nav-icon">🔗</span><span class="nav-text">Integración POS</span></a>
+                <a href="#" class="nav-item" data-view="historial"><span class="nav-icon">📜</span><span class="nav-text">Histórico Producto</span></a>
+                <a href="#" class="nav-item" data-view="reglas"><span class="nav-icon">📐</span><span class="nav-text">Reglas y Parámetros</span></a>
+                <a href="#" class="nav-item" data-view="lago"><span class="nav-icon">🗄️</span><span class="nav-text">Lago de Datos</span></a>
+            </nav>
+            <div class="sidebar-footer"><small>v3.0 &bull; Pricing Intelligence</small></div>
+        </aside>
+        <main class="main-content">
+            <header class="top-header">
+                <div class="header-left">
+                    <button class="menu-toggle" id="menuToggle">☰</button>
+                    <h1 class="header-title" id="headerTitle">Dashboard Ejecutivo</h1>
+                </div>
+                <div class="header-right">
+                    <span class="connection-status" id="connectionStatus">🟢 Conectado POS</span>
+                    <span class="header-date" id="headerDate"></span>
+                    <div class="header-user">
+                        <span class="user-avatar">👤</span>
+                        <div class="user-info"><span class="user-name">Carlos Mora</span><span class="user-role">Gerente Comercial</span></div>
+                    </div>
+                </div>
+            </header>
+            <div class="content-area" id="contentArea"></div>
+        </main>
+    </div>
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal" id="modalContent">
+            <div class="modal-header"><h3 class="modal-title" id="modalTitle"></h3><button class="modal-close" id="modalClose">&times;</button></div>
+            <div class="modal-body" id="modalBody"></div>
+            <div class="modal-footer" id="modalFooter"></div>
+        </div>
+    </div>
+    <div class="toast-container" id="toastContainer"></div>
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
