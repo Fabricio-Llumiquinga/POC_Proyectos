@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MarcaControl COMECA</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>MarcaControl</h2>
+            <span class="sidebar-subtitle">COMECA</span>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active" data-module="dashboard"><span class="nav-icon">📊</span> Dashboard</a>
+            <a href="#" class="nav-item" data-module="fuentes"><span class="nav-icon">🔄</span> Fuentes de Marcación</a>
+            <a href="#" class="nav-item" data-module="empleados"><span class="nav-icon">👥</span> Empleados</a>
+            <a href="#" class="nav-item" data-module="biometrico"><span class="nav-icon">📷</span> Biométrico / Kiosco</a>
+            <a href="#" class="nav-item" data-module="marcacionweb"><span class="nav-icon">🌎</span> Marcación Web / Visitas</a>
+            <a href="#" class="nav-item" data-module="supervisores"><span class="nav-icon">👔</span> Supervisores</a>
+            <a href="#" class="nav-item" data-module="incidencias"><span class="nav-icon">⚠️</span> Revisión de Incidencias</a>
+            <a href="#" class="nav-item" data-module="seguimiento"><span class="nav-icon">📋</span> Seguimiento Nómina</a>
+            <a href="#" class="nav-item" data-module="cierre"><span class="nav-icon">✅</span> Cierre por Empresa</a>
+            <a href="#" class="nav-item" data-module="reportes"><span class="nav-icon">📈</span> Reportes</a>
+            <a href="#" class="nav-item" data-module="politicas"><span class="nav-icon">📐</span> Políticas de Marcación</a>
+            <a href="#" class="nav-item" data-module="documentos"><span class="nav-icon">📄</span> Documentos / Permisos</a>
+            <a href="#" class="nav-item" data-module="plantillas"><span class="nav-icon">📋</span> Plantillas de Horario</a>
+        </nav>
+    </aside>
+    <main class="main-content">
+        <header class="header">
+            <div class="header-left">
+                <h1>MarcaControl COMECA</h1>
+                <span class="header-subtitle">Plataforma de Administración de Marcas</span>
+            </div>
+            <div class="header-right">
+                <span class="user-role" id="currentRole">Administrador Nómina</span>
+                <button class="btn btn-sm btn-secondary" id="btnChangeRole">Cambiar Rol</button>
+            </div>
+        </header>
+        <div class="content" id="mainContent"></div>
+    </main>
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal" id="modalContent"></div>
+    </div>
+    <div class="toast-container" id="toastContainer"></div>
+    <script src="app.js"></script>
+</body>
+</html>
