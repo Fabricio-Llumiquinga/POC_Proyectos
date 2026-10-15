@@ -27,7 +27,14 @@ defaultImportMode:'contenedor_completo',usualContainer:'40 pies',allowsConsolida
 {id:7,nombre:'Proveedor 7',region:'Estados Unidos',pais:'Estados Unidos',recurrente:true,moneda:'USD',incoterm:'FCA',tipoContenedor:'Consolidado',tiempoEntrega:20,tratado:true,variacionReciente:6.8,ultimaCompra:'2026-05-10',importaciones:9,frecuenciaCompra:'Cada 2 meses',utilizacionProm:72,email:'proveedor7@ejemplo.com',direccion:'450 Industrial Blvd, Miami FL, USA',
 defaultImportMode:'consolidado',usualContainer:'No aplica',allowsConsolidation:true,consolidationPoint:'Miami',exceptionAllowed:true,exceptionTypes:['Pedido urgente'],minimumOrderValue:6000,targetOrderValue:12000,usualIncoterm:'FCA',quoteValidityDays:30,averageTransitDays:20,brands:['Marca M','Marca N'],utilizacionMinRec:70},
 {id:8,nombre:'Proveedor 8',region:'Estados Unidos',pais:'Estados Unidos',recurrente:true,moneda:'USD',incoterm:'FCA',tipoContenedor:'Consolidado',tiempoEntrega:16,tratado:true,variacionReciente:4.2,ultimaCompra:'2026-06-15',importaciones:11,frecuenciaCompra:'Cada 2 meses',utilizacionProm:68,email:'proveedor8@ejemplo.com',direccion:'789 Warehouse Ave, Miami FL, USA',
-defaultImportMode:'consolidado',usualContainer:'No aplica',allowsConsolidation:true,consolidationPoint:'Miami',exceptionAllowed:true,exceptionTypes:['Pedido urgente','Necesidad extraordinaria'],minimumOrderValue:5000,targetOrderValue:10000,usualIncoterm:'FCA',quoteValidityDays:30,averageTransitDays:16,brands:['Marca O','Marca P'],utilizacionMinRec:65}
+defaultImportMode:'consolidado',usualContainer:'No aplica',allowsConsolidation:true,consolidationPoint:'Miami',exceptionAllowed:true,exceptionTypes:['Pedido urgente','Necesidad extraordinaria'],minimumOrderValue:5000,targetOrderValue:10000,usualIncoterm:'FCA',quoteValidityDays:30,averageTransitDays:16,brands:['Marca O','Marca P'],utilizacionMinRec:65},
+// Proveedores locales (Costa Rica) — Compra local, sin datos de importación
+{id:9,nombre:'Proveedor Local 1',local:true,region:'Costa Rica',pais:'Costa Rica',ciudad:'San José',recurrente:true,moneda:'CRC',incoterm:'N/A',tipoContenedor:'No aplica',tiempoEntrega:3,tratado:false,variacionReciente:3.5,ultimaCompra:'2026-07-28',importaciones:0,comprasLocales:22,frecuenciaCompra:'Cada 2 semanas',utilizacionProm:0,email:'proveedorlocal1@ejemplo.com',direccion:'Zona Industrial La Uruca, San José, Costa Rica',
+defaultImportMode:'compra_local',usualContainer:'No aplica',allowsConsolidation:false,consolidationPoint:null,exceptionAllowed:false,exceptionTypes:[],minimumOrderValue:1500,targetOrderValue:4000,usualIncoterm:'N/A',quoteValidityDays:15,averageTransitDays:3,brands:['Marca F','Marca G'],plazoCredito:30,entregaIncluida:true,utilizacionMinRec:0},
+{id:10,nombre:'Proveedor Local 2',local:true,region:'Costa Rica',pais:'Costa Rica',ciudad:'Heredia',recurrente:true,moneda:'USD',incoterm:'N/A',tipoContenedor:'No aplica',tiempoEntrega:5,tratado:false,variacionReciente:6.0,ultimaCompra:'2026-07-10',importaciones:0,comprasLocales:9,frecuenciaCompra:'Mensual',utilizacionProm:0,email:'proveedorlocal2@ejemplo.com',direccion:'Parque Empresarial Lagunilla, Heredia, Costa Rica',
+defaultImportMode:'compra_local',usualContainer:'No aplica',allowsConsolidation:false,consolidationPoint:null,exceptionAllowed:false,exceptionTypes:[],minimumOrderValue:3000,targetOrderValue:8000,usualIncoterm:'N/A',quoteValidityDays:15,averageTransitDays:5,brands:['Marca A','Marca B'],plazoCredito:45,entregaIncluida:false,utilizacionMinRec:0},
+{id:11,nombre:'Proveedor Local 3',local:true,region:'Costa Rica',pais:'Costa Rica',ciudad:'Cartago',recurrente:false,moneda:'CRC',incoterm:'N/A',tipoContenedor:'No aplica',tiempoEntrega:7,tratado:false,variacionReciente:0,ultimaCompra:null,importaciones:0,comprasLocales:0,frecuenciaCompra:'N/A',utilizacionProm:0,email:'proveedorlocal3@ejemplo.com',direccion:'Zona Franca, Cartago, Costa Rica',
+defaultImportMode:'compra_local',usualContainer:'No aplica',allowsConsolidation:false,consolidationPoint:null,exceptionAllowed:false,exceptionTypes:[],minimumOrderValue:1000,targetOrderValue:3000,usualIncoterm:'N/A',quoteValidityDays:10,averageTransitDays:7,brands:['Marca M'],plazoCredito:0,entregaIncluida:true,utilizacionMinRec:0}
 ];
 
 // Catálogo por proveedor (8 productos cada uno para los principales)
@@ -93,6 +100,11 @@ consumoVenta:20,consumoInstalacion:5,consumoProyecto:2,consumoMensual:26.7,consu
 {sku:'P8-003',descripcion:'Producto 23',categoria:'Impermeabilización',costoActual:72,precioVenta:135,pesoUnitario:22,volumenUnitario:0.025,stockTotal:18,stockReservado:4,stockActual:14,ordenesTransito:0,ventas3m:8,ventas6m:15,ventas12m:32,cobertura:5.3,frecuenciaCompra:7,cantidadPromedio:20,ultimaCompra:'2026-06-15',clientePrincipal:'Cliente A',concentracion:45,
 consumoVenta:2,consumoInstalacion:1,consumoProyecto:0,consumoMensual:2.7,consumoTrimestral:8,consumoSemestral:15,consumoAnual:32,puntoReorden:8,inventarioMinimo:5,proyeccionComercial:{qty:3,period:'mensual',source:'Ventas',notes:'Normal'}}
 ];
+
+// Catálogos de proveedores locales (costo de distribuidor local, sin costos de importación)
+SUPPLIER_CATALOGS[9] = SUPPLIER_CATALOGS[3].map((p,i)=>({...p,sku:'L1-00'+(i+1),descripcion:'Producto '+(i+50),costoActual:Math.round(p.costoActual*1.12*100)/100,cantidadPromedio:Math.max(5,Math.round(p.cantidadPromedio/4))}));
+SUPPLIER_CATALOGS[10] = SUPPLIER_CATALOGS[1].slice(0,5).map((p,i)=>({...p,sku:'L2-00'+(i+1),descripcion:'Producto '+(i+60),costoActual:Math.round(p.costoActual*1.15*100)/100,cantidadPromedio:Math.max(5,Math.round(p.cantidadPromedio/5))}));
+SUPPLIER_CATALOGS[11] = SUPPLIER_CATALOGS[7].map((p,i)=>({...p,sku:'L3-00'+(i+1),descripcion:'Producto '+(i+70),costoActual:Math.round(p.costoActual*1.25*100)/100,concentracion:68,cantidadPromedio:Math.max(5,Math.round(p.cantidadPromedio/3))}));
 
 // Asignar fechaVencimiento y stockPorVencer a productos que no lo tengan
 Object.values(SUPPLIER_CATALOGS).forEach(cat=>cat.forEach(p=>{if(p.fechaVencimiento===undefined){p.fechaVencimiento=null;p.stockPorVencer=0;}}));
@@ -161,7 +173,10 @@ const DEFAULT_SIMULACIONES = [
 {id:'SIM-2026-012',fecha:'2026-07-22',motivo:'Necesidad comercial',proveedor:'Proveedor 3',tipoProveedor:'Recurrente',pais:'Estados Unidos',region:'Estados Unidos',incoterm:'FCA',tipoCarga:'Consolidado',numProductos:12,totalCompra:28500,costoCR:36200,utilizacion:86,recomendacion:'COMPRAR',estado:'borrador',fechaLlegada:null,responsable:'Ana Solano',sapOrder:null,tipoImportacion:'consolidada',notas:'Caso 2: Consolidado 3 proveedores (Proveedor 3+7+8) en Miami. 12 productos, $28.5k, utilización 86%.'},
 {id:'SIM-2026-013',fecha:'2026-07-24',motivo:'Reposición de productos',proveedor:'Proveedor 2',tipoProveedor:'Recurrente',pais:'Suiza',region:'Europa',incoterm:'FOB',tipoCarga:'40 pies',numProductos:6,totalCompra:42000,costoCR:55800,utilizacion:78,recomendacion:'COMPRAR CON AJUSTES',estado:'borrador',fechaLlegada:null,responsable:'Carlos Méndez',sapOrder:null,tipoImportacion:'regular',notas:'Caso 3: Motor NO agrega producto porque generaría 11.3 meses de cobertura (sobre-stock).'},
 {id:'SIM-2026-014',fecha:'2026-07-26',motivo:'Compra completa por proveedor',proveedor:'Proveedor 2',tipoProveedor:'Recurrente',pais:'Suiza',region:'Europa',incoterm:'FOB',tipoCarga:'40 pies',numProductos:5,totalCompra:35000,costoCR:46500,utilizacion:82,recomendacion:'ESPERAR',estado:'borrador',fechaLlegada:null,responsable:'Roberto Fallas',sapOrder:null,tipoImportacion:'regular',notas:'Caso 4: Cotización vencida. Sistema bloquea recomendación. Score penalizado -25.'},
-{id:'SIM-2026-015',fecha:'2026-07-28',motivo:'Proyecto específico',proveedor:'Proveedor 1',tipoProveedor:'Recurrente',pais:'España',region:'Europa',incoterm:'CIF',tipoCarga:'Consolidado',numProductos:4,totalCompra:18000,costoCR:24500,utilizacion:65,recomendacion:'COMPRAR CON AJUSTES',estado:'borrador',fechaLlegada:null,responsable:'Ana Solano',sapOrder:null,tipoImportacion:'pedido_especial',notas:'Caso 5: Pedido especial. Proveedor normalmente contenedor completo. Excepción aprobada para consolidado urgente.'}
+{id:'SIM-2026-015',fecha:'2026-07-28',motivo:'Proyecto específico',proveedor:'Proveedor 1',tipoProveedor:'Recurrente',pais:'España',region:'Europa',incoterm:'CIF',tipoCarga:'Consolidado',numProductos:4,totalCompra:18000,costoCR:24500,utilizacion:65,recomendacion:'COMPRAR CON AJUSTES',estado:'borrador',fechaLlegada:null,responsable:'Ana Solano',sapOrder:null,tipoImportacion:'pedido_especial',notas:'Caso 5: Pedido especial. Proveedor normalmente contenedor completo. Excepción aprobada para consolidado urgente.'},
+// Compras locales (Costa Rica)
+{id:'SIM-2026-016',fecha:'2026-07-29',motivo:'Reposición de productos',proveedor:'Proveedor Local 1',tipoProveedor:'Recurrente',pais:'Costa Rica',region:'Costa Rica',incoterm:'N/A',tipoCarga:'Local',numProductos:5,totalCompra:4850,costoCR:5010,utilizacion:null,recomendacion:'COMPRAR',estado:'aprobado',fechaLlegada:'2026-08-01',responsable:'Ana Solano',sapOrder:null,tipoCompra:'local',tiempoEntrega:3,notas:'Compra local para cubrir stock crítico mientras llega la importación.'},
+{id:'SIM-2026-017',fecha:'2026-07-30',motivo:'Necesidad comercial',proveedor:'Proveedor Local 2',tipoProveedor:'Recurrente',pais:'Costa Rica',region:'Costa Rica',incoterm:'N/A',tipoCarga:'Local',numProductos:3,totalCompra:6200,costoCR:6550,utilizacion:null,recomendacion:'COMPRAR CON AJUSTES',estado:'borrador',fechaLlegada:null,responsable:'Carlos Méndez',sapOrder:null,tipoCompra:'local',tiempoEntrega:5,notas:'Compra local por proyecto. Margen bajo observación.'}
 ];
 
 // Ventas mensuales determinísticas
@@ -412,7 +427,7 @@ function optimizeOrder(selectedProducts, allProducts, supplier, rules, container
             tiempoRotacion: rotacion.mesesRotacionAdicional,
             clasificacionRotacion: rotacion.clasificacion,
             margenEsperado: ((p.precioVenta - p.costoActual) / p.precioVenta * 100),
-            motivo: determineAddReason(p, need, faltanteObjetivo, utilizacionActual),
+            motivo: determineAddReason(p, need, faltanteObjetivo, containerType === 'Local' ? 100 : utilizacionActual),
             recomendado: true,
             razonNoRecomendado: null
         });
@@ -577,10 +592,14 @@ function setupEvents(){
     document.getElementById('modal-overlay').addEventListener('click',e=>{if(e.target.id==='modal-overlay')closeModal();});
 }
 
-function navigateTo(view){APP.currentView=view;document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));const a=document.querySelector(`[data-view="${view}"]`);if(a)a.classList.add('active');renderView(view);document.getElementById('sidebar').classList.remove('open');}
+function navigateTo(view){
+// El asistente es el mismo para importación y compra local; cambiar de módulo reinicia el modo
+if(view==='compra-local'&&APP.wizardData.tipoCompra!=='local'){initWizard('local');APP.wizardStep=1;}
+if(view==='nueva-simulacion'&&APP.wizardData.tipoCompra==='local'){initWizard();APP.wizardStep=1;}
+APP.currentView=view;document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));const a=document.querySelector(`[data-view="${view}"]`);if(a)a.classList.add('active');renderView(view);document.getElementById('sidebar').classList.remove('open');}
 function updateRoleVis(){const r=APP.currentRole;const a=document.querySelector('[data-role="admin"]');if(a)a.style.display=r==='admin'?'flex':'none';}
 function updateUserDisplay(){const n={comercial:'Carlos Méndez',importaciones:'Ana Solano',aprobador:'Roberto Fallas',admin:'Administrador'};document.getElementById('user-name').textContent=n[APP.currentRole]||'Usuario';}
-function renderView(v){const c=document.getElementById('content');switch(v){case'resumen':c.innerHTML=renderResumen();break;case'simulaciones':c.innerHTML=renderSimulaciones();break;case'nueva-simulacion':c.innerHTML=renderNuevaSimulacion();break;case'planificacion':c.innerHTML=renderPlanificacion();break;case'proveedores':c.innerHTML=renderProveedores();break;case'productos':c.innerHTML=renderMaestroProductos();break;case'reglas':c.innerHTML=renderReglas();break;case'configuracion':c.innerHTML=renderConfiguracion();break;case'usuarios':c.innerHTML=renderUsuarios();break;case'consumo':c.innerHTML=renderControlConsumo();break;case'reportes':c.innerHTML=renderReportes();break;case'detalle-simulacion':c.innerHTML=renderDetalle();break;default:c.innerHTML=renderResumen();}}
+function renderView(v){const c=document.getElementById('content');switch(v){case'resumen':c.innerHTML=renderResumen();break;case'simulaciones':c.innerHTML=renderSimulaciones();break;case'nueva-simulacion':case'compra-local':c.innerHTML=renderNuevaSimulacion();break;case'planificacion':c.innerHTML=renderPlanificacion();break;case'proveedores':c.innerHTML=renderProveedores();break;case'productos':c.innerHTML=renderMaestroProductos();break;case'reglas':c.innerHTML=renderReglas();break;case'configuracion':c.innerHTML=renderConfiguracion();break;case'usuarios':c.innerHTML=renderUsuarios();break;case'consumo':c.innerHTML=renderControlConsumo();break;case'reportes':c.innerHTML=renderReportes();break;case'detalle-simulacion':c.innerHTML=renderDetalle();break;default:c.innerHTML=renderResumen();}}
 
 // ===== VISTA 1: RESUMEN EJECUTIVO =====
 function renderResumen(){
@@ -588,7 +607,7 @@ function renderResumen(){
     const ocs=APP.purchaseOrders.length;const enTransito=APP.transitRecords.filter(t=>t.estado==='transito').length;
     const proxLlegar=APP.transitRecords.filter(t=>t.diasRestantes<=15).length;
     const utilProm=Math.round(s.filter(x=>x.utilizacion).reduce((a,x)=>a+x.utilizacion,0)/(s.length||1));
-    const alertas=s.filter(x=>x.utilizacion<80).length+s.filter(x=>x.recomendacion==='NO COMPRAR').length;
+    const alertas=s.filter(x=>x.utilizacion!=null&&x.utilizacion<80).length+s.filter(x=>x.recomendacion==='NO COMPRAR').length;
     // Nuevos KPIs v3.0
     const allProds=Object.values(SUPPLIER_CATALOGS).flat();
     const bajoReorden=allProds.filter(p=>{const n=calculatePurchaseNeed(p,APP.rules);return n.urgency==='critica'||n.urgency==='necesaria';}).length;
@@ -601,7 +620,7 @@ function renderResumen(){
     </div>
     <div class="card"><div class="card-header"><h2><i class="fas fa-table"></i> Últimas simulaciones</h2><button class="btn btn-primary btn-sm" onclick="navigateTo('nueva-simulacion')"><i class="fas fa-plus"></i> Nueva</button></div>
     <div class="card-body"><div class="table-container"><table><thead><tr><th>Código</th><th>Proveedor</th><th>País</th><th><i class="fas fa-database" style="color:var(--primary)" title="SAP"></i> Incoterm</th><th><i class="fas fa-database" style="color:var(--primary)" title="SAP"></i> Monto</th><th>Productos</th><th><i class="fas fa-calculator" style="color:var(--accent)" title="Cálculo"></i> Utilización</th><th><i class="fas fa-robot" style="color:var(--success)" title="IA"></i> Recomendación</th><th>Estado</th><th>Llegada est.</th><th>Responsable</th><th></th></tr></thead><tbody>
-    ${s.slice(0,6).map(x=>`<tr style="cursor:pointer" onclick="viewSimDetail('${x.id}')"><td><strong>${x.id}</strong></td><td>${x.proveedor}</td><td>${x.pais}</td><td>${x.incoterm}</td><td>$${fmt(x.totalCompra)}</td><td>${x.numProductos}</td><td><span class="semaphore ${x.utilizacion>=85?'green':x.utilizacion>=70?'yellow':'red'}">${x.utilizacion}%</span></td><td><span class="badge-status ${getRecBadge(x.recomendacion)}">${x.recomendacion}</span></td><td><span class="badge-status badge-${x.estado}">${ESTADOS_MAP[x.estado]||x.estado}</span></td><td>${x.fechaLlegada||'—'}</td><td>${x.responsable}</td><td class="action-btns"><button onclick="event.stopPropagation();viewSimDetail('${x.id}')"><i class="fas fa-eye"></i></button></td></tr>`).join('')}
+    ${s.slice(0,6).map(x=>`<tr style="cursor:pointer" onclick="viewSimDetail('${x.id}')"><td><strong>${x.id}</strong>${localBadge(x)}</td><td>${x.proveedor}</td><td>${x.pais}</td><td>${x.incoterm}</td><td>$${fmt(x.totalCompra)}</td><td>${x.numProductos}</td><td>${utilCell(x.utilizacion)}</td><td><span class="badge-status ${getRecBadge(x.recomendacion)}">${x.recomendacion}</span></td><td><span class="badge-status badge-${x.estado}">${ESTADOS_MAP[x.estado]||x.estado}</span></td><td>${x.fechaLlegada||'—'}</td><td>${x.responsable}</td><td class="action-btns"><button onclick="event.stopPropagation();viewSimDetail('${x.id}')"><i class="fas fa-eye"></i></button></td></tr>`).join('')}
     </tbody></table></div></div></div>
     <div style="text-align:right;margin-top:10px;"><button class="btn btn-outline btn-sm" onclick="resetData()"><i class="fas fa-redo"></i> Restaurar datos de demostración</button></div>`;
 }
@@ -610,29 +629,36 @@ function renderCostosChart(){const r=['Europa','Asia','EEUU','Sudamérica'];cons
 
 // ===== VISTA 2: SIMULACIONES =====
 function renderSimulaciones(){
-    return `<h1 class="section-title"><i class="fas fa-list"></i> Simulaciones de Importación</h1>
-    <div class="card"><div class="card-header"><h2>Listado</h2><button class="btn btn-primary btn-sm" onclick="navigateTo('nueva-simulacion')"><i class="fas fa-plus"></i> Nueva</button></div>
+    return `<h1 class="section-title"><i class="fas fa-list"></i> Simulaciones de Compra</h1>
+    <div class="card"><div class="card-header"><h2>Listado</h2><div style="display:flex;gap:6px;"><button class="btn btn-primary btn-sm" onclick="navigateTo('nueva-simulacion')"><i class="fas fa-plus"></i> Nueva simulación importación</button><button class="btn btn-accent btn-sm" onclick="navigateTo('compra-local')"><i class="fas fa-store"></i> Nueva simulación compra local</button></div></div>
     <div class="card-body">
-    <div class="filter-bar"><input type="text" id="sf-search" placeholder="Buscar..." oninput="filterSims()"><select id="sf-proveedor" onchange="filterSims()"><option value="">Todo proveedor</option>${PROVEEDORES.map(p=>`<option value="${p.nombre}">${p.nombre}</option>`).join('')}</select><select id="sf-estado" onchange="filterSims()"><option value="">Todo estado</option>${Object.entries(ESTADOS_MAP).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select><select id="sf-region" onchange="filterSims()"><option value="">Toda región</option><option>Europa</option><option>Asia</option><option>Estados Unidos</option><option>Sudamérica</option></select></div>
+    <div class="filter-bar"><input type="text" id="sf-search" placeholder="Buscar..." oninput="filterSims()"><select id="sf-tipo" onchange="filterSims()"><option value="">Toda compra</option><option value="importacion">Importación</option><option value="local">Compra local</option></select><select id="sf-proveedor" onchange="filterSims()"><option value="">Todo proveedor</option>${PROVEEDORES.map(p=>`<option value="${p.nombre}">${p.nombre}</option>`).join('')}</select><select id="sf-estado" onchange="filterSims()"><option value="">Todo estado</option>${Object.entries(ESTADOS_MAP).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select><select id="sf-region" onchange="filterSims()"><option value="">Toda región</option><option>Europa</option><option>Asia</option><option>Estados Unidos</option><option>Sudamérica</option><option>Costa Rica</option></select></div>
     <div class="table-container"><table><thead><tr><th>Código</th><th>Fecha</th><th>Proveedor</th><th>Tipo</th><th>Región</th><th><i class="fas fa-database" style="color:var(--primary)" title="SAP"></i> Incoterm</th><th>Carga</th><th>Productos</th><th><i class="fas fa-database" style="color:var(--primary)" title="SAP"></i> Total</th><th><i class="fas fa-calculator" style="color:var(--accent)" title="Cálculo"></i> Costo CR</th><th><i class="fas fa-calculator" style="color:var(--accent)" title="Cálculo"></i> Utilización</th><th><i class="fas fa-robot" style="color:var(--success)" title="IA"></i> Recom.</th><th>Estado</th><th>Llegada</th><th></th></tr></thead><tbody id="sim-tbody">${renderSimRows(APP.simulaciones)}</tbody></table></div></div></div>`;
 }
-function renderSimRows(sims){return sims.map(s=>`<tr><td><strong>${s.id}</strong></td><td>${s.fecha}</td><td>${s.proveedor}</td><td>${s.tipoProveedor}</td><td>${s.region}</td><td>${s.incoterm}</td><td>${s.tipoCarga}</td><td>${s.numProductos}</td><td>$${fmt(s.totalCompra)}</td><td>$${fmt(s.costoCR)}</td><td><span class="semaphore ${s.utilizacion>=85?'green':s.utilizacion>=70?'yellow':'red'}">${s.utilizacion}%</span></td><td><span class="badge-status ${getRecBadge(s.recomendacion)}">${s.recomendacion}</span></td><td><span class="badge-status badge-${s.estado}">${ESTADOS_MAP[s.estado]||s.estado}</span></td><td>${s.fechaLlegada||'—'}</td><td class="action-btns"><button title="Ver" onclick="viewSimDetail('${s.id}')"><i class="fas fa-eye"></i></button>${s.estado==='borrador'?`<button title="Editar" onclick="editarSim('${s.id}')"><i class="fas fa-edit" style="color:var(--primary)"></i></button>`:''}<button title="Duplicar" onclick="duplicarSim('${s.id}')"><i class="fas fa-copy"></i></button>${s.estado==='borrador'?`<button title="Eliminar" onclick="eliminarSim('${s.id}')"><i class="fas fa-trash"></i></button>`:''}</td></tr>`).join('');}
-function filterSims(){const q=(document.getElementById('sf-search')?.value||'').toLowerCase();const e=document.getElementById('sf-estado')?.value||'';const r=document.getElementById('sf-region')?.value||'';const pv=document.getElementById('sf-proveedor')?.value||'';const f=APP.simulaciones.filter(s=>(!q||s.id.toLowerCase().includes(q)||s.proveedor.toLowerCase().includes(q))&&(!e||s.estado===e)&&(!r||s.region===r)&&(!pv||s.proveedor===pv));document.getElementById('sim-tbody').innerHTML=renderSimRows(f);}
+function renderSimRows(sims){return sims.map(s=>`<tr><td><strong>${s.id}</strong>${localBadge(s)}</td><td>${s.fecha}</td><td>${s.proveedor}</td><td>${s.tipoProveedor}</td><td>${s.region}</td><td>${s.incoterm}</td><td>${s.tipoCarga}</td><td>${s.numProductos}</td><td>$${fmt(s.totalCompra)}</td><td>$${fmt(s.costoCR)}</td><td>${utilCell(s.utilizacion)}</td><td><span class="badge-status ${getRecBadge(s.recomendacion)}">${s.recomendacion}</span></td><td><span class="badge-status badge-${s.estado}">${ESTADOS_MAP[s.estado]||s.estado}</span></td><td>${s.fechaLlegada||'—'}</td><td class="action-btns"><button title="Ver" onclick="viewSimDetail('${s.id}')"><i class="fas fa-eye"></i></button>${s.estado==='borrador'?`<button title="Editar" onclick="editarSim('${s.id}')"><i class="fas fa-edit" style="color:var(--primary)"></i></button>`:''}<button title="Duplicar" onclick="duplicarSim('${s.id}')"><i class="fas fa-copy"></i></button>${s.estado==='borrador'?`<button title="Eliminar" onclick="eliminarSim('${s.id}')"><i class="fas fa-trash"></i></button>`:''}</td></tr>`).join('');}
+function filterSims(){const q=(document.getElementById('sf-search')?.value||'').toLowerCase();const e=document.getElementById('sf-estado')?.value||'';const r=document.getElementById('sf-region')?.value||'';const pv=document.getElementById('sf-proveedor')?.value||'';const tc=document.getElementById('sf-tipo')?.value||'';const f=APP.simulaciones.filter(s=>(!q||s.id.toLowerCase().includes(q)||s.proveedor.toLowerCase().includes(q))&&(!e||s.estado===e)&&(!r||s.region===r)&&(!pv||s.proveedor===pv)&&(!tc||(tc==='local')===isLocalSim(s)));document.getElementById('sim-tbody').innerHTML=renderSimRows(f);}
 
 // ===== VISTA 3: NUEVA SIMULACIÓN (WIZARD) =====
 function renderNuevaSimulacion(){
-    if(!APP.wizardData.productos){initWizard();APP.wizardStep=1;}
-    const steps=['Origen','Proveedor','Catálogo y Mix','Logística','Análisis','Decisión'];
-    return `<h1 class="section-title"><i class="fas fa-plus-circle"></i> Nueva Simulación</h1>
+    if(!APP.wizardData.productos){initWizard(APP.currentView==='compra-local'?'local':undefined);APP.wizardStep=1;}
+    const local=isLocalWiz();const pp=local?'local-':'';
+    const steps=local?['Origen','Proveedor local','Catálogo','Costos de compra','Análisis','Decisión']:['Origen','Proveedor','Catálogo y Mix','Logística','Análisis','Decisión'];
+    return `<h1 class="section-title"><i class="fas ${local?'fa-store':'fa-plus-circle'}"></i> ${local?'Nueva Simulación Compra Local':'Nueva Simulación Importación'}</h1>
+    ${local?`<div class="alert-item info" style="margin-bottom:14px;"><i class="fas fa-map-marker-alt"></i><span><strong>Compra local en Costa Rica:</strong> misma simulación de necesidad, costos, margen y recomendación, sin datos de importación (Incoterm, contenedor, flete internacional, aranceles, tratados ni aduana).</span></div>`:''}
     <div class="card" style="margin-bottom:14px;border-left:3px solid var(--accent);"><div class="card-body" style="padding:12px 18px;"><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;"><span style="font-size:.83rem;font-weight:600;color:var(--gray-500);"><i class="fas fa-flask"></i> Ejemplos:</span>
-    <button class="btn btn-success btn-sm" onclick="loadPreset('comprar')"><i class="fas fa-check-circle"></i> COMPRAR</button>
-    <button class="btn btn-danger btn-sm" onclick="loadPreset('no-comprar')"><i class="fas fa-times-circle"></i> NO COMPRAR</button>
-    <button class="btn btn-warning btn-sm" onclick="loadPreset('ajustes')"><i class="fas fa-exclamation-circle"></i> CON AJUSTES</button></div></div></div>
+    <button class="btn btn-success btn-sm" onclick="loadPreset('${pp}comprar')"><i class="fas fa-check-circle"></i> COMPRAR</button>
+    <button class="btn btn-danger btn-sm" onclick="loadPreset('${pp}no-comprar')"><i class="fas fa-times-circle"></i> NO COMPRAR</button>
+    <button class="btn btn-warning btn-sm" onclick="loadPreset('${pp}ajustes')"><i class="fas fa-exclamation-circle"></i> CON AJUSTES</button></div></div></div>
     <div class="card"><div class="card-body">
     <div class="wizard-progress">${steps.map((s,i)=>`<div class="wizard-step ${i+1<APP.wizardStep?'completed':''} ${i+1===APP.wizardStep?'active':''}"><div class="step-circle">${i+1<APP.wizardStep?'<i class="fas fa-check"></i>':(i+1)}</div><span class="step-label">${s}</span>${i<steps.length-1?'<div class="wizard-line"></div>':''}</div>`).join('')}</div>
     ${renderWizStep()}</div></div>`;
 }
-function initWizard(){APP.wizardData={tipoImportacion:'regular',tipoAnalisis:'Compra completa por proveedor',motivo:'',area:'Comercial',responsable:'Carlos Méndez',fechaRequerida:'2026-09-01',observaciones:'',proveedorId:1,incoterm:'CIF',tipoCarga:'40 pies',productos:[],selectedProducts:[],
+function initWizard(modo){
+if(modo==='local'){APP.wizardData={tipoCompra:'local',tipoImportacion:'local',tipoAnalisis:'Reposición de productos',motivo:'',area:'Comercial',responsable:'Carlos Méndez',fechaRequerida:'2026-09-01',observaciones:'',proveedorId:PROVEEDORES.find(p=>p.local).id,incoterm:'N/A',tipoCarga:'Local',productos:[],selectedProducts:[],suppliers:[],
+// Costos de compra local (sin costos de importación)
+transporteLocal:0,cargaDescarga:0,otrosCostos:0,descuentoComercial:0,
+tiempoTransito:3,metodoDistribucion:'valor',escenario:'A',margenObjetivo:APP.rules.margenObjetivo,mixApplied:false,optimizacionResult:null};return;}
+APP.wizardData={tipoCompra:'importacion',tipoImportacion:'regular',tipoAnalisis:'Compra completa por proveedor',motivo:'',area:'Comercial',responsable:'Carlos Méndez',fechaRequerida:'2026-09-01',observaciones:'',proveedorId:1,incoterm:'CIF',tipoCarga:'40 pies',productos:[],selectedProducts:[],
 // Consolidado multi-proveedor
 suppliers:[],consolidationPoint:'Miami',excepcionAprobada:false,
 // Costos
@@ -643,8 +669,8 @@ tiempoTransito:35,metodoDistribucion:'valor',escenario:'A',margenObjetivo:APP.ru
 function renderWizStep(){switch(APP.wizardStep){case 1:return renderWS1();case 2:return renderWS2();case 3:return renderWS3();case 4:return renderWS4();case 5:return renderWS5();case 6:return renderWS6();default:return renderWS1();}}
 function wizNav(){return `<div class="wizard-nav">${APP.wizardStep>1?`<button class="btn btn-outline" onclick="APP.wizardStep--;renderView('nueva-simulacion')"><i class="fas fa-arrow-left"></i> Anterior</button>`:'<div></div>'}${APP.wizardStep<6?`<button class="btn btn-primary" onclick="APP.wizardStep++;renderView('nueva-simulacion')">Siguiente <i class="fas fa-arrow-right"></i></button>`:'<div></div>'}</div>`;}
 
-function renderWS1(){const d=APP.wizardData;return `<div class="card" style="box-shadow:none;border:1px solid var(--gray-100);"><div class="card-header"><h2>Paso 1: Origen de la necesidad</h2></div><div class="card-body">
-<div class="form-row"><div class="form-group"><label>Tipo de importación</label><select onchange="APP.wizardData.tipoImportacion=this.value;renderView('nueva-simulacion')"><option value="regular" ${d.tipoImportacion==='regular'?'selected':''}>Regular</option><option value="consolidada" ${d.tipoImportacion==='consolidada'?'selected':''}>Consolidada</option></select></div>
+function renderWS1(){const d=APP.wizardData;const local=isLocalWiz();return `<div class="card" style="box-shadow:none;border:1px solid var(--gray-100);"><div class="card-header"><h2>Paso 1: Origen de la necesidad</h2></div><div class="card-body">
+<div class="form-row">${local?`<div class="form-group"><label>Tipo de compra</label><input value="Compra local — Costa Rica" disabled style="background:var(--gray-50);font-weight:600;"></div>`:`<div class="form-group"><label>Tipo de importación</label><select onchange="APP.wizardData.tipoImportacion=this.value;renderView('nueva-simulacion')"><option value="regular" ${d.tipoImportacion==='regular'?'selected':''}>Regular</option><option value="consolidada" ${d.tipoImportacion==='consolidada'?'selected':''}>Consolidada</option></select></div>`}
 <div class="form-group"><label>Tipo de análisis</label><select onchange="APP.wizardData.tipoAnalisis=this.value"><option ${d.tipoAnalisis==='Compra completa por proveedor'?'selected':''}>Compra completa por proveedor</option><option ${d.tipoAnalisis==='Reposición de productos'?'selected':''}>Reposición de productos</option><option ${d.tipoAnalisis==='Producto nuevo'?'selected':''}>Producto nuevo</option><option ${d.tipoAnalisis==='Necesidad comercial'?'selected':''}>Necesidad comercial</option><option ${d.tipoAnalisis==='Proyecto específico'?'selected':''}>Proyecto específico</option></select></div></div>
 <div class="form-row"><div class="form-group"><label>Área solicitante</label><select onchange="APP.wizardData.area=this.value"><option ${d.area==='Comercial'?'selected':''}>Comercial</option><option ${d.area==='Operaciones'?'selected':''}>Operaciones</option><option ${d.area==='Proyectos'?'selected':''}>Proyectos</option></select></div>
 <div class="form-group"><label>Responsable</label><input value="${d.responsable}" onchange="APP.wizardData.responsable=this.value"></div></div>
@@ -654,13 +680,14 @@ ${d.tipoImportacion==='consolidada'?`<div class="alert-item info" style="margin-
 </div></div>${wizNav()}`;}
 
 function renderWS2(){const d=APP.wizardData;const isConsolidada=d.tipoImportacion==='consolidada';
+if(isLocalWiz()) return renderWS2Local(d);
 if(isConsolidada) return renderWS2Consolidada(d);
 const prov=PROVEEDORES.find(p=>p.id===d.proveedorId)||PROVEEDORES[0];
 const isNew=!prov.recurrente;const combos=HISTORICAL_COMBOS[prov.id]||[];
 // Auto-cargar regla logística del proveedor al seleccionarlo
 if(!d._provLoaded||d._provLoaded!==prov.id){d.incoterm=prov.usualIncoterm||prov.incoterm;d.tipoCarga=prov.usualContainer==='No aplica'?'Consolidado':prov.usualContainer;d.tiempoTransito=prov.averageTransitDays||prov.tiempoEntrega;d._provLoaded=prov.id;}
 return `<div class="card" style="box-shadow:none;border:1px solid var(--gray-100);"><div class="card-header"><h2>Paso 2: Proveedor y regla logística</h2></div><div class="card-body">
-<div class="form-row"><div class="form-group"><label>Proveedor</label><select onchange="APP.wizardData.proveedorId=parseInt(this.value);APP.wizardData.productos=[];APP.wizardData.selectedProducts=[];APP.wizardData.proformaLoaded=false;APP.wizardData._provLoaded=null;renderView('nueva-simulacion')">${PROVEEDORES.map(p=>`<option value="${p.id}" ${p.id===d.proveedorId?'selected':''}>${p.nombre} ${p.recurrente?'':'(Nuevo)'}</option>`).join('')}</select></div>
+<div class="form-row"><div class="form-group"><label>Proveedor</label><select onchange="APP.wizardData.proveedorId=parseInt(this.value);APP.wizardData.productos=[];APP.wizardData.selectedProducts=[];APP.wizardData.proformaLoaded=false;APP.wizardData._provLoaded=null;renderView('nueva-simulacion')">${PROVEEDORES.filter(p=>!p.local).map(p=>`<option value="${p.id}" ${p.id===d.proveedorId?'selected':''}>${p.nombre} ${p.recurrente?'':'(Nuevo)'}</option>`).join('')}</select></div>
 <div class="form-group"><label>Modo habitual</label><input value="${prov.defaultImportMode==='contenedor_completo'?'Contenedor completo':'Consolidado'}" disabled style="background:var(--gray-50);font-weight:600;"></div>
 <div class="form-group"><label>Contenedor habitual</label><input value="${prov.usualContainer}" disabled style="background:var(--gray-50);font-weight:600;"></div></div>
 <div class="form-row"><div class="form-group"><label>Incoterm</label><select onchange="APP.wizardData.incoterm=this.value;renderView('nueva-simulacion')"><option ${d.incoterm==='CIF'?'selected':''}>CIF</option><option ${d.incoterm==='FOB'?'selected':''}>FOB</option><option ${d.incoterm==='FCA'?'selected':''}>FCA</option><option ${d.incoterm==='EXW'?'selected':''}>EXW</option></select></div>
@@ -677,8 +704,53 @@ ${prov.consolidationPoint?`<span><strong>Pto. consolidación:</strong> ${prov.co
 <span><strong>Marcas:</strong> ${(prov.brands||[]).join(', ')}</span>
 </div></div></div>
 
-<div class="card" style="border:2px dashed ${d.proformaLoaded?'var(--success)':'var(--gray-300)'};margin-top:16px;box-shadow:none;">
-<div class="card-header"><h2><i class="fas fa-file-invoice-dollar"></i> Proforma / Cotización del proveedor</h2></div>
+${renderProformaBlock(d,prov)}
+
+${isNew?'<div class="alert-item warning" style="margin-top:12px;"><i class="fas fa-exclamation-triangle"></i><span>Proveedor nuevo sin histórico. Confianza: Baja. Ingrese manualmente las condiciones.</span></div>':''}
+${!isNew?`<div class="card" style="border:1px solid var(--primary-light);margin-top:16px;"><div class="card-header" style="background:rgba(41,128,185,.05);"><h2><i class="fas fa-history"></i> Resumen histórico del proveedor</h2></div><div class="card-body">
+<div class="kpi-grid" style="margin-bottom:0;">
+<div class="kpi-card"><div class="kpi-icon blue"><i class="fas fa-file-invoice"></i></div><div class="kpi-info"><h3>${prov.importaciones}</h3><p>Importaciones</p></div></div>
+<div class="kpi-card"><div class="kpi-icon green"><i class="fas fa-layer-group"></i></div><div class="kpi-info"><h3>${combos.length}</h3><p>Combos recurrentes</p></div></div>
+<div class="kpi-card"><div class="kpi-icon teal"><i class="fas fa-box"></i></div><div class="kpi-info"><h3>${prov.usualContainer}</h3><p>Contenedor habitual</p></div></div>
+<div class="kpi-card"><div class="kpi-icon purple"><i class="fas fa-percentage"></i></div><div class="kpi-info"><h3>${prov.utilizacionProm}%</h3><p>Utilización prom.</p></div></div>
+<div class="kpi-card"><div class="kpi-icon orange"><i class="fas fa-calendar"></i></div><div class="kpi-info"><h3>${prov.averageTransitDays||prov.tiempoEntrega}d</h3><p>Tiempo tránsito</p></div></div>
+</div><p style="font-size:.8rem;color:var(--gray-400);margin-top:12px;">Última importación: ${prov.ultimaCompra} · Frecuencia: ${prov.frecuenciaCompra} · Tratado: ${prov.tratado?'Sí':'No'} · Moneda: ${prov.moneda}</p>
+</div></div>`:''}
+</div></div>${wizNav()}`;}
+
+// === WIZARD PASO 2 COMPRA LOCAL ===
+function renderWS2Local(d){
+const locales=PROVEEDORES.filter(p=>p.local);
+const prov=locales.find(p=>p.id===d.proveedorId)||locales[0];d.proveedorId=prov.id;
+const isNew=!prov.recurrente;
+if(d._provLoaded!==prov.id){d.tiempoTransito=prov.tiempoEntrega;d._provLoaded=prov.id;}
+return `<div class="card" style="box-shadow:none;border:1px solid var(--gray-100);"><div class="card-header"><h2>Paso 2: Proveedor local y condiciones comerciales</h2></div><div class="card-body">
+<div class="form-row"><div class="form-group"><label>Proveedor local</label><select onchange="APP.wizardData.proveedorId=parseInt(this.value);APP.wizardData.productos=[];APP.wizardData.selectedProducts=[];APP.wizardData.proformaLoaded=false;APP.wizardData._provLoaded=null;renderView('nueva-simulacion')">${locales.map(p=>`<option value="${p.id}" ${p.id===prov.id?'selected':''}>${p.nombre} — ${p.ciudad} ${p.recurrente?'':'(Nuevo)'}</option>`).join('')}</select></div>
+<div class="form-group"><label>Moneda de facturación</label><input value="${prov.moneda==='CRC'?'Colones (CRC)':'Dólares (USD)'}" disabled style="background:var(--gray-50);font-weight:600;"></div>
+<div class="form-group"><label>Tiempo de entrega (días)</label><input type="number" value="${d.tiempoTransito}" onchange="APP.wizardData.tiempoTransito=parseInt(this.value)||0"></div></div>
+<div class="card" style="border:1px solid var(--primary-light);margin-top:14px;box-shadow:none;background:rgba(41,128,185,.02);"><div class="card-body" style="padding:12px 16px;">
+<h3 style="font-size:.85rem;color:var(--primary);margin-bottom:10px;"><i class="fas fa-handshake"></i> Condiciones del proveedor local</h3>
+<div style="display:flex;gap:16px;flex-wrap:wrap;font-size:.82rem;">
+<span><strong>Monto mínimo:</strong> $${fmt(prov.minimumOrderValue||0)}</span>
+<span><strong>Monto objetivo:</strong> $${fmt(prov.targetOrderValue||0)}</span>
+<span><strong>Crédito:</strong> ${prov.plazoCredito?prov.plazoCredito+' días':'Contado'}</span>
+<span><strong>Entrega en bodega:</strong> ${prov.entregaIncluida?'Incluida':'Por cuenta de RENTECO'}</span>
+<span><strong>Vigencia cotización:</strong> ${prov.quoteValidityDays||15}d</span>
+<span><strong>Marcas:</strong> ${(prov.brands||[]).join(', ')}</span>
+</div>${prov.moneda==='CRC'?`<p style="font-size:.74rem;color:var(--gray-400);margin-top:8px;"><i class="fas fa-info-circle"></i> Factura en colones. Los montos se muestran en USD al tipo de cambio del sistema (₡${APP.rules.tipoCambio}).</p>`:''}</div></div>
+${renderProformaBlock(d,prov)}
+${isNew?'<div class="alert-item warning" style="margin-top:12px;"><i class="fas fa-exclamation-triangle"></i><span>Proveedor local nuevo sin historial de compras. Confianza: Baja. Valide precios y condiciones.</span></div>':`<div class="card" style="border:1px solid var(--primary-light);margin-top:16px;"><div class="card-header" style="background:rgba(41,128,185,.05);"><h2><i class="fas fa-history"></i> Historial de compras locales</h2></div><div class="card-body">
+<div class="kpi-grid" style="margin-bottom:0;">
+<div class="kpi-card"><div class="kpi-icon blue"><i class="fas fa-file-invoice"></i></div><div class="kpi-info"><h3>${prov.comprasLocales}</h3><p>Compras realizadas</p></div></div>
+<div class="kpi-card"><div class="kpi-icon orange"><i class="fas fa-shipping-fast"></i></div><div class="kpi-info"><h3>${prov.tiempoEntrega}d</h3><p>Entrega promedio</p></div></div>
+<div class="kpi-card"><div class="kpi-icon purple"><i class="fas fa-chart-line"></i></div><div class="kpi-info"><h3>${prov.variacionReciente}%</h3><p>Variación precios</p></div></div>
+<div class="kpi-card"><div class="kpi-icon green"><i class="fas fa-credit-card"></i></div><div class="kpi-info"><h3>${prov.plazoCredito||0}d</h3><p>Plazo crédito</p></div></div>
+</div><p style="font-size:.8rem;color:var(--gray-400);margin-top:12px;">Última compra: ${prov.ultimaCompra} · Frecuencia: ${prov.frecuenciaCompra} · ${prov.direccion}</p>
+</div></div>`}
+</div></div>${wizNav()}`;}
+
+function renderProformaBlock(d,prov){return `<div class="card" style="border:2px dashed ${d.proformaLoaded?'var(--success)':'var(--gray-300)'};margin-top:16px;box-shadow:none;">
+<div class="card-header"><h2><i class="fas fa-file-invoice-dollar"></i> ${isLocalWiz()?'Cotización del proveedor local':'Proforma / Cotización del proveedor'}</h2></div>
 <div class="card-body">
 ${d.proformaLoaded?`
 <div class="alert-item success"><i class="fas fa-check-circle"></i><span><strong>Proforma cargada:</strong> ${d.proformaFile||'Cotización-'+prov.nombre.replace(/\s/g,'')+'.pdf'}</span></div>
@@ -707,19 +779,7 @@ ${(d.proformaItems||[]).map(item=>{const comp=compareCosts(item.costoAnterior,it
 </div>
 <input type="file" id="proforma-input" style="display:none" accept=".pdf,.xlsx,.xls,.csv,.png,.jpg" onchange="handleProformaUpload()">
 `}
-</div></div>
-
-${isNew?'<div class="alert-item warning" style="margin-top:12px;"><i class="fas fa-exclamation-triangle"></i><span>Proveedor nuevo sin histórico. Confianza: Baja. Ingrese manualmente las condiciones.</span></div>':''}
-${!isNew?`<div class="card" style="border:1px solid var(--primary-light);margin-top:16px;"><div class="card-header" style="background:rgba(41,128,185,.05);"><h2><i class="fas fa-history"></i> Resumen histórico del proveedor</h2></div><div class="card-body">
-<div class="kpi-grid" style="margin-bottom:0;">
-<div class="kpi-card"><div class="kpi-icon blue"><i class="fas fa-file-invoice"></i></div><div class="kpi-info"><h3>${prov.importaciones}</h3><p>Importaciones</p></div></div>
-<div class="kpi-card"><div class="kpi-icon green"><i class="fas fa-layer-group"></i></div><div class="kpi-info"><h3>${combos.length}</h3><p>Combos recurrentes</p></div></div>
-<div class="kpi-card"><div class="kpi-icon teal"><i class="fas fa-box"></i></div><div class="kpi-info"><h3>${prov.usualContainer}</h3><p>Contenedor habitual</p></div></div>
-<div class="kpi-card"><div class="kpi-icon purple"><i class="fas fa-percentage"></i></div><div class="kpi-info"><h3>${prov.utilizacionProm}%</h3><p>Utilización prom.</p></div></div>
-<div class="kpi-card"><div class="kpi-icon orange"><i class="fas fa-calendar"></i></div><div class="kpi-info"><h3>${prov.averageTransitDays||prov.tiempoEntrega}d</h3><p>Tiempo tránsito</p></div></div>
-</div><p style="font-size:.8rem;color:var(--gray-400);margin-top:12px;">Última importación: ${prov.ultimaCompra} · Frecuencia: ${prov.frecuenciaCompra} · Tratado: ${prov.tratado?'Sí':'No'} · Moneda: ${prov.moneda}</p>
-</div></div>`:''}
-</div></div>${wizNav()}`;}
+</div></div>`;}
 
 // === WIZARD PASO 2 CONSOLIDADA ===
 function renderWS2Consolidada(d){
@@ -807,7 +867,7 @@ renderView('nueva-simulacion');showToast(`${next.nombre} agregado al consolidado
 function openSupplierSearchModal(){
 const d=APP.wizardData;if(!d.suppliers)d.suppliers=[];
 const usedIds=d.suppliers.map(s=>s.supplierId);
-const available=PROVEEDORES.filter(p=>!usedIds.includes(p.id));
+const available=PROVEEDORES.filter(p=>!usedIds.includes(p.id)&&!p.local);
 if(available.length===0){showToast('No hay más proveedores disponibles','warning');return;}
 const content=`<div style="text-align:left;">
 <div class="form-group"><label>Buscar proveedor</label><input type="text" id="supplier-search-input" placeholder="Nombre, país, región..." oninput="filterSupplierModal()" autofocus></div>
@@ -826,7 +886,7 @@ ${list.map(p=>`<tr><td><button class="btn btn-sm btn-success" onclick="selectSup
 function filterSupplierModal(){
 const q=(document.getElementById('supplier-search-input')?.value||'').toLowerCase();
 const d=APP.wizardData;const usedIds=(d.suppliers||[]).map(s=>s.supplierId);
-const available=PROVEEDORES.filter(p=>!usedIds.includes(p.id));
+const available=PROVEEDORES.filter(p=>!usedIds.includes(p.id)&&!p.local);
 const filtered=available.filter(p=>!q||p.nombre.toLowerCase().includes(q)||p.pais.toLowerCase().includes(q)||p.region.toLowerCase().includes(q)||(p.consolidationPoint||'').toLowerCase().includes(q));
 const container=document.getElementById('supplier-search-results');
 if(container)container.innerHTML=renderSupplierSearchTable(filtered);}
@@ -893,7 +953,7 @@ return `<div class="card" style="box-shadow:none;border:1px solid var(--gray-100
 <div class="kpi-card"><div class="kpi-icon blue"><i class="fas fa-shopping-cart"></i></div><div class="kpi-info"><h3>$${fmt(optResult.pedidoBase)}</h3><p>Pedido base</p></div></div>
 <div class="kpi-card"><div class="kpi-icon ${optResult.alcanzaMinimo?'green':'red'}"><i class="fas fa-exclamation-circle"></i></div><div class="kpi-info"><h3>$${fmt(prov.minimumOrderValue||0)}</h3><p>Monto mínimo ${optResult.alcanzaMinimo?'✓':'✗'}</p></div></div>
 <div class="kpi-card"><div class="kpi-icon ${optResult.alcanzaObjetivo?'green':'orange'}"><i class="fas fa-bullseye"></i></div><div class="kpi-info"><h3>$${fmt(prov.targetOrderValue||0)}</h3><p>Monto objetivo ${optResult.alcanzaObjetivo?'✓':'✗'}</p></div></div>
-<div class="kpi-card"><div class="kpi-icon ${optResult.utilizacionActual>=85?'green':optResult.utilizacionActual>=70?'orange':'red'}"><i class="fas fa-box"></i></div><div class="kpi-info"><h3>${optResult.utilizacionActual}%</h3><p>Utilización</p></div></div>
+${isLocalWiz()?`<div class="kpi-card"><div class="kpi-icon teal"><i class="fas fa-shipping-fast"></i></div><div class="kpi-info"><h3>${d.tiempoTransito}d</h3><p>Entrega local</p></div></div>`:`<div class="kpi-card"><div class="kpi-icon ${optResult.utilizacionActual>=85?'green':optResult.utilizacionActual>=70?'orange':'red'}"><i class="fas fa-box"></i></div><div class="kpi-info"><h3>${optResult.utilizacionActual}%</h3><p>Utilización</p></div></div>`}
 </div>
 ${!optResult.alcanzaObjetivo?`<div class="alert-item warning" style="margin-bottom:14px;"><i class="fas fa-info-circle"></i><span><strong>Faltante para objetivo:</strong> $${fmt(optResult.faltanteObjetivo)} · ${optResult.candidatosRecomendados.length} producto(s) candidato(s) disponible(s).</span></div>`:''}
 ${!optResult.alcanzaMinimo?`<div class="alert-item danger" style="margin-bottom:14px;"><i class="fas fa-exclamation-triangle"></i><span><strong>Pedido por debajo del mínimo</strong> ($${fmt(optResult.faltanteMinimo)} faltante). El proveedor podría no aceptar el pedido.</span></div>`:''}
@@ -909,7 +969,7 @@ return `<tr style="${!p.selected?'opacity:.5':''}${need.urgency==='critica'?';ba
 
 ${optResult.candidatosRecomendados.length?`
 <h3 style="font-size:.88rem;color:var(--accent);margin:18px 0 10px;"><i class="fas fa-lightbulb"></i> Productos candidatos adicionales (${optResult.candidatosRecomendados.length})</h3>
-<p style="font-size:.78rem;color:var(--gray-400);margin-bottom:10px;">Productos que podrían agregarse para alcanzar monto objetivo o mejorar utilización.</p>
+<p style="font-size:.78rem;color:var(--gray-400);margin-bottom:10px;">Productos que podrían agregarse para alcanzar monto objetivo${isLocalWiz()?' del proveedor local':' o mejorar utilización'}.</p>
 <div class="table-container"><table><thead><tr><th>SKU</th><th>Producto</th><th><i class="fas fa-robot" style="color:var(--success)" title="IA"></i> Cant. sug.</th><th><i class="fas fa-calculator" style="color:var(--accent)" title="Cálculo"></i> Valor</th><th><i class="fas fa-calculator" style="color:var(--accent)" title="Cálculo"></i> Cob. antes</th><th><i class="fas fa-calculator" style="color:var(--accent)" title="Cálculo"></i> Cob. después</th><th><i class="fas fa-robot" style="color:var(--success)" title="IA"></i> Rotación est.</th><th><i class="fas fa-robot" style="color:var(--success)" title="IA"></i> Clasificación</th><th>Motivo</th><th></th></tr></thead><tbody>
 ${optResult.candidatosRecomendados.slice(0,5).map(c=>`<tr><td>${c.sku}</td><td style="font-size:.74rem;">${c.descripcion}</td><td>${c.cantidadSugerida}</td><td>$${fmt(Math.round(c.valorAdicional))}</td><td>${c.coberturaAntes.toFixed(1)}m</td><td>${c.coberturaDespues.toFixed(1)}m</td><td>${c.tiempoRotacion.toFixed(1)}m</td><td><span class="badge-status ${c.clasificacionRotacion==='Excelente'?'badge-aprobado':c.clasificacionRotacion==='Aceptable'?'badge-ajustes':'badge-rechazado'}">${c.clasificacionRotacion}</span></td><td style="font-size:.72rem;">${c.motivo}</td><td><button class="btn btn-sm btn-success" onclick="addCandidateProduct('${c.sku}',${c.cantidadSugerida})"><i class="fas fa-plus"></i></button></td></tr>`).join('')}
 </tbody></table></div>`:''}
@@ -936,7 +996,7 @@ const currentSkus=d.productos.map(p=>p.sku);
 let allProducts=[];
 Object.keys(SUPPLIER_CATALOGS).forEach(provId=>{
 const prov=PROVEEDORES.find(p=>p.id===parseInt(provId));
-const cat=SUPPLIER_CATALOGS[provId]||[];
+const cat=SUPPLIER_CATALOGS[provId]||[];if(!!prov?.local!==isLocalWiz())return;
 cat.forEach(p=>{if(!currentSkus.includes(p.sku))allProducts.push({...p,proveedorId:parseInt(provId),proveedorNombre:prov?prov.nombre:'—'});});
 });
 const content=`<div style="text-align:left;">
@@ -960,7 +1020,7 @@ const d=APP.wizardData;const currentSkus=d.productos.map(p=>p.sku);
 let allProducts=[];
 Object.keys(SUPPLIER_CATALOGS).forEach(provId=>{
 const prov=PROVEEDORES.find(p=>p.id===parseInt(provId));
-const cat=SUPPLIER_CATALOGS[provId]||[];
+const cat=SUPPLIER_CATALOGS[provId]||[];if(!!prov?.local!==isLocalWiz())return;
 cat.forEach(p=>{if(!currentSkus.includes(p.sku))allProducts.push({...p,proveedorId:parseInt(provId),proveedorNombre:prov?prov.nombre:'—'});});
 });
 const filtered=allProducts.filter(p=>!q||p.sku.toLowerCase().includes(q)||p.descripcion.toLowerCase().includes(q)||p.categoria.toLowerCase().includes(q)||p.proveedorNombre.toLowerCase().includes(q));
@@ -1014,6 +1074,9 @@ p.selected=true;p.cantidad=need.finalSuggestedQty;p.accionRecomendada='Agregar';
 recommendations.push({sku:p.sku,desc:p.descripcion,cantActual:0,cantSugerida:need.finalSuggestedQty,accion:'Agregar',justif:`Necesita reposición y ayuda a alcanzar monto objetivo. Rotación: ${rotacion.mesesRotacionAdicional.toFixed(1)}m.`});
 });}
 
+// Compra local: no hay contenedor que llenar; la optimización termina en necesidad + monto objetivo
+if(isLocalWiz()){APP.wizardData.mixRecommendations=recommendations;APP.wizardData.mixApplied=true;
+renderView('nueva-simulacion');showToast(`Optimización completada: ${recommendations.length} ajustes`,'success');return;}
 // Paso 3: Llenar contenedor — agregar productos y subir cantidades hasta 100% utilización
 const caps=getCaps(d.tipoCarga);
 const selAfter=d.productos.filter(p=>p.selected);
@@ -1094,7 +1157,7 @@ return `<h3 style="font-size:.9rem;color:var(--primary);margin:20px 0 12px;"><i 
 <div class="metric"><span class="label">Productos</span><span class="value">${sel.length}</span></div>
 <div class="metric"><span class="label">Peso total</span><span class="value">${fmt(Math.round(peso))} kg</span></div>
 <div class="metric"><span class="label">Volumen</span><span class="value">${vol.toFixed(2)} m³</span></div>
-<div class="metric"><span class="label">Utilización</span><span class="value"><span class="semaphore ${util>=85?'green':util>=70?'yellow':'red'}">${util}%</span></span></div>
+${isLocalWiz()?`<div class="metric"><span class="label">Monto pedido</span><span class="value">$${fmt(Math.round(sel.reduce((a,p)=>a+p.cantidad*(p.costoCotizado||p.costoActual),0)))}</span></div>`:`<div class="metric"><span class="label">Utilización</span><span class="value"><span class="semaphore ${util>=85?'green':util>=70?'yellow':'red'}">${util}%</span></span></div>`}
 </div><div class="comparison-box"><h4><i class="fas fa-list"></i> Cambios sugeridos (${recs.length})</h4>
 ${recs.map(r=>`<div class="metric"><span class="label">${r.sku}: ${r.accion}</span><span class="value">${r.cantActual}→${r.cantSugerida}</span></div>`).join('')}
 </div></div>
@@ -1102,7 +1165,33 @@ ${recs.map(r=>`<div class="metric"><span class="label">${r.sku}: ${r.accion}</sp
 ${recs.map(r=>`<tr><td>${r.desc}</td><td>${r.cantActual}</td><td><strong>${r.cantSugerida}</strong></td><td><span class="badge-status ${r.accion==='Agregar'?'badge-aprobado':r.accion==='Retirar'?'badge-rechazado':'badge-ajustes'}">${r.accion}</span></td><td style="font-size:.78rem;">${r.justif}</td></tr>`).join('')}
 </tbody></table></div>`;}
 
-function renderWS4(){const d=APP.wizardData;const isCIF=d.incoterm==='CIF';const isEXW=d.incoterm==='EXW';const isConsolidada=d.tipoImportacion==='consolidada';
+function renderWS4Local(){const d=APP.wizardData;const prov=PROVEEDORES.find(p=>p.id===d.proveedorId)||{};
+const sel=d.productos.filter(p=>p.selected);
+const peso=sel.reduce((a,p)=>a+p.cantidad*p.pesoUnitario,0);const vol=sel.reduce((a,p)=>a+p.cantidad*p.volumenUnitario,0);
+const monto=sel.reduce((a,p)=>a+p.cantidad*(p.costoCotizado||p.costoActual),0);
+const costos=(d.transporteLocal||0)+(d.cargaDescarga||0)+(d.otrosCostos||0)-(d.descuentoComercial||0);
+const inp=(campo,label,tip)=>`<div class="form-group"><label>${label}${tip?` <i class="fas fa-info-circle" style="color:var(--gray-400)" title="${tip}"></i>`:''}</label><input type="number" value="${d[campo]||0}" onchange="APP.wizardData.${campo}=parseFloat(this.value)||0;renderView('nueva-simulacion')"></div>`;
+return `<div class="card" style="box-shadow:none;border:1px solid var(--gray-100);"><div class="card-header"><h2>Paso 4: Costos de compra local</h2></div><div class="card-body">
+<div class="alert-item info"><i class="fas fa-info-circle"></i><span>Compra en Costa Rica: no aplican flete internacional, seguro marítimo, agencia aduanal, aranceles ni tratados. El IVA (13%) es crédito fiscal y no se suma al costo.</span></div>
+${prov.entregaIncluida?`<div class="alert-item success"><i class="fas fa-truck"></i><span>${prov.nombre} incluye la entrega en bodega RENTECO. Registre transporte solo si hay entregas adicionales.</span></div>`:''}
+<div class="form-row">
+${inp('transporteLocal','Transporte a bodega ($)','Flete nacional del proveedor a la bodega de RENTECO')}
+${inp('cargaDescarga','Carga / descarga ($)','Montacargas, cuadrilla o maniobras de descarga')}
+${inp('otrosCostos','Otros costos ($)')}
+</div><div class="form-row">
+${inp('descuentoComercial','Descuento comercial ($)','Descuento por volumen o pronto pago otorgado por el proveedor')}
+<div class="form-group"><label>Tiempo de entrega (días)</label><input type="number" value="${d.tiempoTransito}" onchange="APP.wizardData.tiempoTransito=parseInt(this.value)||0"></div>
+<div class="form-group"><label>Método distribución</label><select onchange="APP.wizardData.metodoDistribucion=this.value"><option value="valor" ${d.metodoDistribucion==='valor'?'selected':''}>Por valor</option><option value="peso" ${d.metodoDistribucion==='peso'?'selected':''}>Por peso</option><option value="volumen" ${d.metodoDistribucion==='volumen'?'selected':''}>Por volumen</option></select></div>
+</div>
+<h3 style="margin-top:18px;font-size:.92rem;color:var(--primary);">Resumen de la entrega</h3>
+<div class="util-display">
+<div class="util-item"><label>Peso total</label><span class="util-value">${fmt(Math.round(peso))} kg</span></div>
+<div class="util-item"><label>Volumen</label><span class="util-value">${vol.toFixed(2)} m³</span></div>
+<div class="util-item"><label>Costos sobre compra</label><span class="util-value">${monto?((costos/monto)*100).toFixed(1):'0.0'}%</span></div>
+</div>
+</div></div>${wizNav()}`;}
+
+function renderWS4(){const d=APP.wizardData;if(isLocalWiz())return renderWS4Local();const isCIF=d.incoterm==='CIF';const isEXW=d.incoterm==='EXW';const isConsolidada=d.tipoImportacion==='consolidada';
 const sel=d.productos.filter(p=>p.selected);const caps=getCaps(d.tipoCarga);
 const peso=sel.reduce((a,p)=>a+p.cantidad*p.pesoUnitario,0);const vol=sel.reduce((a,p)=>a+p.cantidad*p.volumenUnitario,0);
 const utilP=(peso/caps.peso*100).toFixed(1);const utilV=(vol/caps.vol*100).toFixed(1);const util=Math.max(parseFloat(utilP),parseFloat(utilV)).toFixed(1);
@@ -1156,14 +1245,15 @@ const tcActual=APP.rules.tipoCambio||530;
 const diasEntrega=d.tiempoTransito||prov.tiempoEntrega||35;
 const variacionTC=((diasEntrega/30)*0.8).toFixed(1);// ~0.8% por mes de variación estimada
 const tcProyectado=(tcActual*(1+parseFloat(variacionTC)/100)).toFixed(2);
+const local=isLocalWiz();
 return `<div class="card" style="box-shadow:none;border:1px solid var(--gray-100);"><div class="card-header"><h2>Paso 5: Análisis y escenarios</h2></div><div class="card-body">
 <div class="kpi-grid" style="margin-bottom:16px;">
 <div class="kpi-card"><div class="kpi-icon blue"><i class="fas fa-shopping-cart"></i></div><div class="kpi-info"><h3>$${fmt(calc.montoCompra)}</h3><p>Monto compra</p></div></div>
-<div class="kpi-card"><div class="kpi-icon orange"><i class="fas fa-truck-loading"></i></div><div class="kpi-info"><h3>$${fmt(calc.costosAd)}</h3><p>Costos adicionales</p></div></div>
-<div class="kpi-card"><div class="kpi-icon green"><i class="fas fa-flag-checkered"></i></div><div class="kpi-info"><h3>$${fmt(calc.costoTotalCR)}</h3><p>Costo puesto en CR</p></div></div>
+<div class="kpi-card"><div class="kpi-icon orange"><i class="fas fa-truck-loading"></i></div><div class="kpi-info"><h3>$${fmt(calc.costosAd)}</h3><p>${local?'Costos de compra local':'Costos adicionales'}</p></div></div>
+<div class="kpi-card"><div class="kpi-icon green"><i class="fas fa-flag-checkered"></i></div><div class="kpi-info"><h3>$${fmt(calc.costoTotalCR)}</h3><p>${local?'Costo puesto en bodega':'Costo puesto en CR'}</p></div></div>
 </div>
-
-<div class="card" style="border:1px solid var(--gray-200);margin-bottom:16px;box-shadow:none;"><div class="card-header" style="background:var(--gray-50);"><h2><i class="fas fa-exchange-alt"></i> Tipo de cambio y proyección</h2></div><div class="card-body" style="padding:14px 18px;">
+${local?`<div class="alert-item info" style="margin-bottom:16px;"><i class="fas fa-exchange-alt"></i><span>Equivalencia: <strong>₡${fmt(Math.round(calc.costoTotalCR*tcActual))}</strong> (TC ₡${tcActual}). Entrega en ${diasEntrega} días: no se proyecta variación de tipo de cambio.</span></div>`:`
+<div class="card"style="border:1px solid var(--gray-200);margin-bottom:16px;box-shadow:none;"><div class="card-header" style="background:var(--gray-50);"><h2><i class="fas fa-exchange-alt"></i> Tipo de cambio y proyección</h2></div><div class="card-body" style="padding:14px 18px;">
 <div class="form-row">
 <div class="form-group"><label>Tipo de cambio actual (₡/USD)</label><div style="font-size:1.2rem;font-weight:700;color:var(--primary);">₡${tcActual.toFixed?tcActual.toFixed(2):tcActual}</div><p style="font-size:.72rem;color:var(--gray-400);margin-top:2px;">Configurado en el sistema</p></div>
 <div class="form-group"><label>Tiempo máx. entrega (${prov.nombre})</label><div style="font-size:1.2rem;font-weight:700;color:var(--accent);">${diasEntrega} días</div><p style="font-size:.72rem;color:var(--gray-400);margin-top:2px;">Según histórico del proveedor</p></div>
@@ -1175,7 +1265,7 @@ return `<div class="card" style="box-shadow:none;border:1px solid var(--gray-100
 <div style="padding:8px 14px;background:var(--gray-50);border-radius:6px;"><strong>Diferencia:</strong> ₡${fmt(Math.round(calc.costoTotalCR*(parseFloat(tcProyectado)-tcActual)))}</div>
 </div>
 <p style="font-size:.72rem;color:var(--gray-400);margin-top:8px;"><i class="fas fa-info-circle"></i> La proyección es estimada. El tipo de cambio puede variar durante los ${diasEntrega} días de tránsito de la mercancía.</p>
-</div></div>
+</div></div>`}
 
 <h3 style="font-size:.9rem;color:var(--primary);margin-bottom:10px;">Escenario de precios</h3>
 <div class="scenario-tabs">
@@ -1183,7 +1273,7 @@ return `<div class="card" style="box-shadow:none;border:1px solid var(--gray-100
 <div class="scenario-tab ${d.escenario==='B'?'active':''}" onclick="APP.wizardData.escenario='B';renderView('nueva-simulacion')">B. Mantener margen</div>
 <div class="scenario-tab ${d.escenario==='C'?'active':''}" onclick="APP.wizardData.escenario='C';renderView('nueva-simulacion')">C. Margen objetivo</div>
 </div>
-<div class="table-container"><table><thead><tr><th>SKU</th><th>Producto</th><th><i class="fas fa-database" style="color:var(--primary)" title="SAP"></i> Costo SAP</th><th>Costo cot.</th><th><i class="fas fa-calculator" style="color:var(--accent)" title="Cálculo"></i> Costos logíst.</th><th><i class="fas fa-calculator" style="color:var(--accent)" title="Cálculo"></i> Costo CR</th><th><i class="fas fa-calculator" style="color:var(--accent)" title="Cálculo"></i> Var.%</th><th><i class="fas fa-database" style="color:var(--primary)" title="SAP"></i> Precio</th><th><i class="fas fa-calculator" style="color:var(--accent)" title="Cálculo"></i> Margen act.</th><th><i class="fas fa-calculator" style="color:var(--accent)" title="Cálculo"></i> Margen proy.</th><th><i class="fas fa-robot" style="color:var(--success)" title="IA"></i> Precio sug.</th><th><i class="fas fa-robot" style="color:var(--success)" title="IA"></i> Estado</th><th><i class="fas fa-robot" style="color:var(--success)" title="IA"></i> Acción</th></tr></thead><tbody>
+<div class="table-container"><table><thead><tr><th>SKU</th><th>Producto</th><th><i class="fas fa-database" style="color:var(--primary)" title="SAP"></i> Costo SAP</th><th>Costo cot.</th><th><i class="fas fa-calculator" style="color:var(--accent)" title="Cálculo"></i> ${local?'Costos compra':'Costos logíst.'}</th><th><i class="fas fa-calculator" style="color:var(--accent)" title="Cálculo"></i> ${local?'Costo bodega':'Costo CR'}</th><th><i class="fas fa-calculator" style="color:var(--accent)" title="Cálculo"></i> Var.%</th><th><i class="fas fa-database" style="color:var(--primary)" title="SAP"></i> Precio</th><th><i class="fas fa-calculator" style="color:var(--accent)" title="Cálculo"></i> Margen act.</th><th><i class="fas fa-calculator" style="color:var(--accent)" title="Cálculo"></i> Margen proy.</th><th><i class="fas fa-robot" style="color:var(--success)" title="IA"></i> Precio sug.</th><th><i class="fas fa-robot" style="color:var(--success)" title="IA"></i> Estado</th><th><i class="fas fa-robot" style="color:var(--success)" title="IA"></i> Acción</th></tr></thead><tbody>
 ${calc.productos.map(p=>`<tr><td>${p.sku}</td><td style="font-size:.75rem;">${p.descripcion}</td><td>$${p.costoActual.toFixed(2)}</td><td>$${p.costoCotizado.toFixed(2)}</td><td>$${p.costoLogDist.toFixed(2)}</td><td>$${p.costoProyectado.toFixed(2)}</td><td style="color:${p.aumento>15?'var(--danger)':p.aumento>10?'var(--warning)':'var(--gray-600)'}">${p.aumento.toFixed(1)}%</td><td>$${p.precioVenta.toFixed(2)}</td><td>${p.margenActual.toFixed(1)}%</td><td style="color:${p.margenProy<APP.rules.margenMinimo?'var(--danger)':'inherit'}">${p.margenProy.toFixed(1)}%</td><td><strong>$${p.precioSugerido.toFixed(2)}</strong></td><td><span class="badge-status ${p.estadoMargen==='Saludable'?'badge-aprobado':p.estadoMargen==='En riesgo'?'badge-ajustes':p.estadoMargen==='Negativo'?'badge-rechazado':'badge-pendiente'}">${p.estadoMargen}</span></td><td><span class="badge-status ${p.accionRecomendada==='Mantener'?'badge-aprobado':p.accionRecomendada==='Retirar'?'badge-rechazado':'badge-ajustes'}">${p.accionRecomendada}</span></td></tr>`).join('')}
 </tbody></table></div>
 <div style="display:flex;gap:16px;margin-top:14px;flex-wrap:wrap;">
@@ -1206,40 +1296,49 @@ admin:`<button class="btn btn-outline" onclick="guardarSim('borrador')"><i class
 return `<div class="card" style="box-shadow:none;border:1px solid var(--gray-100);"><div class="card-header"><h2>Paso 6: Decisión</h2></div><div class="card-body">
 <div class="kpi-grid">
 <div class="kpi-card"><div class="kpi-icon blue"><i class="fas fa-shopping-cart"></i></div><div class="kpi-info"><h3>$${fmt(calc.montoCompra)}</h3><p>Total compra</p></div></div>
-<div class="kpi-card"><div class="kpi-icon green"><i class="fas fa-flag-checkered"></i></div><div class="kpi-info"><h3>$${fmt(calc.costoTotalCR)}</h3><p>Costo puesto CR</p></div></div>
+${isLocalWiz()?`<div class="kpi-card"><div class="kpi-icon green"><i class="fas fa-flag-checkered"></i></div><div class="kpi-info"><h3>$${fmt(calc.costoTotalCR)}</h3><p>Costo puesto en bodega</p></div></div>
+<div class="kpi-card"><div class="kpi-icon teal"><i class="fas fa-credit-card"></i></div><div class="kpi-info"><h3>${prov.plazoCredito?prov.plazoCredito+'d':'Contado'}</h3><p>Crédito proveedor</p></div></div>
+<div class="kpi-card"><div class="kpi-icon orange"><i class="fas fa-shipping-fast"></i></div><div class="kpi-info"><h3>${d.tiempoTransito}d</h3><p>Entrega local</p></div></div>`:`<div class="kpi-card"><div class="kpi-icon green"><i class="fas fa-flag-checkered"></i></div><div class="kpi-info"><h3>$${fmt(calc.costoTotalCR)}</h3><p>Costo puesto CR</p></div></div>
 <div class="kpi-card"><div class="kpi-icon teal"><i class="fas fa-box"></i></div><div class="kpi-info"><h3>${util}%</h3><p>Utilización</p></div></div>
-<div class="kpi-card"><div class="kpi-icon orange"><i class="fas fa-calendar"></i></div><div class="kpi-info"><h3>${d.tiempoTransito}d</h3><p>Tiempo tránsito</p></div></div>
+<div class="kpi-card"><div class="kpi-icon orange"><i class="fas fa-calendar"></i></div><div class="kpi-info"><h3>${d.tiempoTransito}d</h3><p>Tiempo tránsito</p></div></div>`}
 </div>
 <div class="rec-card ${calc.rec.clase}" style="margin:16px 0;"><h3 style="color:${calc.rec.color};">${calc.rec.texto}</h3><p class="confidence">Confianza: ${calc.rec.confianza}</p></div>
 <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:18px;">${roleActions[APP.currentRole]||roleActions.comercial}
 <button class="btn btn-outline" onclick="showToast('Reporte exportado (simulado)','success')"><i class="fas fa-download"></i> Exportar</button></div>
 <p style="font-size:.74rem;color:var(--gray-400);text-align:center;margin-top:14px;">Equivalencia CRC: ₡${fmt(Math.round(calc.costoTotalCR*APP.rules.tipoCambio))} (TC: ${APP.rules.tipoCambio})</p>
-<div class="alert-item info" style="margin-top:16px;text-align:center;"><i class="fas fa-user-shield"></i><span style="font-weight:600;">Recomendación de apoyo. La decisión final corresponde al especialista de Importaciones.</span></div>
+<div class="alert-item info" style="margin-top:16px;text-align:center;"><i class="fas fa-user-shield"></i><span style="font-weight:600;">Recomendación de apoyo. La decisión final corresponde al especialista de ${isLocalWiz()?'Compras':'Importaciones'}.</span></div>
 </div></div>${wizNav()}`;}
 
-function guardarSim(estado){const d=APP.wizardData;const calc=calcAnalysis(d);const prov=PROVEEDORES.find(p=>p.id===d.proveedorId);const sel=d.productos.filter(p=>p.selected);const caps=getCaps(d.tipoCarga);
-const peso=sel.reduce((a,p)=>a+p.cantidad*p.pesoUnitario,0);const vol=sel.reduce((a,p)=>a+p.cantidad*p.volumenUnitario,0);const util=Math.round(Math.max(peso/caps.peso*100,vol/caps.vol*100));
-const ns={id:d.editingSimId||('SIM-2026-'+String(APP.simulaciones.length+1).padStart(3,'0')),fecha:new Date().toISOString().split('T')[0],motivo:d.tipoAnalisis,proveedor:prov.nombre,tipoProveedor:prov.recurrente?'Recurrente':'Nuevo',pais:prov.pais,region:prov.region,incoterm:d.incoterm,tipoCarga:d.tipoCarga,numProductos:sel.length,totalCompra:Math.round(calc.montoCompra),costoCR:Math.round(calc.costoTotalCR),utilizacion:util,recomendacion:calc.rec.texto,estado,fechaLlegada:null,responsable:d.responsable,sapOrder:null,tipoImportacion:d.tipoImportacion||'regular'};
+function buildSimRecord(d,id,estado,sapOrder){const calc=calcAnalysis(d);const prov=PROVEEDORES.find(p=>p.id===d.proveedorId);const sel=d.productos.filter(p=>p.selected);const local=d.tipoCompra==='local';
+let util=null;if(!local){const caps=getCaps(d.tipoCarga);const peso=sel.reduce((a,p)=>a+p.cantidad*p.pesoUnitario,0);const vol=sel.reduce((a,p)=>a+p.cantidad*p.volumenUnitario,0);util=Math.round(Math.max(peso/caps.peso*100,vol/caps.vol*100));}
+return {id,fecha:new Date().toISOString().split('T')[0],motivo:d.tipoAnalisis,proveedor:prov.nombre,tipoProveedor:prov.recurrente?'Recurrente':'Nuevo',pais:prov.pais,region:prov.region,incoterm:local?'N/A':d.incoterm,tipoCarga:local?'Local':d.tipoCarga,numProductos:sel.length,totalCompra:Math.round(calc.montoCompra),costoCR:Math.round(calc.costoTotalCR),utilizacion:util,recomendacion:calc.rec.texto,estado,fechaLlegada:null,responsable:d.responsable,sapOrder:sapOrder||null,tipoImportacion:d.tipoImportacion||'regular',tipoCompra:local?'local':'importacion',tiempoEntrega:d.tiempoTransito,
+// Líneas reales del pedido (para la OC / PDF)
+lineas:sel.map(p=>({sku:p.sku,descripcion:p.descripcion,cantidad:p.cantidad,costo:Math.round((p.costoCotizado||p.costoActual)*100)/100}))};}
+function guardarSim(estado){const d=APP.wizardData;
+const ns=buildSimRecord(d,d.editingSimId||('SIM-2026-'+String(APP.simulaciones.length+1).padStart(3,'0')),estado);
 if(d.editingSimId){const idx=APP.simulaciones.findIndex(x=>x.id===d.editingSimId);if(idx>=0)APP.simulaciones[idx]=ns;else APP.simulaciones.unshift(ns);}else{APP.simulaciones.unshift(ns);}
 saveData();APP.wizardData={};APP.wizardStep=1;showToast(`${ns.id} guardada como "${ESTADOS_MAP[estado]}"`,`success`);navigateTo('simulaciones');}
 function confirmReject(){showModal('Confirmar rechazo','¿Rechazar esta simulación?',[{text:'Cancelar',cls:'btn-outline',action:'closeModal()'},{text:'Rechazar',cls:'btn-danger',action:"guardarSim('rechazado');closeModal()"}]);}
 
-function aprobarYCrearOC(){const d=APP.wizardData;const calc=calcAnalysis(d);const prov=PROVEEDORES.find(p=>p.id===d.proveedorId);const sel=d.productos.filter(p=>p.selected);const caps=getCaps(d.tipoCarga);
-const peso=sel.reduce((a,p)=>a+p.cantidad*p.pesoUnitario,0);const vol=sel.reduce((a,p)=>a+p.cantidad*p.volumenUnitario,0);const util=Math.round(Math.max(peso/caps.peso*100,vol/caps.vol*100));
+function aprobarYCrearOC(){const d=APP.wizardData;
 const sapNum='4500'+String(Math.floor(Math.random()*9000)+1000);
-const ns={id:'SIM-2026-'+String(APP.simulaciones.length+1).padStart(3,'0'),fecha:new Date().toISOString().split('T')[0],motivo:d.tipoAnalisis,proveedor:prov.nombre,tipoProveedor:prov.recurrente?'Recurrente':'Nuevo',pais:prov.pais,region:prov.region,incoterm:d.incoterm,tipoCarga:d.tipoCarga,numProductos:sel.length,totalCompra:Math.round(calc.montoCompra),costoCR:Math.round(calc.costoTotalCR),utilizacion:util,recomendacion:calc.rec.texto,estado:'oc_generada',fechaLlegada:null,responsable:d.responsable,sapOrder:sapNum};
+const ns=buildSimRecord(d,'SIM-2026-'+String(APP.simulaciones.length+1).padStart(3,'0'),'oc_generada',sapNum);
 APP.simulaciones.unshift(ns);
-const po={id:'OC-2026-'+String(APP.purchaseOrders.length+50).padStart(3,'0'),simId:ns.id,proveedor:prov.nombre,fecha:ns.fecha,estado:'sap',sapOrder:sapNum,total:ns.totalCompra,productos:sel.length};
+const po={id:'OC-2026-'+String(APP.purchaseOrders.length+50).padStart(3,'0'),simId:ns.id,proveedor:ns.proveedor,fecha:ns.fecha,estado:'sap',sapOrder:sapNum,total:ns.totalCompra,productos:ns.numProductos};
 APP.purchaseOrders.push(po);
 saveData();APP.wizardData={};APP.wizardStep=1;
-showToast(`${ns.id} aprobada y orden SAP ${sapNum} creada (simulado)`,'success');navigateTo('simulaciones');}
+showToast(`${ns.id} aprobada y orden SAP ${sapNum} creada (simulado)`,'success');
+// Abrir el detalle en la pestaña de OC y mostrar la vista PDF de la orden
+viewSimDetail(ns.id);printPO(ns.id);}
 
 // ===== CÁLCULOS =====
 function calcAnalysis(d){
 const sel=d.productos.filter(p=>p.selected);const montoCompra=sel.reduce((a,p)=>a+p.cantidad*p.costoCotizado,0);
 // Costos de consolidación (solo si aplica)
 const costosConsolidacion=(d.transporteConsolidacion||0)+(d.recepcionConsolidacion||0)+(d.handling||0)+(d.bodega||0)+(d.consolidacion||0)+(d.documentacion||0);
-const costosAd=(d.flete||0)+(d.seguro||0)+(d.operador||0)+(d.agencia||0)+(d.aranceles||0)+(d.impuestos||0)+(d.transporteLocal||0)+(d.otrosCostos||0)-(d.tratado?(d.descuentoTratado||0):0)+costosConsolidacion;
+const costosAd=d.tipoCompra==='local'
+?(d.transporteLocal||0)+(d.cargaDescarga||0)+(d.otrosCostos||0)-(d.descuentoComercial||0)
+:(d.flete||0)+(d.seguro||0)+(d.operador||0)+(d.agencia||0)+(d.aranceles||0)+(d.impuestos||0)+(d.transporteLocal||0)+(d.otrosCostos||0)-(d.tratado?(d.descuentoTratado||0):0)+costosConsolidacion;
 const costoTotalCR=montoCompra+costosAd;const totalPeso=sel.reduce((a,p)=>a+p.cantidad*p.pesoUnitario,0);const totalVol=sel.reduce((a,p)=>a+p.cantidad*p.volumenUnitario,0);
 const productos=sel.map(p=>{const val=p.cantidad*p.costoCotizado;let fd;
 if(d.metodoDistribucion==='hibrido'){const h=APP.rules.distribucionHibrida||{valor:0.4,peso:0.3,volumen:0.3};const fdVal=val/(montoCompra||1);const fdPeso=(p.cantidad*p.pesoUnitario)/(totalPeso||1);const fdVol=(p.cantidad*p.volumenUnitario)/(totalVol||1);fd=fdVal*h.valor+fdPeso*h.peso+fdVol*h.volumen;}
@@ -1261,9 +1360,16 @@ function genInsights(d,prods,costosAd){const ins=[];const prov=PROVEEDORES.find(
 const margenProm=prods.reduce((a,p)=>a+p.margenProy,0)/prods.length;const margenActProm=prods.reduce((a,p)=>a+p.margenActual,0)/prods.length;
 if(margenProm<margenActProm-5)ins.push({icon:'fa-arrow-down',text:`Margen promedio baja del ${margenActProm.toFixed(0)}% al ${margenProm.toFixed(0)}%. Considere ajustar precios.`});
 const conc=prods.filter(p=>p.concentracion>APP.rules.maxConcentracionCliente);if(conc.length)ins.push({icon:'fa-user-clock',text:`${conc.length} producto(s) con concentración superior al ${APP.rules.maxConcentracionCliente}% en un solo cliente.`});
+if(d.tipoCompra==='local'){
+const criticos=prods.filter(p=>calculatePurchaseNeed(p,APP.rules).urgency==='critica').length;
+ins.push({icon:'fa-shipping-fast',text:`Compra local con entrega en ${d.tiempoTransito} días${criticos?`: cubre ${criticos} producto(s) en cobertura crítica sin esperar el tránsito de una importación`:''}.`});
+const pctCostos=costosAd/(prods.reduce((a,p)=>a+p.cantidad*p.costoCotizado,0)||1)*100;
+if(pctCostos>5)ins.push({icon:'fa-truck-loading',text:`Los costos de compra local representan ${pctCostos.toFixed(1)}% del monto. Negocie entrega incluida o descuento por volumen.`});
+}else{
 const caps=getCaps(d.tipoCarga);const sel=d.productos.filter(p=>p.selected);const peso=sel.reduce((a,p)=>a+p.cantidad*p.pesoUnitario,0);const util=Math.max(peso/caps.peso*100,(sel.reduce((a,p)=>a+p.cantidad*p.volumenUnitario,0)/caps.vol)*100);
 if(util<APP.rules.utilizacionMinima)ins.push({icon:'fa-box-open',text:`Contenedor al ${util.toFixed(0)}% de utilización. Evalúe agregar productos o cambiar tipo.`});
-if(d.tratado)ins.push({icon:'fa-handshake',text:`Tratado comercial aplicable. Reducción estimada: $${d.descuentoTratado}.`});
+}
+if(d.tratado&&d.tipoCompra!=='local')ins.push({icon:'fa-handshake',text:`Tratado comercial aplicable. Reducción estimada: $${d.descuentoTratado}.`});
 if(!prov?.recurrente)ins.push({icon:'fa-user-plus',text:'Proveedor nuevo sin histórico suficiente. Confianza media.'});
 const combos=HISTORICAL_COMBOS[d.proveedorId]||[];if(combos.length&&d.mixApplied)ins.push({icon:'fa-history',text:'Mix basado en combinación histórica exitosa del proveedor.'});
 const negat=prods.filter(p=>p.estadoMargen==='Negativo');if(negat.length)ins.push({icon:'fa-exclamation-triangle',text:`${negat.length} producto(s) con margen negativo. Se recomienda retirar o ajustar precio.`});
@@ -1276,17 +1382,20 @@ const montoCompra=prods.reduce((a,p)=>a+p.cantidad*(p.costoCotizado||p.costoActu
 // Monto mínimo/objetivo
 if(prov&&montoCompra>=(prov.minimumOrderValue||0))score+=10;
 if(prov&&montoCompra>=(prov.targetOrderValue||0))score+=10;
-// Utilización
+// Utilización (no aplica en compra local)
+const local=d.tipoCompra==='local';
 const caps=getCaps(d.tipoCarga);const sel=d.productos.filter(p=>p.selected);
 const peso=sel.reduce((a,p)=>a+p.cantidad*p.pesoUnitario,0);const vol=sel.reduce((a,p)=>a+p.cantidad*p.volumenUnitario,0);
-const util=Math.max(peso/caps.peso*100,vol/caps.vol*100);
-if(util>=85)score+=15;
+const util=local?null:Math.max(peso/caps.peso*100,vol/caps.vol*100);
+if(!local&&util>=85)score+=15;
 // Cobertura posterior <=6 meses promedio
 const cobProm=prods.reduce((a,p)=>a+(p.rotacion?p.rotacion.coberturaPosterior:4),0)/(prods.length||1);
 if(cobProm<=6)score+=10;
 // Productos críticos cubiertos
 const criticos=prods.filter(p=>{const need=calculatePurchaseNeed(p,APP.rules);return need.urgency==='critica';});
 if(criticos.length>0)score+=10;
+// Compra local: entrega rápida cubre la urgencia sin esperar tránsito internacional
+if(local&&criticos.length>0&&(d.tiempoTransito||0)<=7)score+=5;
 // Proyección comercial respalda
 const conProy=prods.filter(p=>p.proyeccionComercial&&p.proyeccionComercial.qty>0).length;
 if(conProy>prods.length*0.3)score+=5;
@@ -1320,7 +1429,7 @@ const negativos=prods.filter(p=>p.estadoMargen==='Negativo').length;if(negativos
 // Proveedor no recurrente
 if(!prov?.recurrente)score-=10;
 // Utilización baja
-if(util<70)score-=15;
+if(!local&&util<70)score-=15;
 
 // === CONSOLIDADO ===
 if(d.tipoImportacion==='consolidada'){
@@ -1340,8 +1449,8 @@ const necesarios=prods.filter(p=>{const n=calculatePurchaseNeed(p,APP.rules);ret
 narrativa.push(`Se requieren ${necesarios} de ${prods.length} productos para mantener cobertura objetivo.`);
 // Optimización
 if(prov)narrativa.push(`El pedido base alcanza $${fmt(Math.round(montoCompra))} de un objetivo de $${fmt(prov.targetOrderValue||0)}.`);
-// Utilización
-narrativa.push(`La utilización del contenedor es ${util.toFixed(0)}%.`);
+// Utilización / entrega
+narrativa.push(local?`Compra local con entrega en ${d.tiempoTransito} días, sin costos de importación.`:`La utilización del contenedor es ${util.toFixed(0)}%.`);
 // Riesgo
 if(cobProm>6)narrativa.push(`La cobertura promedio resultante será ${cobProm.toFixed(1)} meses.`);
 if(sobreStock>0)narrativa.push(`${sobreStock} producto(s) generarían sobre-stock.`);
@@ -1354,7 +1463,22 @@ confianza=(!prov?.recurrente)?'Baja':(score>=60||score<30?'Alta':'Media');
 return {texto,clase,icon,color,confianza,razon,score};}
 
 // ===== PRESETS =====
+function loadLocalPreset(type){
+initWizard('local');const d=APP.wizardData;
+if(type==='comprar'){Object.assign(d,{tipoAnalisis:'Reposición de productos',area:'Operaciones',responsable:'Ana Solano',observaciones:'Stock crítico. Compra local mientras llega la importación.',proveedorId:9,
+productos:SUPPLIER_CATALOGS[9].map(p=>({...p,selected:true,cantidad:p.cantidadPromedio,costoCotizado:p.costoActual*0.98,accionRecomendada:'Mantener'})),
+transporteLocal:0,cargaDescarga:60,otrosCostos:0,descuentoComercial:40,tiempoTransito:3,mixApplied:true});}
+else if(type==='no-comprar'){Object.assign(d,{tipoAnalisis:'Producto nuevo',area:'Proyectos',responsable:'Roberto Fallas',observaciones:'Proveedor local nuevo. Cotización única para proyecto.',proveedorId:11,
+productos:SUPPLIER_CATALOGS[11].map(p=>({...p,selected:true,cantidad:80,costoCotizado:p.costoActual*1.35,accionRecomendada:'Revisar',stockTotal:200,stockActual:200,stockReservado:0,ventas3m:3,consumoMensual:1,concentracion:72})),
+transporteLocal:250,cargaDescarga:120,otrosCostos:150,descuentoComercial:0,tiempoTransito:7,mixApplied:false});}
+else{Object.assign(d,{tipoAnalisis:'Necesidad comercial',area:'Comercial',responsable:'Carlos Méndez',observaciones:'Precio local subió 22% y el proveedor entrega en 8 días (sin inventario completo). Evaluar ajuste de precios.',proveedorId:10,
+productos:SUPPLIER_CATALOGS[10].map(p=>({...p,selected:true,cantidad:Math.max(2,Math.round(p.cantidadPromedio/4)),costoCotizado:p.costoActual*1.22,accionRecomendada:'Mantener'})),
+transporteLocal:180,cargaDescarga:60,otrosCostos:40,descuentoComercial:0,tiempoTransito:8,mixApplied:true});}
+d._provLoaded=d.proveedorId;
+APP.wizardStep=5;renderView('compra-local');showToast(`Ejemplo de compra local "${type}" cargado`,'info');}
+
 function loadPreset(type){
+if(type.startsWith('local-')){loadLocalPreset(type.slice(6));return;}
 const cat1=SUPPLIER_CATALOGS[1];const cat3=SUPPLIER_CATALOGS[3];
 if(type==='comprar'){APP.wizardData={tipoImportacion:'regular',tipoAnalisis:'Compra completa por proveedor',motivo:'',area:'Comercial',responsable:'Carlos Méndez',fechaRequerida:'2026-09-15',observaciones:'Reposición programada. Stock crítico.',proveedorId:1,incoterm:'CIF',tipoCarga:'40 pies',
 productos:cat1.map(p=>({...p,selected:true,cantidad:p.cantidadPromedio,costoCotizado:p.costoActual*0.97,accionRecomendada:'Mantener',stockActual:Math.min(p.stockActual,10),cobertura:1.5})),selectedProducts:[],
@@ -1407,7 +1531,7 @@ const catalog=SUPPLIER_CATALOGS[provId]||[];const combos=HISTORICAL_COMBOS[provI
 const needs=catalog.map(p=>({...p,need:calculatePurchaseNeed(p,APP.rules)}));
 const necesarios=needs.filter(p=>p.need.needsPurchase);
 const pedidoBase=necesarios.reduce((sum,p)=>sum+p.need.finalSuggestedQty*p.costoActual,0);
-return `<div class="card"><div class="card-header"><h2>Planificación por proveedor</h2><select onchange="changePlanProv(this.value)">${PROVEEDORES.filter(p=>p.recurrente).map(p=>`<option value="${p.id}" ${p.id===provId?'selected':''}>${p.nombre}</option>`).join('')}</select></div>
+return `<div class="card"><div class="card-header"><h2>Planificación por proveedor</h2><select onchange="changePlanProv(this.value)">${PROVEEDORES.filter(p=>p.recurrente&&!p.local).map(p=>`<option value="${p.id}" ${p.id===provId?'selected':''}>${p.nombre}</option>`).join('')}</select></div>
 <div class="card-body">
 <div class="kpi-grid">
 <div class="kpi-card"><div class="kpi-icon blue"><i class="fas fa-boxes"></i></div><div class="kpi-info"><h3>${catalog.length}</h3><p>Productos catálogo</p></div></div>
@@ -1535,7 +1659,7 @@ function startSimFromSelection(provId){APP.wizardData={};initWizard();APP.wizard
 APP.wizardData.productos=catalog.map(p=>({...p,selected:(APP.planSelectedProducts||[]).includes(p.sku),cantidad:p.cantidadPromedio||50,costoCotizado:p.costoActual*(1+(prov.variacionReciente||0)/100),accionRecomendada:p.cobertura<3?'Aumentar':'Mantener'}));
 APP.wizardStep=3;APP.planSelectedProducts=[];navigateTo('nueva-simulacion');showToast('Simulación creada con productos seleccionados','success');}
 
-function startSimFromProv(provId){APP.wizardData={};APP.wizardStep=1;initWizard();APP.wizardData.proveedorId=provId;navigateTo('nueva-simulacion');showToast('Simulación iniciada desde planificación','info');}
+function startSimFromProv(provId){const local=!!PROVEEDORES.find(p=>p.id===provId)?.local;APP.wizardData={};APP.wizardStep=1;initWizard(local?'local':undefined);APP.wizardData.proveedorId=provId;navigateTo(local?'compra-local':'nueva-simulacion');showToast(local?'Compra local iniciada':'Simulación iniciada desde planificación','info');}
 function startSimFromCombo(provId,comboId){APP.wizardData={};initWizard();APP.wizardData.proveedorId=provId;APP.wizardStep=3;navigateTo('nueva-simulacion');setTimeout(()=>applyCombo(comboId),100);}
 
 function changePlanProd(val){APP.planProdIdx=parseInt(val);document.getElementById('prod-tab').innerHTML=renderForecast();}
@@ -1600,10 +1724,11 @@ APP.wizardData.productos=catalog.map(p=>({...p,selected:(APP.forecastSelectedPro
 APP.wizardStep=3;APP.forecastSelectedProducts=[];navigateTo('nueva-simulacion');showToast('Simulación creada con productos seleccionados desde forecast','success');}
 // ===== VISTA 5: PROVEEDORES =====
 function renderProveedores(){return `<h1 class="section-title"><i class="fas fa-truck"></i> Proveedores e Historial</h1>
-<div class="card"><div class="card-header"><h2>Directorio</h2></div><div class="card-body"><div class="table-container"><table><thead><tr><th>Proveedor</th><th>Región</th><th>País</th><th>Tipo</th><th><i class="fas fa-database" style="color:var(--primary)" title="SAP"></i> Moneda</th><th><i class="fas fa-database" style="color:var(--primary)" title="SAP"></i> Incoterm</th><th>Contenedor</th><th><i class="fas fa-calculator" style="color:var(--accent)" title="Cálculo"></i> Tiempo prom.</th><th>Tratado</th><th><i class="fas fa-calculator" style="color:var(--accent)" title="Cálculo"></i> Var.%</th><th><i class="fas fa-database" style="color:var(--primary)" title="SAP"></i> Import.</th><th>Última</th><th></th></tr></thead><tbody>
-${PROVEEDORES.map(p=>`<tr><td><strong>${p.nombre}</strong></td><td>${p.region}</td><td>${p.pais}</td><td><span class="badge-status ${p.recurrente?'badge-aprobado':'badge-ajustes'}">${p.recurrente?'Recurrente':'Nuevo'}</span></td><td>${p.moneda}</td><td>${p.incoterm}</td><td>${p.tipoContenedor}</td><td>${p.tiempoEntrega}d</td><td>${p.tratado?'<i class="fas fa-check" style="color:var(--success)"></i>':'<i class="fas fa-times" style="color:var(--danger)"></i>'}</td><td style="color:${p.variacionReciente>15?'var(--danger)':'inherit'}">${p.variacionReciente}%</td><td>${p.importaciones}</td><td>${p.ultimaCompra||'N/A'}</td><td class="action-btns"><button onclick="verFichaProveedor(${p.id})" title="Ver ficha"><i class="fas fa-eye"></i></button><button onclick="startSimFromProv(${p.id})" title="Crear simulación"><i class="fas fa-plus"></i></button></td></tr>`).join('')}
+<div class="card"><div class="card-header"><h2>Directorio</h2></div><div class="card-body"><div class="table-container"><table><thead><tr><th>Proveedor</th><th>Origen</th><th>Región</th><th>País</th><th>Tipo</th><th><i class="fas fa-database" style="color:var(--primary)" title="SAP"></i> Moneda</th><th><i class="fas fa-database" style="color:var(--primary)" title="SAP"></i> Incoterm</th><th>Contenedor</th><th><i class="fas fa-calculator" style="color:var(--accent)" title="Cálculo"></i> Tiempo prom.</th><th>Tratado</th><th><i class="fas fa-calculator" style="color:var(--accent)" title="Cálculo"></i> Var.%</th><th><i class="fas fa-database" style="color:var(--primary)" title="SAP"></i> Compras</th><th>Última</th><th></th></tr></thead><tbody>
+${PROVEEDORES.map(p=>`<tr><td><strong>${p.nombre}</strong></td><td><span class="badge-status ${p.local?'badge-aprobado':'badge-analisis'}"><i class="fas ${p.local?'fa-store':'fa-globe-americas'}"></i> ${p.local?'Local':'Internacional'}</span></td><td>${p.region}</td><td>${p.local?p.ciudad:p.pais}</td><td><span class="badge-status ${p.recurrente?'badge-aprobado':'badge-ajustes'}">${p.recurrente?'Recurrente':'Nuevo'}</span></td><td>${p.moneda}</td><td>${p.local?'—':p.incoterm}</td><td>${p.local?'—':p.tipoContenedor}</td><td>${p.tiempoEntrega}d</td><td>${p.local?'—':p.tratado?'<i class="fas fa-check" style="color:var(--success)"></i>':'<i class="fas fa-times" style="color:var(--danger)"></i>'}</td><td style="color:${p.variacionReciente>15?'var(--danger)':'inherit'}">${p.variacionReciente}%</td><td>${p.local?p.comprasLocales:p.importaciones}</td><td>${p.ultimaCompra||'N/A'}</td><td class="action-btns"><button onclick="verFichaProveedor(${p.id})" title="Ver ficha"><i class="fas fa-eye"></i></button><button onclick="startSimFromProv(${p.id})" title="Crear simulación"><i class="fas fa-plus"></i></button></td></tr>`).join('')}
 </tbody></table></div></div></div>`;}
 function verFichaProveedor(id){const p=PROVEEDORES.find(x=>x.id===id);const cat=SUPPLIER_CATALOGS[id]||[];const combos=HISTORICAL_COMBOS[id]||[];
+if(p.local){showModal(`${p.nombre}`,`<div style="text-align:left;"><p><strong>Ubicación:</strong> ${p.direccion}</p><p><strong>Moneda:</strong> ${p.moneda} · <strong>Crédito:</strong> ${p.plazoCredito?p.plazoCredito+' días':'Contado'}</p><p><strong>Tiempo entrega:</strong> ${p.tiempoEntrega} días · <strong>Entrega en bodega:</strong> ${p.entregaIncluida?'Incluida':'No incluida'}</p><p><strong>Compras locales:</strong> ${p.comprasLocales} · <strong>Frecuencia:</strong> ${p.frecuenciaCompra}</p><p><strong>Monto mínimo:</strong> $${fmt(p.minimumOrderValue)} · <strong>Variación:</strong> ${p.variacionReciente}%</p><p><strong>Catálogo:</strong> ${cat.length} productos</p></div>`,[{text:'Nueva compra local',cls:'btn-primary',action:`closeModal();startSimFromProv(${id})`},{text:'Cerrar',cls:'btn-outline',action:'closeModal()'}]);return;}
 showModal(`${p.nombre}`,`<div style="text-align:left;"><p><strong>País:</strong> ${p.pais} · <strong>Región:</strong> ${p.region}</p><p><strong>Moneda:</strong> ${p.moneda} · <strong>Incoterm:</strong> ${p.incoterm}</p><p><strong>Tiempo entrega:</strong> ${p.tiempoEntrega} días · <strong>Tratado:</strong> ${p.tratado?'Sí':'No'}</p><p><strong>Importaciones:</strong> ${p.importaciones} · <strong>Frecuencia:</strong> ${p.frecuenciaCompra}</p><p><strong>Utilización prom.:</strong> ${p.utilizacionProm}% · <strong>Variación:</strong> ${p.variacionReciente}%</p><p><strong>Catálogo:</strong> ${cat.length} productos · <strong>Combos:</strong> ${combos.length} combinaciones</p><hr style="margin:10px 0;"><p style="font-size:.8rem;color:var(--gray-400);">${p.recurrente?'Proveedor confiable con historial positivo.':'Proveedor nuevo, requiere validación.'}</p></div>`,[{text:'Planificar compra',cls:'btn-primary',action:`closeModal();startSimFromProv(${id})`},{text:'Cerrar',cls:'btn-outline',action:'closeModal()'}]);}
 
 // ===== VISTA: MAESTRO DE PRODUCTOS =====
@@ -1806,22 +1931,23 @@ function renderIncotermChart(){const ics=['CIF','FOB','FCA','EXW'];const counts=
 // ===== VISTA 8: DETALLE SIMULACIÓN =====
 function viewSimDetail(id){APP.currentSimDetail=APP.simulaciones.find(s=>s.id===id);if(!APP.currentSimDetail)return;APP.currentView='detalle-simulacion';renderView('detalle-simulacion');}
 function renderDetalle(){const s=APP.currentSimDetail;if(!s)return '<p>No encontrada</p>';const tr=APP.transitRecords.find(t=>t.simId===s.id);const po=APP.purchaseOrders.find(o=>o.simId===s.id);
-return `<div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap;"><button class="btn btn-outline btn-sm" onclick="navigateTo('simulaciones')"><i class="fas fa-arrow-left"></i></button><h1 class="section-title" style="margin:0;">${s.id}</h1><span class="badge-status badge-${s.estado}">${ESTADOS_MAP[s.estado]}</span></div>
-<div class="tabs" id="det-tabs"><div class="tab active" onclick="showDetTab('dt-res')">Resumen</div><div class="tab" onclick="showDetTab('dt-prod')">Productos</div><div class="tab" onclick="showDetTab('dt-mix')">Mix inteligente</div><div class="tab" onclick="showDetTab('dt-log')">Logística</div><div class="tab" onclick="showDetTab('dt-rec')">Recomendación</div>${po?'<div class="tab" onclick="showDetTab(\'dt-oc\')">Orden de compra</div>':''}<div class="tab" onclick="showDetTab('dt-track')">Seguimiento</div><div class="tab" onclick="showDetTab('dt-hist')">Historial</div></div>
+return `<div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap;"><button class="btn btn-outline btn-sm" onclick="navigateTo('simulaciones')"><i class="fas fa-arrow-left"></i></button><h1 class="section-title" style="margin:0;">${s.id}</h1><span class="badge-status badge-${s.estado}">${ESTADOS_MAP[s.estado]||s.estado}</span>${localBadge(s)}</div>
+<div class="tabs" id="det-tabs"><div class="tab active" onclick="showDetTab('dt-res')">Resumen</div><div class="tab" onclick="showDetTab('dt-prod')">Productos</div><div class="tab" onclick="showDetTab('dt-mix')">Mix inteligente</div><div class="tab" onclick="showDetTab('dt-log')">${isLocalSim(s)?'Entrega':'Logística'}</div><div class="tab" onclick="showDetTab('dt-rec')">Recomendación</div>${po?'<div class="tab" onclick="showDetTab(\'dt-oc\')">Orden de compra</div>':''}<div class="tab" onclick="showDetTab('dt-track')">Seguimiento</div><div class="tab" onclick="showDetTab('dt-hist')">Historial</div></div>
 <div id="dt-res" class="tab-content">${renderDetResumen(s)}</div>
 <div id="dt-prod" class="tab-content hidden">${renderDetProductos(s)}</div>
-<div id="dt-mix" class="tab-content hidden"><div class="card"><div class="card-body"><p style="color:var(--gray-400);">El mix inteligente se genera durante la creación de la simulación. Consulte el paso 3 del wizard para detalles de la optimización aplicada.</p><div class="alert-item info"><i class="fas fa-magic"></i><span>Mix aplicado: ${s.numProductos} productos seleccionados. Utilización: ${s.utilizacion}%.</span></div></div></div></div>
+<div id="dt-mix" class="tab-content hidden"><div class="card"><div class="card-body"><p style="color:var(--gray-400);">El mix inteligente se genera durante la creación de la simulación. Consulte el paso 3 del wizard para detalles de la optimización aplicada.</p><div class="alert-item info"><i class="fas fa-magic"></i><span>Mix aplicado: ${s.numProductos} productos seleccionados.${isLocalSim(s)?' Compra local (sin contenedor).':` Utilización: ${s.utilizacion}%.`}</span></div></div></div></div>
 <div id="dt-log" class="tab-content hidden">${renderDetLogistica(s)}</div>
 <div id="dt-rec" class="tab-content hidden"><div class="card"><div class="card-body"><div class="rec-card ${getRecClass(s.recomendacion)}"><h3>${s.recomendacion}</h3><p class="confidence">Confianza: ${s.tipoProveedor==='Nuevo'?'Baja':'Alta'}</p></div></div></div></div>
 ${po?`<div id="dt-oc" class="tab-content hidden">${renderOCTab(s,po)}</div>`:''}
-<div id="dt-track" class="tab-content hidden">${tr?renderTracking(tr):'<div class="card"><div class="card-body"><p style="color:var(--gray-400);">Sin información de tránsito disponible para esta simulación.</p></div></div>'}</div>
+<div id="dt-track" class="tab-content hidden">${isLocalSim(s)?`<div class="card"><div class="card-body"><div class="alert-item info"><i class="fas fa-truck"></i><span><strong>Entrega local:</strong> el proveedor entrega directamente en bodega RENTECO en ${s.tiempoEntrega||'—'} días${s.fechaLlegada?` (estimada ${s.fechaLlegada})`:''}. No aplica seguimiento marítimo, puerto ni aduana.</span></div></div></div>`:tr?renderTracking(tr):'<div class="card"><div class="card-body"><p style="color:var(--gray-400);">Sin información de tránsito disponible para esta simulación.</p></div></div>'}</div>
 <div id="dt-hist" class="tab-content hidden">${renderTimeline(s)}</div>
 ${renderDetActions(s)}`;}
 function showDetTab(id){document.querySelectorAll('.tab-content').forEach(t=>t.classList.add('hidden'));document.getElementById(id)?.classList.remove('hidden');document.querySelectorAll('#det-tabs .tab').forEach(t=>t.classList.remove('active'));event.target.classList.add('active');}
-function renderDetResumen(s){return `<div class="kpi-grid"><div class="kpi-card"><div class="kpi-icon blue"><i class="fas fa-shopping-cart"></i></div><div class="kpi-info"><h3>$${fmt(s.totalCompra)}</h3><p>Total compra</p></div></div><div class="kpi-card"><div class="kpi-icon green"><i class="fas fa-flag-checkered"></i></div><div class="kpi-info"><h3>$${fmt(s.costoCR)}</h3><p>Costo CR</p></div></div><div class="kpi-card"><div class="kpi-icon teal"><i class="fas fa-box"></i></div><div class="kpi-info"><h3>${s.utilizacion}%</h3><p>Utilización</p></div></div><div class="kpi-card"><div class="kpi-icon orange"><i class="fas fa-globe"></i></div><div class="kpi-info"><h3>${s.incoterm}</h3><p>Incoterm</p></div></div></div>
-<div class="grid-2"><div class="card"><div class="card-body"><p><strong>Motivo:</strong> ${s.motivo}</p><p><strong>Proveedor:</strong> ${s.proveedor} (${s.tipoProveedor})</p><p><strong>Región:</strong> ${s.region} · ${s.pais}</p><p><strong>Carga:</strong> ${s.tipoCarga}</p><p><strong>Responsable:</strong> ${s.responsable}</p></div></div><div class="card"><div class="card-body"><p><strong>Fecha:</strong> ${s.fecha}</p><p><strong>Llegada est.:</strong> ${s.fechaLlegada||'N/A'}</p><p><strong>Productos:</strong> ${s.numProductos}</p>${s.sapOrder?`<p><strong>Orden SAP:</strong> ${s.sapOrder}</p>`:''}<p><strong>Equivalencia CRC:</strong> ₡${fmt(Math.round(s.costoCR*APP.rules.tipoCambio))}</p></div></div></div>`;}
+function renderDetResumen(s){const local=isLocalSim(s);return `<div class="kpi-grid"><div class="kpi-card"><div class="kpi-icon blue"><i class="fas fa-shopping-cart"></i></div><div class="kpi-info"><h3>$${fmt(s.totalCompra)}</h3><p>Total compra</p></div></div><div class="kpi-card"><div class="kpi-icon green"><i class="fas fa-flag-checkered"></i></div><div class="kpi-info"><h3>$${fmt(s.costoCR)}</h3><p>${local?'Costo en bodega':'Costo CR'}</p></div></div>${local?`<div class="kpi-card"><div class="kpi-icon teal"><i class="fas fa-shipping-fast"></i></div><div class="kpi-info"><h3>${s.tiempoEntrega||'—'}d</h3><p>Entrega local</p></div></div><div class="kpi-card"><div class="kpi-icon orange"><i class="fas fa-store"></i></div><div class="kpi-info"><h3>Local</h3><p>Tipo de compra</p></div></div>`:`<div class="kpi-card"><div class="kpi-icon teal"><i class="fas fa-box"></i></div><div class="kpi-info"><h3>${s.utilizacion}%</h3><p>Utilización</p></div></div><div class="kpi-card"><div class="kpi-icon orange"><i class="fas fa-globe"></i></div><div class="kpi-info"><h3>${s.incoterm}</h3><p>Incoterm</p></div></div>`}</div>
+<div class="grid-2"><div class="card"><div class="card-body"><p><strong>Motivo:</strong> ${s.motivo}</p><p><strong>Proveedor:</strong> ${s.proveedor} (${s.tipoProveedor})</p><p><strong>Región:</strong> ${s.region} · ${s.pais}</p><p><strong>${local?'Compra':'Carga'}:</strong> ${local?'Local — Costa Rica':s.tipoCarga}</p><p><strong>Responsable:</strong> ${s.responsable}</p></div></div><div class="card"><div class="card-body"><p><strong>Fecha:</strong> ${s.fecha}</p><p><strong>Llegada est.:</strong> ${s.fechaLlegada||'N/A'}</p><p><strong>Productos:</strong> ${s.numProductos}</p>${s.sapOrder?`<p><strong>Orden SAP:</strong> ${s.sapOrder}</p>`:''}<p><strong>Equivalencia CRC:</strong> ₡${fmt(Math.round(s.costoCR*APP.rules.tipoCambio))}</p></div></div></div>`;}
 function renderDetProductos(s){const cat=SUPPLIER_CATALOGS[PROVEEDORES.find(p=>p.nombre===s.proveedor)?.id||1]||[];return `<div class="card"><div class="card-body"><div class="table-container"><table><thead><tr><th>SKU</th><th>Descripción</th><th><i class="fas fa-database" style="color:var(--primary)" title="SAP"></i> Costo SAP</th><th><i class="fas fa-database" style="color:var(--primary)" title="SAP"></i> Precio</th><th><i class="fas fa-calculator" style="color:var(--accent)" title="Cálculo"></i> Margen</th><th><i class="fas fa-database" style="color:var(--primary)" title="SAP"></i> Stock</th></tr></thead><tbody>${cat.slice(0,s.numProductos).map(p=>`<tr><td>${p.sku}</td><td>${p.descripcion}</td><td>$${p.costoActual.toFixed(2)}</td><td>$${p.precioVenta.toFixed(2)}</td><td>${(((p.precioVenta-p.costoActual)/p.precioVenta)*100).toFixed(1)}%</td><td>${p.stockActual}</td></tr>`).join('')}</tbody></table></div></div></div>`;}
-function renderDetLogistica(s){return `<div class="card"><div class="card-body"><div class="grid-2"><div><p><strong>Tipo carga:</strong> ${s.tipoCarga}</p><p><strong>Incoterm:</strong> ${s.incoterm}</p><p><strong>Región:</strong> ${s.region}</p></div><div><p><strong>Costo logístico est.:</strong> $${fmt(s.costoCR-s.totalCompra)}</p><p><strong>% sobre compra:</strong> ${(((s.costoCR-s.totalCompra)/s.totalCompra)*100).toFixed(1)}%</p><p><strong>Utilización:</strong> <span class="semaphore ${s.utilizacion>=85?'green':s.utilizacion>=70?'yellow':'red'}">${s.utilizacion}%</span></p></div></div></div></div>`;}
+function renderDetLogistica(s){if(isLocalSim(s)){const prov=PROVEEDORES.find(p=>p.nombre===s.proveedor)||{};return `<div class="card"><div class="card-body"><div class="grid-2"><div><p><strong>Tipo de compra:</strong> Local — Costa Rica</p><p><strong>Proveedor:</strong> ${s.proveedor}${prov.ciudad?' · '+prov.ciudad:''}</p><p><strong>Entrega en bodega:</strong> ${prov.entregaIncluida?'Incluida por el proveedor':'Por cuenta de RENTECO'}</p><p><strong>Crédito:</strong> ${prov.plazoCredito?prov.plazoCredito+' días':'Contado'}</p></div><div><p><strong>Costos de compra local:</strong> $${fmt(s.costoCR-s.totalCompra)}</p><p><strong>% sobre compra:</strong> ${(((s.costoCR-s.totalCompra)/s.totalCompra)*100).toFixed(1)}%</p><p><strong>Tiempo de entrega:</strong> ${s.tiempoEntrega||'—'} días</p></div></div></div></div>`;}
+return `<div class="card"><div class="card-body"><div class="grid-2"><div><p><strong>Tipo carga:</strong> ${s.tipoCarga}</p><p><strong>Incoterm:</strong> ${s.incoterm}</p><p><strong>Región:</strong> ${s.region}</p></div><div><p><strong>Costo logístico est.:</strong> $${fmt(s.costoCR-s.totalCompra)}</p><p><strong>% sobre compra:</strong> ${(((s.costoCR-s.totalCompra)/s.totalCompra)*100).toFixed(1)}%</p><p><strong>Utilización:</strong> <span class="semaphore ${s.utilizacion>=85?'green':s.utilizacion>=70?'yellow':'red'}">${s.utilizacion}%</span></p></div></div></div></div>`;}
 
 // ===== ORDEN DE COMPRA =====
 function renderOCTab(s,po){return `<div class="card"><div class="card-body"><p><strong>Orden:</strong> ${po.id} · <strong>SAP:</strong> ${po.sapOrder||'Pendiente'} · <strong>Estado:</strong> ${po.estado}</p><div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;"><button class="btn btn-primary btn-sm" onclick="printPO('${s.id}')"><i class="fas fa-print"></i> Imprimir / PDF</button><button class="btn btn-accent btn-sm" onclick="sendToSupplier('${s.id}')"><i class="fas fa-envelope"></i> Enviar al proveedor</button>${!po.sapOrder?`<button class="btn btn-sm btn-success" onclick="createSAPOrder('${s.id}')"><i class="fas fa-database"></i> Crear en SAP</button>`:''}</div></div></div>`;}
@@ -1849,9 +1975,9 @@ function printPO(simId){const s=APP.simulaciones.find(x=>x.id===simId);const po=
 const el=document.getElementById('print-overlay');el.classList.remove('hidden');
 el.innerHTML=`<div class="po-document"><div style="margin-bottom:20px;"><button class="btn btn-primary" onclick="window.print()"><i class="fas fa-print"></i> Imprimir / PDF</button> <button class="btn btn-outline" onclick="document.getElementById('print-overlay').classList.add('hidden')"><i class="fas fa-times"></i> Cerrar</button></div>
 <div class="po-header"><div class="po-logo"><i class="fas fa-building"></i> RENTECO</div><div class="po-info"><h2>ORDEN DE COMPRA</h2><p><strong>${po?.id||'OC-XXXX'}</strong></p><p>Fecha: ${po?.fecha||s.fecha}</p>${po?.sapOrder?`<p>SAP: ${po.sapOrder}</p>`:''}</div></div>
-<div class="grid-2" style="margin-bottom:20px;"><div><p><strong>Proveedor:</strong> ${s.proveedor}</p><p>${prov?.direccion||''}</p><p>${prov?.pais||''}</p></div><div><p><strong>Moneda:</strong> ${prov?.moneda||'USD'}</p><p><strong>Incoterm:</strong> ${s.incoterm}</p><p><strong>Entrega esperada:</strong> ${s.fechaLlegada||'Por confirmar'}</p></div></div>
+<div class="grid-2" style="margin-bottom:20px;"><div><p><strong>Proveedor:</strong> ${s.proveedor}</p><p>${prov?.direccion||''}</p>${prov?.local?'':`<p>${prov?.pais||''}</p>`}</div><div><p><strong>Moneda:</strong> ${prov?.moneda||'USD'}</p>${isLocalSim(s)?'<p><strong>Entrega:</strong> Bodega RENTECO, Costa Rica</p>':`<p><strong>Incoterm:</strong> ${s.incoterm}</p>`}<p><strong>Entrega esperada:</strong> ${s.fechaLlegada||'Por confirmar'}</p></div></div>
 <table><thead><tr><th>SKU</th><th>Descripción</th><th>Cantidad</th><th>Costo unit.</th><th>Total</th></tr></thead><tbody>
-${cat.map(p=>{const qty=p.cantidadPromedio||50;const cost=p.costoActual;return `<tr><td>${p.sku}</td><td>${p.descripcion}</td><td>${qty}</td><td>$${cost.toFixed(2)}</td><td>$${fmt(Math.round(qty*cost))}</td></tr>`;}).join('')}
+${(s.lineas||cat.map(p=>({sku:p.sku,descripcion:p.descripcion,cantidad:p.cantidadPromedio||50,costo:p.costoActual}))).map(l=>`<tr><td>${l.sku}</td><td>${l.descripcion}</td><td>${fmt(l.cantidad)}</td><td>$${l.costo.toFixed(2)}</td><td>$${fmt(Math.round(l.cantidad*l.costo))}</td></tr>`).join('')}
 </tbody></table><div class="po-total">TOTAL: $${fmt(s.totalCompra)}</div>
 <div style="margin-top:30px;"><p><strong>Responsable:</strong> ${s.responsable}</p><p><strong>Aprobador:</strong> Roberto Fallas — Dirección</p></div>
 <div class="po-footer">RENTECO © 2026 · Documento generado desde prototipo (datos simulados)</div></div>`;}
@@ -1889,26 +2015,31 @@ function editarSim(id){const s=APP.simulaciones.find(x=>x.id===id);if(!s||s.esta
 const provId=PROVEEDORES.find(p=>p.nombre===s.proveedor)?.id||1;
 const prov=PROVEEDORES.find(p=>p.id===provId);
 const catalog=SUPPLIER_CATALOGS[provId]||[];
-APP.wizardData={};initWizard();
-APP.wizardData.tipoImportacion=s.tipoImportacion||'regular';
+const local=isLocalSim(s);
+APP.wizardData={};initWizard(local?'local':undefined);
+if(!local){APP.wizardData.tipoImportacion=s.tipoImportacion||'regular';APP.wizardData.incoterm=s.incoterm;APP.wizardData.tipoCarga=s.tipoCarga;}
+else{APP.wizardData.tiempoTransito=s.tiempoEntrega||prov.tiempoEntrega;APP.wizardData._provLoaded=provId;}
 APP.wizardData.tipoAnalisis=s.motivo||'Compra completa por proveedor';
 APP.wizardData.responsable=s.responsable;
 APP.wizardData.proveedorId=provId;
-APP.wizardData.incoterm=s.incoterm;
-APP.wizardData.tipoCarga=s.tipoCarga;
 APP.wizardData.editingSimId=id;// Marcar que estamos editando
 APP.wizardData.productos=catalog.map(p=>{
 const need=calculatePurchaseNeed(p,APP.rules);
 return {...p,selected:need.needsPurchase,cantidad:need.finalSuggestedQty||p.cantidadPromedio||50,costoCotizado:p.costoActual*(1+(prov.variacionReciente||0)/100),needData:need,accionRecomendada:getRecommendedAction(p)};});
-APP.wizardStep=1;navigateTo('nueva-simulacion');showToast(`Editando ${id}`,'info');}
+APP.wizardStep=1;navigateTo(local?'compra-local':'nueva-simulacion');showToast(`Editando ${id}`,'info');}
 function eliminarSim(id){showModal('Eliminar','¿Eliminar '+id+'?',[{text:'Cancelar',cls:'btn-outline',action:'closeModal()'},{text:'Eliminar',cls:'btn-danger',action:`doEliminar('${id}')`}]);}
 function doEliminar(id){APP.simulaciones=APP.simulaciones.filter(s=>s.id!==id);saveData();closeModal();showToast('Eliminada','success');renderView('simulaciones');}
 function changeEstado(id,est){const s=APP.simulaciones.find(x=>x.id===id);if(s){s.estado=est;saveData();showToast(`${id} → ${ESTADOS_MAP[est]}`,'success');renderView('detalle-simulacion');}}
 function confirmRejectSim(id){showModal('Confirmar rechazo','¿Rechazar '+id+'?',[{text:'Cancelar',cls:'btn-outline',action:'closeModal()'},{text:'Rechazar',cls:'btn-danger',action:`changeEstado('${id}','rechazado');closeModal()`}]);}
 
 // ===== UTILIDADES =====
+function isLocalWiz(){return APP.wizardData.tipoCompra==='local';}
+function isLocalSim(s){return s.tipoCompra==='local';}
+function localBadge(s){return isLocalSim(s)?' <span class="badge-status badge-ajustes" style="font-size:.65rem;"><i class="fas fa-store"></i> Local</span>':'';}
+function utilCell(u){return u==null?'<span style="color:var(--gray-400)">—</span>':`<span class="semaphore ${u>=85?'green':u>=70?'yellow':'red'}">${u}%</span>`;}
 function fmt(n){return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,',');}
-function getCaps(tipo){return tipo==='20 pies'?{peso:APP.rules.capacidad20Peso,vol:APP.rules.capacidad20Volumen}:{peso:APP.rules.capacidad40Peso,vol:APP.rules.capacidad40Volumen};}
+// Compra local: sin contenedor (capacidad ilimitada para no restringir candidatos)
+function getCaps(tipo){if(tipo==='Local')return {peso:Infinity,vol:Infinity};return tipo==='20 pies'?{peso:APP.rules.capacidad20Peso,vol:APP.rules.capacidad20Volumen}:{peso:APP.rules.capacidad40Peso,vol:APP.rules.capacidad40Volumen};}
 function getRecBadge(r){if(r==='COMPRAR')return'rec-comprar';if(r==='COMPRAR CON AJUSTES')return'rec-ajustes';if(r==='ESPERAR')return'rec-esperar';return'rec-no-comprar';}
 function getRecClass(r){if(r==='COMPRAR')return'comprar';if(r==='COMPRAR CON AJUSTES')return'ajustes';if(r==='ESPERAR')return'esperar';return'no-comprar';}
 function showToast(msg,type='info'){const c=document.getElementById('toast-container');const t=document.createElement('div');t.className=`toast ${type}`;const icons={success:'fa-check-circle',error:'fa-times-circle',warning:'fa-exclamation-triangle',info:'fa-info-circle'};t.innerHTML=`<i class="fas ${icons[type]||icons.info}"></i> ${msg}`;c.appendChild(t);setTimeout(()=>{t.style.opacity='0';t.style.transform='translateX(100%)';setTimeout(()=>t.remove(),300);},3500);}

@@ -1,470 +1,392 @@
 # ALCANCE TOTAL DE LA SOLUCIÓN
 ## Torre Inteligente de Importaciones y Rentabilidad — RENTECO
 
-**Versión:** Prototipo v2.0 (Producción futura)  
-**Fecha:** Agosto 2026  
-**Propósito:** Documento de alcance funcional y técnico para evaluación en reunión de cambios. Describe las capacidades actuales implementadas en el prototipo y los requerimientos para paso a producción.
+**Versión:** Prototipo v3.1 (incluye módulo de Compra Local)
+**Fecha:** Octubre 2026
+**Propósito:** Documento de alcance funcional y técnico. Describe las capacidades implementadas en el prototipo y los requerimientos para el paso a producción.
 
 ---
 
 ## 1. DESCRIPCIÓN GENERAL
 
-Sistema web empresarial para la planificación, simulación, aprobación y seguimiento de importaciones comerciales. La plataforma centraliza el análisis previo a cada compra internacional, integrando datos de SAP Business One y reglas de negocio configurables para recomendar de forma explicable si una importación debe ejecutarse, ajustarse, posponerse o descartarse.
+Sistema web para la planificación, simulación, aprobación y seguimiento de compras de RENTECO, tanto **importaciones** como **compras locales en Costa Rica**. Centraliza el análisis previo a cada compra con datos equivalentes a SAP Business One (stock, reservas, consumo, costos, precios), cotizaciones de proveedores y reglas de negocio configurables. Con esa información recomienda, de forma explicable, si una compra debe ejecutarse, ajustarse, posponerse o descartarse.
 
-**Usuarios objetivo:** Gerencia Comercial, Departamento de Importaciones/Compras, Dirección/Aprobadores y Administración de sistemas.
+**Principio de diseño:** la herramienta **asiste** al especialista y no lo reemplaza. Recopila información, hace los cálculos repetitivos (costos, cobertura, utilización, márgenes, escenarios) y sugiere alternativas. El experto valida, ajusta o descarta.
 
-**Ubicación geográfica:** Costa Rica (sede principal), con proveedores en Europa, Estados Unidos, Asia y Sudamérica.
+**Usuarios objetivo:** Gerencia Comercial, Importaciones/Compras, Dirección/Aprobadores y Administración del sistema.
 
-**Estado actual:** Prototipo funcional con datos simulados. Sin conexión a SAP ni servicios externos reales.
+**Ubicación:** Costa Rica (sede y bodega), con proveedores internacionales (Europa, Estados Unidos, Asia, Sudamérica) y proveedores locales (San José, Heredia, Cartago).
+
+**Estado actual:** prototipo funcional con datos simulados. No hay conexión a SAP, IA real ni servicios externos. Los proveedores y productos están anonimizados ("Proveedor N", "Producto N").
 
 ---
 
 ## 2. ARQUITECTURA TÉCNICA ACTUAL
 
 | Componente | Tecnología | Archivo |
-|-----------|-----------|---------|
-| Frontend | HTML5 + CSS3 + JavaScript Vanilla | `index.html`, `styles.css`, `app.js` |
+|---|---|---|
+| Frontend | HTML5 + CSS3 + JavaScript vanilla (SPA) | `index.html`, `styles.css`, `app.js` |
 | Iconos | Font Awesome 6.5.1 (CDN) | — |
+| Gráficos | Barras CSS y líneas SVG generadas en JS | `app.js` |
 | Persistencia | `localStorage` del navegador | — |
-| Backend | No existe (datos estáticos en JS) | — |
-| Base de datos | No existe | — |
-| Autenticación | Simulada (selector de rol) | — |
+| Backend / Base de datos | No existe (datos estáticos en JS) | — |
+| Autenticación | Simulada (selector de rol en el encabezado) | — |
 
-**Despliegue actual:** Archivo estático que se abre directamente en navegador.
+**Despliegue actual:** archivos estáticos; se abre `index.html` directamente en el navegador.
+
+**Estructura de `app.js`:**
+
+| Bloque | Contenido |
+|---|---|
+| Datos | Reglas, 11 proveedores, catálogos, combos históricos, tránsitos, OC, 17 simulaciones, cotizaciones, usuarios, consumo |
+| Motores de cálculo | `calculatePurchaseNeed`, `calculateProjectedRotation`, `optimizeOrder`, `calculateQuoteStatus`, `compareCosts`, `generatePriceHistory` |
+| Estado / ruteo | Objeto `APP`, `navigateTo`, `renderView`, roles |
+| Asistente de simulación | 6 pasos, con modo **importación** (regular o consolidada) y modo **compra local** |
+| Análisis | `calcAnalysis`, `genInsights`, `genRecommendation` |
+| Vistas | Resumen, simulaciones, planificación, proveedores, maestro de productos, reglas, configuración, usuarios, consumo, reportes, detalle |
+
+**Claves de `localStorage`:** `renteco_sims2`, `renteco_rules2`, `renteco_advrules`, `renteco_transit`, `renteco_po`, `renteco_cotizaciones`, `renteco_usuarios`, `renteco_consumo`, `renteco_tc_historial`.
 
 ---
 
-## 3. MÓDULOS FUNCIONALES IMPLEMENTADOS
+## 3. MENÚ Y VISTAS
 
-### 3.1 Dashboard / Resumen Ejecutivo
-- **KPIs en tiempo real:** simulaciones en análisis, pendientes de aprobación, órdenes de compra generadas, alertas críticas.
-- **Gráficos:** simulaciones por estado (barras), variación de costos por región de origen (barras).
-- **Tabla resumen:** últimas 6 simulaciones con acceso directo al detalle.
-- **Botón de restauración** de datos de demostración.
-- **Datos presentados:**
-  - Estado: borrador, aprobada, rechazada, OC creada.
-  - Semáforo de utilización por simulación.
-  - Badge de recomendación (COMPRAR / CON AJUSTES / ESPERAR / NO COMPRAR).
+| # | Menú | Vista | Rol |
+|---|---|---|---|
+| 1 | Resumen ejecutivo | `resumen` | Todos |
+| 2 | Simulaciones | `simulaciones` | Todos |
+| 3 | Nueva simulación importación | `nueva-simulacion` | Todos |
+| 4 | Nueva simulación compra local | `compra-local` | Todos |
+| 5 | Planificación de compra | `planificacion` | Todos |
+| 6 | Proveedores e historial | `proveedores` | Todos |
+| 7 | Maestro de productos | `productos` | Todos |
+| 8 | Reglas y parámetros | `reglas` | Solo Administrador |
+| 9 | Configuración | `configuracion` | Todos |
+| 10 | Usuarios | `usuarios` | Todos |
+| 11 | Control de consumo | `consumo` | Todos |
+| 12 | Reportes | `reportes` | Todos |
+| — | Detalle de simulación | `detalle-simulacion` | Se abre desde una simulación |
 
-### 3.2 Simulaciones de Importación (Bandeja)
-- **Listado completo** de todas las simulaciones registradas.
-- **Filtros avanzados:** búsqueda textual, proveedor, estado, región.
-- **Columnas:** código, fecha, proveedor, tipo, región, Incoterm, carga, productos, total USD, costo CR, utilización, recomendación, estado, llegada estimada.
-- **Acciones por fila:** ver detalle, duplicar, eliminar (solo borradores).
-- **4 estados implementados:** borrador, aprobada, rechazada, OC generada.
-- **Botón de creación** de nueva simulación.
+---
 
-### 3.3 Wizard de Nueva Simulación (6 pasos)
+## 4. MÓDULOS FUNCIONALES IMPLEMENTADOS
+
+### 4.1 Resumen ejecutivo
+- Gráfico de simulaciones por estado y de variación de costos por región de origen.
+- Tabla de las últimas 6 simulaciones: proveedor, país, Incoterm, monto, productos, utilización (o "—" si es compra local), recomendación, estado, llegada estimada y responsable. Las compras locales llevan la etiqueta **Local**.
+- Botón **Restaurar datos de demostración**, que limpia `localStorage`.
+
+### 4.2 Simulaciones (bandeja)
+- Listado de simulaciones de importación y de compra local.
+- **Filtros:** texto, tipo de compra (Importación / Compra local), proveedor, estado y región (incluye Costa Rica).
+- **Columnas:** código (con etiqueta Local), fecha, proveedor, tipo de proveedor, región, Incoterm, carga, productos, total, costo puesto, utilización, recomendación, estado y llegada.
+- **Acciones:** ver, editar (solo borradores), duplicar, eliminar (solo borradores, con confirmación). Al editar, el asistente se abre en el modo correcto (importación o local).
+- **Botones:** "Nueva simulación importación" y "Nueva simulación compra local".
+
+### 4.3 Asistente de simulación (6 pasos)
+
+Es un solo asistente con dos modos. El modo se define con `tipoCompra` (`importacion` o `local`). Ambos modos comparten la necesidad de compra, el catálogo, la optimización, los márgenes, los escenarios, la recomendación y la OC.
+
+Arriba del asistente hay 3 **ejemplos precargados** (COMPRAR, NO COMPRAR, CON AJUSTES) que saltan directo al paso 5.
 
 #### Paso 1 — Origen de la necesidad
-- Tipo de análisis: compra completa por proveedor, reposición, producto nuevo, extraordinaria.
-- Área solicitante: Comercial, Operaciones, Proyectos.
-- Responsable, fecha requerida, observaciones.
+- Tipo de análisis: compra completa por proveedor, reposición de productos, producto nuevo, necesidad comercial o proyecto específico.
+- Área solicitante, responsable, fecha requerida y observaciones.
+- **Importación:** tipo de importación, regular o consolidada.
+- **Compra local:** tipo fijo, "Compra local — Costa Rica".
 
-#### Paso 2 — Proveedor, Proforma e Histórico
-- **Selección de proveedor** del directorio (6 proveedores configurados).
-- **Incoterm:** CIF, FOB, FCA, EXW.
-- **Tipo de carga:** 40 pies, 20 pies, Consolidado.
-- **Carga de proforma/cotización:**
-  - Zona drag & drop (acepta PDF, Excel, imagen).
-  - Extracción simulada de costos por producto.
-  - Tabla comparativa: costo anterior SAP vs. nuevo costo proforma con variación %.
-  - Indicadores visuales de alerta (>15% rojo, >0% naranja, ≤0% verde).
-  - Aplicación directa de costos al catálogo de la simulación.
-  - Datos extraídos: N° cotización, fecha, cantidad de productos, moneda.
-- **Resumen histórico del proveedor** (si recurrente): importaciones, combos, contenedor habitual, utilización promedio, tiempo tránsito, última importación, frecuencia, tratado, moneda.
-- **Alerta para proveedor nuevo** (sin histórico, confianza baja).
+#### Paso 2 — Proveedor y cotización
+- **Importación regular:** proveedor internacional; al elegirlo se cargan automáticamente su Incoterm, contenedor habitual y tiempo de tránsito. Muestra la regla logística del proveedor (monto mínimo y objetivo, utilización mínima, vigencia de la cotización, punto de consolidación, marcas) y el resumen histórico (importaciones, combos, contenedor, utilización promedio, tránsito). Si el proveedor es nuevo, muestra una alerta.
+- **Importación consolidada:** varios proveedores que comparten punto de consolidación (Miami). Permite buscarlos y agregarlos, cargar una proforma por proveedor y valida la compatibilidad entre ellos.
+- **Compra local:** proveedor local (ciudad), moneda de facturación (CRC o USD), tiempo de entrega y condiciones: monto mínimo y objetivo, crédito, si la entrega en bodega está incluida, vigencia de la cotización y marcas. Muestra el historial de compras locales.
+- **Cotización / proforma (en ambos modos):** zona de arrastrar y soltar. La extracción de costos es simulada y compara el último costo SAP con el costo cotizado (variación % y estado: Disminución, Estable, Incremento moderado o Incremento crítico). Los costos se pueden aplicar directamente al catálogo.
 
-#### Paso 3 — Catálogo y Mix de Productos
-- **Tabla editable del catálogo completo** del proveedor (8 productos por proveedor principal):
-  - Checkbox de selección, SKU, descripción, categoría, cantidad (editable), stock, ventas 3m, cobertura, frecuencia, peso, volumen, costo cotizado (editable), costo SAP, precio venta, concentración %, acción recomendada.
-- **Combinaciones históricas:** cards con nombre, veces usada, productos, utilización, fecha, botón aplicar.
-- **Motor de mix inteligente:**
-  - Botón "Recomendados" (selecciona según reglas).
-  - Botón "Limpiar" selección.
-  - Botón "Mix inteligente" que genera recomendaciones explicables.
-  - Acciones por producto: Aumentar, Reducir, Revisar, Agregar, Retirar, Mantener.
-  - Justificaciones por cambio: cobertura, rotación, concentración, órdenes en tránsito, incremento de costo.
-  - Intento de llenado de contenedor si hay >15% espacio libre.
-  - Comparación visual antes/después con métricas logísticas.
-  - Tabla de justificación por cambio sugerido.
+#### Paso 3 — Necesidad y optimización del pedido
+- **Indicadores:** pedido base, monto mínimo (✓/✗), monto objetivo (✓/✗), y utilización (importación) o días de entrega (local).
+- **Tabla editable del catálogo:** selección, SKU, descripción, cantidad, stock, reservado, disponible, consumo mensual, cobertura (semáforo), punto de reorden, costo SAP, costo cotizado (editable), variación % y necesidad (Crítico, Necesario u Opcional).
+- **Botones:** Necesarios, Limpiar, Optimizar pedido y Buscar producto (modal que muestra solo productos de proveedores del mismo modo).
+- **Productos candidatos:** se sugieren productos adicionales para alcanzar el monto objetivo, indicando cobertura antes y después, rotación y clasificación. También se listan los productos **no recomendados** por riesgo de sobre-stock.
+- **Optimizar pedido:**
+  1. Ajusta cantidades según la necesidad real (cobertura crítica, punto de reorden, órdenes en tránsito, sobre-stock).
+  2. Agrega productos con necesidad hasta alcanzar el monto objetivo, validando la rotación.
+  3. **Solo en importación:** llena el contenedor hasta ~100%. En compra local este paso no existe.
+- Muestra la comparación y la justificación de cada cambio.
+- Combos históricos como referencia (en importación).
 
-#### Paso 4 — Logística y Costos
-- **Campos de costos dinámicos según Incoterm:**
-  - CIF: flete y seguro desactivados (incluidos en costo producto).
-  - EXW: alerta de incluir todos los costos desde planta.
-  - FOB/FCA: todos los campos activos.
-- **Desglose de costos:** flete internacional, seguro, operador logístico, agencia aduanal, aranceles, impuestos, tratado comercial (sí/no), descuento tratado, transporte local, otros costos.
-- **Tiempo tránsito** en días.
-- **Método de distribución** de costos: por valor, por peso, por volumen.
-- **Visualización de utilización del contenedor:**
-  - Peso total (kg) con barra de progreso.
-  - Volumen (m³) con barra de progreso.
-  - Utilización efectiva (%) con semáforo (verde ≥85%, amarillo ≥70%, rojo <70%).
-  - Alerta si utilización <70%.
+#### Paso 4 — Costos
+- **Importación:**
+  - Flete internacional, seguro, operador logístico, agencia aduanal, aranceles, impuestos, tratado comercial y su descuento, transporte local, otros costos, tiempo de tránsito.
+  - Los campos se adaptan al Incoterm: en CIF se desactivan flete y seguro; en EXW aparece una alerta.
+  - En consolidada se agregan: transporte proveedor → punto de consolidación, recepción, handling, bodega, consolidación y documentación.
+  - Métodos de distribución de costos: valor, peso, volumen o **híbrido** (40/30/30, configurable).
+  - Utilización del contenedor: peso, volumen y efectiva, con semáforo (≥85% verde, ≥70% amarillo, <70% rojo).
+- **Compra local:**
+  - Transporte a bodega, carga/descarga, otros costos y descuento comercial; tiempo de entrega; método de distribución.
+  - Aclara que no aplican flete internacional, seguro marítimo, agencia aduanal, aranceles ni tratados, y que el IVA es crédito fiscal (no se suma al costo).
+  - Resumen de la entrega: peso, volumen y % de costos sobre la compra.
 
-#### Paso 5 — Análisis y Escenarios
-- **KPIs:** monto compra, costos adicionales, costo total puesto en CR.
-- **Módulo de tipo de cambio y proyección:**
-  - TC actual del sistema.
-  - Tiempo máximo de entrega del proveedor.
-  - TC proyectado a N días (variación estimada ~0.8%/mes).
-  - Costo total con TC actual vs. TC proyectado vs. diferencia.
-- **3 escenarios de precios:**
-  - A. Precio actual (mantener precio, evaluar margen).
-  - B. Mantener margen (ajustar precio para conservar margen actual).
-  - C. Margen objetivo (ajustar precio al margen configurado).
-- **Tabla de análisis por producto:** SKU, costo SAP, costo cotizado, costos logísticos distribuidos, costo CR proyectado, variación %, precio actual, margen actual, margen proyectado, precio sugerido, estado (Saludable/Bajo observación/En riesgo/Negativo), acción recomendada.
-- **Resumen de estados de margen:** saludables, en riesgo, negativos.
-- **Análisis inteligente (insights):** lista de observaciones en lenguaje natural con iconos.
-- **Recomendación final:**
-  - 4 niveles: COMPRAR, COMPRAR CON AJUSTES, ESPERAR, NO COMPRAR.
-  - Scoring basado en 14+ factores: márgenes, utilización, coincidencia histórica, stock crítico, rotación, Incoterm, concentración, incremento costos, tipo proveedor.
-  - Nivel de confianza: Alta, Media, Baja.
-  - Razón explicable de la recomendación.
+#### Paso 5 — Análisis y escenarios
+- **Indicadores:** monto de compra, costos adicionales (o de compra local) y costo puesto en Costa Rica (o en bodega).
+- **Tipo de cambio:**
+  - Importación: tipo de cambio actual, proyectado a N días de tránsito (~0.8%/mes) y diferencia de costo.
+  - Local: solo la equivalencia en colones (sin proyección, porque la entrega es corta).
+- **Escenarios de precio:** A. mantener precio actual; B. mantener margen actual; C. margen objetivo.
+- **Tabla por producto:** costo SAP, costo cotizado, costos distribuidos, costo proyectado, variación %, precio, margen actual, margen proyectado, precio sugerido, estado del margen y acción recomendada.
+- Resumen de productos saludables, en riesgo y negativos.
+- **Análisis inteligente:** frases explicativas generadas por reglas.
+- **Recomendación final** (ver 4.12) con nivel de confianza y explicación.
 
 #### Paso 6 — Decisión
-- **Resumen ejecutivo:** total compra, costo CR, utilización, tiempo tránsito.
-- **Recomendación final** con confianza.
-- **Acciones según rol:**
-  - Guardar borrador.
-  - Aprobar.
-  - Aprobar y crear OC en SAP (simulado).
-  - Rechazar (con confirmación modal).
-  - Exportar reporte.
-- **Equivalencia CRC** con tipo de cambio del sistema.
+- **Resumen:** total compra y costo puesto. En importación se muestran utilización y tránsito; en local, crédito del proveedor y entrega.
+- **Acciones:** guardar borrador, aprobar, **aprobar y crear OC en SAP** (simulado), rechazar (con confirmación) y exportar.
+- **Al aprobar y crear la OC:** se genera la simulación con estado "OC creada", la OC y el número SAP (4500XXXX). Se abre el detalle y **la vista PDF de la orden** con las líneas reales del pedido.
+- Equivalencia en colones y aviso de "recomendación de apoyo".
 
-### 3.4 Ejemplos / Presets de Demostración
-- 3 escenarios precargados accesibles desde el wizard:
-  - **COMPRAR:** Danosa, CIF, 40 pies, costos -3%, stock crítico, alta utilización.
-  - **NO COMPRAR:** Polímeros del Sur (nuevo), CIF, 20 pies, costos +60%, baja rotación, alta concentración.
-  - **CON AJUSTES:** Danosa, CIF, 40 pies, costos +10%, cobertura baja, mix aplicado.
-- Carga directa al paso 5 para demostración rápida.
+### 4.4 Módulo de Compra Local
+Es una variante del asistente para compras a proveedores de Costa Rica.
 
-### 3.5 Planificación de Compra
+| Aspecto | Importación | Compra local |
+|---|---|---|
+| Proveedores | Internacionales (1–8) | Locales (9–11) |
+| Incoterm / contenedor | Sí | No aplica (`N/A` / `Local`) |
+| Costos | Flete, seguro, operador, agencia, aranceles, impuestos, tratado, consolidación | Transporte a bodega, carga/descarga, otros, descuento comercial |
+| Optimización | Necesidad + monto objetivo + llenado de contenedor | Necesidad + monto objetivo |
+| Tipo de cambio | Proyección durante el tránsito | Solo equivalencia en colones |
+| Puntaje | Incluye utilización y consolidación | Excluye utilización; +5 si la entrega en ≤7 días cubre productos críticos |
+| Detalle | Logística y seguimiento marítimo | Entrega local (sin puerto ni aduana) |
+| OC / PDF | Incoterm | "Entrega: Bodega RENTECO, Costa Rica" |
 
-#### Pestaña: Por Proveedor
-- **Selector de proveedor** (solo recurrentes).
-- **KPIs del proveedor:** productos en catálogo, combos históricos, utilización promedio, frecuencia, tiempo tránsito.
-- **Información comercial:** país, moneda, Incoterm, última compra, tratado, variación reciente.
-- **Catálogo completo** con tabla de selección múltiple:
-  - Indicador visual de stock bajo (fondo naranja, borde lateral).
-  - Sugerencia IA: "Comprar" para productos con cobertura <3 meses.
-  - Botón "Seleccionar sugeridos por IA" (selecciona productos con stock bajo).
-  - Checkbox individual y global.
-- **Combinaciones históricas** con botón de crear simulación desde combo.
-- **Acciones:** crear simulación con proveedor completo, crear simulación con selección específica.
+**Campos propios del proveedor local:** `local`, `ciudad`, `comprasLocales`, `plazoCredito`, `entregaIncluida`.
+**Campos propios de la simulación local:** `tipoCompra:'local'`, `incoterm:'N/A'`, `tipoCarga:'Local'`, `utilizacion:null`, `tiempoEntrega`.
 
-#### Pestaña: Por Producto (Forecast)
-- **Selector de producto** individual del catálogo.
-- **KPIs:** stock actual, pronóstico mensual, cobertura (meses), compra sugerida.
-- **Gráfico de ventas** últimos 12 meses (barras con detección de atípicos).
-- **Información del producto:** costo, precio, margen, ventas 3m/6m/12m, cliente principal, concentración.
-- **Alertas:** cobertura crítica (<2m), concentración alta (>60%).
-- **Pronóstico:** promedio móvil ponderado (pesos [1,1,2,2,3,3] sobre últimos 6 meses).
-- **Tabla de selección múltiple** para crear simulación conjunta.
-- **Acciones:** crear simulación con productos seleccionados desde forecast.
+### 4.5 Planificación de compra
+- **Por proveedor:** proveedores internacionales recurrentes. Muestra indicadores, información comercial y el catálogo con la necesidad calculada. Permite seleccionar los productos sugeridos por IA, optimizar el pedido, ver los combos históricos, crear una simulación (proveedor completo, selección o combo) y generar una OC directa con su vista previa.
+- **Por producto (forecast):** ventas de 24 meses (con un mes atípico), gráfico de los últimos 12 meses, pronóstico por promedio móvil ponderado (pesos 1,1,2,2,3,3), cobertura, compra sugerida, alertas de cobertura y concentración. Permite seleccionar varios productos para una simulación.
+- **Consolidada:** proveedores consolidables por punto de consolidación (Miami), con montos, necesidad de reposición y vigencia de la cotización. Botón para crear una simulación consolidada.
 
-### 3.6 Proveedores e Historial
-- **Directorio de 6 proveedores** con datos comerciales y logísticos:
-  - Danosa S.A. (España), Sika AG (Suiza), BuildTech USA Inc. (EEUU), Shanghai Materials Co. (China), Polímeros del Sur S.A. (Colombia), NovaTech Materials GmbH (Alemania).
-- **Columnas:** región, tipo (recurrente/nuevo), moneda, Incoterm, contenedor, tiempo entrega histórico, tratado, variación %, importaciones, última compra.
-- **Ficha detallada** (modal): datos completos, catálogo, combos, estado del proveedor.
-- **Acciones:** ver ficha, planificar compra, crear simulación.
+### 4.6 Proveedores e historial
+- Directorio de **11 proveedores**.
+- **Columnas:** proveedor, **Origen (Local / Internacional)**, región, país o ciudad, tipo (recurrente o nuevo), moneda, Incoterm, contenedor, tiempo promedio, tratado, variación %, compras (importaciones o compras locales) y última compra.
+- **Ficha (modal):** la de proveedor internacional muestra datos logísticos y comerciales; la de proveedor local muestra dirección, crédito, entrega y monto mínimo.
+- **Acción:** crear una simulación, que abre el asistente en el modo que corresponde al proveedor.
 
-### 3.7 Detalle de Simulación (7 pestañas)
+### 4.7 Maestro de productos
+- Catálogo general de todos los proveedores, con filtro por proveedor y búsqueda.
+- **Columnas:** stock, reservado, disponible, consumo mensual, cobertura, punto de reorden, costo, precio, margen, vencimiento (stock por vencer) y estado (Crítico, Necesario u OK).
 
-#### Resumen
-- KPIs: total compra, costo CR, utilización, Incoterm.
-- Datos: motivo, proveedor, región/país, carga, responsable, fecha, llegada, productos, orden SAP, equivalencia CRC.
+### 4.8 Detalle de simulación
+- **Pestañas:** Resumen, Productos, Mix inteligente, Logística (o **Entrega** en compra local), Recomendación, Orden de compra (si existe), Seguimiento e Historial.
+- **Orden de compra:** imprimir/PDF, enviar al proveedor (simulado) y crear en SAP (simulado).
+- **Seguimiento:**
+  - Importación: datos del embarque y línea de tránsito Proveedor → Puerto origen → En tránsito → Puerto intermedio → Costa Rica → Aduana → Bodega.
+  - Local: entrega directa en bodega.
+- **Historial:** 9 eventos, desde la solicitud hasta la orden en SAP.
+- **Acciones:** aprobar, rechazar, generar OC y exportar.
 
-#### Productos
-- Tabla con SKU, descripción, costo SAP, precio, margen, stock del catálogo del proveedor.
+### 4.9 Orden de compra (vista PDF)
+- Documento formal con logo RENTECO, número de OC, fecha, número SAP, datos del proveedor, moneda, Incoterm o entrega local, fecha de entrega esperada, tabla de líneas (SKU, descripción, cantidad, costo unitario, total), total general, responsable y aprobador.
+- **Las líneas salen del pedido simulado** (campo `lineas` de la simulación). Las simulaciones antiguas, que no tienen ese campo, usan el catálogo.
+- Imprimir o guardar como PDF con `window.print()` (hay estilos de impresión).
 
-#### Mix inteligente
-- Indicador de mix aplicado con productos seleccionados y utilización.
+### 4.10 Reglas y parámetros (solo Administrador)
+- **Parámetros generales:** margen mínimo (25%), margen objetivo (35%), variación de costo que genera alerta (15%), utilización mínima (80%), concentración máxima por cliente (60%), tipo de cambio (₡530).
+- **Parámetros v3.0:** cobertura objetivo (4 meses), cobertura máxima (9), umbral de sobre-stock (9), meses máximos de rotación (9), umbral de cotización por vencer (15 días).
+- **Capacidades de contenedor:** 20' = 21,770 kg / 33.2 m³; 40' = 26,780 kg / 67.7 m³.
+- **Distribución híbrida:** 40% valor, 30% peso, 30% volumen.
+- **Reglas avanzadas** (6 precargadas): niveles General, Región, Proveedor, Producto e Incoterm. Se pueden crear, activar/desactivar, eliminar y filtrar por nivel.
 
-#### Logística
-- Tipo carga, Incoterm, región, costo logístico estimado, % sobre compra, utilización con semáforo.
+### 4.11 Configuración, Usuarios, Consumo y Reportes
+- **Configuración:** tipo de cambio USD/CRC con fecha, fuente (manual, referencia BCCR, tipo de cambio del proveedor) y notas; historial de hasta 20 registros con su variación %.
+- **Usuarios:** 6 usuarios simulados con rol, estado, límite de simulaciones, simulaciones usadas, % de uso y último acceso. Se pueden crear, activar/desactivar, eliminar y editar el límite.
+- **Control de consumo:** simulaciones mensuales (límite 500) y páginas procesadas por el extractor IA (límite 4,500), con semáforo, historial de 5 meses y límites configurables.
+- **Reportes:** tendencia de precio, costo, margen y precio de mercado por producto, con varios proveedores y productos a la vez (gráfico SVG); detalle de precio/costo/margen; tabla histórica; simulaciones por estado; variación de costos por proveedor. La exportación a Excel/PDF es simulada.
 
-#### Recomendación
-- Card con recomendación final y confianza.
+### 4.12 Motor de recomendación (puntaje)
 
-#### Orden de compra (si existe)
-- Datos: número OC, SAP, estado.
-- Acciones: imprimir/PDF, enviar al proveedor (simulado), crear en SAP (simulado).
-
-#### Seguimiento logístico
-- Datos de embarque: OC, SAP, embarque, contenedor, naviera, operador, puertos, salida.
-- KPIs: ubicación actual, días restantes, llegada estimada.
-- Línea visual de tránsito: Proveedor → Puerto origen → En tránsito → Puerto intermedio → Costa Rica → Aduana → Bodega.
-- Nodos completados, actual (animación pulse) y pendientes.
-- Botón actualizar (simulado, reduce días restantes).
-
-#### Historial / Línea de tiempo
-- 9 eventos trazables: solicitud creada → cotización cargada → datos SAP consultados → históricos analizados → mix recomendado → análisis completado → compra aprobada → OC generada → orden SAP creada.
-- Eventos con fecha y hora.
-- Indicación de flujo detenido si rechazada.
-
-### 3.8 Orden de Compra
-- **Generación automática** post-aprobación o desde botón en detalle.
-- **Vista imprimible/PDF** con diseño de documento formal:
-  - Logo RENTECO, datos de proveedor, tabla de productos con cantidades y costos, total, responsable, aprobador.
-- **Creación de orden SAP** (simulada, genera número aleatorio 4500XXXX).
-- **Envío al proveedor** (simulado, modal con correo, asunto y mensaje).
-- **Estados de OC:** generada, SAP, enviada.
-
-### 3.9 Seguimiento Logístico (Datos de tránsito)
-- **3 registros de tránsito** configurados:
-  - TR-001: Sika AG, Maersk, Rotterdam → Puerto Limón, en tránsito Atlántico.
-  - TR-002: Danosa, Hapag-Lloyd, Valencia → Puerto Limón, en aduana.
-  - TR-003: BuildTech USA, OOCL, Houston → Puerto Limón, en tránsito Caribe.
-- **Datos por registro:** proveedor, OC, SAP, embarque, contenedor, naviera, operador logístico, puerto origen, fecha salida, ubicación actual, próximo puerto, fecha estimada, días restantes, estado aduanero, última actualización.
-- **Actualización manual** simulada (reduce días, cambia estado).
-
-### 3.10 Reglas y Parámetros (Solo rol Administrador)
-
-#### Parámetros globales editables
-- Margen mínimo (%) — default 25%.
-- Margen objetivo (%) — default 35%.
-- Variación costo alerta (%) — default 15%.
-- Utilización mínima (%) — default 80%.
-- Máxima concentración cliente (%) — default 60%.
-- Tipo de cambio USD/CRC — default 530.
-- Capacidades de contenedor: 20' peso 21,770 kg / 33.2 m³; 40' peso 26,780 kg / 67.7 m³.
-- Carga sugerida por región: Europa 40', Asia 40', Sudamérica 20', EEUU Consolidado.
-
-#### Reglas avanzadas (CRUD)
-- 6 reglas pre-configuradas.
-- Niveles de aplicación: General, Región, Proveedor, Producto, Incoterm.
-- Campos: ID, nombre, descripción, condición, resultado, prioridad, activa (toggle), vigencia.
-- Acciones: agregar, activar/desactivar, eliminar.
-- Filtro por nivel.
-
-### 3.11 Configuración General (Todos los roles)
-
-#### Tipo de Cambio USD/CRC
-- Campo editable con fecha de actualización.
-- Fuente: ingreso manual, referencia BCCR (manual), tipo de cambio del proveedor.
-- Notas opcionales.
-- Equivalencia en tiempo real ($1,000 → ₡CRC).
-- **Historial de actualizaciones:** tabla con fecha, valor, usuario, variación % respecto al anterior.
-- Hasta 20 registros en historial.
-
-#### Información del sistema
-- Versión, estado de integración SAP (simulada), moneda base.
-- Alerta de prototipo con datos simulados.
-
-### 3.12 Reportes
-- **Gráficos:**
-  - Simulaciones por estado (barras).
-  - Importaciones por Incoterm (barras).
-- **Métricas generales:**
-  - Importaciones en tránsito, próximas a llegar (15d), utilización promedio, tiempo promedio solicitud→aprobación (4.8d), tasa de aprobación, recomendaciones aceptadas (72%).
-- **Tabla:** variación de costos por proveedor con estado (Normal/Moderado/Alerta).
-- **Exportación simulada:** botones Excel y PDF (no funcionales, solo toast).
-
-### 3.13 Roles y Permisos (Implementados como selector)
-| Rol | Nombre en UI | Vistas | Acciones especiales |
-|-----|-------------|--------|---------------------|
-| comercial | Gerencia Comercial (Carlos Méndez) | Todas excepto Reglas | Crear, aprobar, rechazar, exportar |
-| importaciones | Importaciones/Compras (Ana Solano) | Todas excepto Reglas | Crear, aprobar, rechazar, OC |
-| aprobador | Aprobador/Dirección (Roberto Fallas) | Todas excepto Reglas | Aprobar, rechazar |
-| admin | Administrador | Todas | Gestión de reglas y parámetros |
-
-### 3.14 Motor de Recomendación (Scoring)
-**Factores del score (base 50, rango ~0-100):**
+**Base: 50 puntos.**
 
 | Factor | Impacto |
-|--------|---------|
-| >60% productos con margen saludable | +15 |
-| Margen promedio ≥ margen mínimo | +5 |
-| Productos con margen negativo | -15 |
-| Utilización ≥85% | +15 |
-| Utilización <70% | -15 |
-| Combo histórico aplicado | +15 |
-| Sin combos históricos | -10 |
-| >30% productos con stock crítico (<2m cobertura) | +10 |
-| >50% productos baja rotación (<10 ventas/3m) | -15 |
-| >50% productos alta concentración | -15 |
-| Aumento promedio costos >20% | -15 |
-| Aumento promedio costos >15% | -10 |
-| Proveedor no recurrente | -10 |
-| Incoterm CIF o FCA | +5 |
-| Costos adicionales <30% del monto compra | +10 |
+|---|---|
+| Monto del pedido ≥ monto mínimo del proveedor | +10 |
+| Monto del pedido ≥ monto objetivo | +10 |
+| Utilización ≥ 85% *(solo importación)* | +15 |
+| Cobertura posterior promedio ≤ 6 meses | +10 |
+| Incluye productos en cobertura crítica | +10 |
+| Entrega ≤ 7 días que cubre productos críticos *(solo local)* | +5 |
+| Proyección comercial en >30% de los productos | +5 |
+| Aumento promedio del costo ≤ 5% | +5 |
+| Alta rotación (>30 u/3m) en >50% de los productos | +10 |
+| Cotización vencida | −25 |
+| Monto por debajo del mínimo | −15 |
+| Algún producto en sobre-stock (> cobertura máxima) | −20 |
+| Baja rotación (<10 u/3m) en >50% de los productos | −15 |
+| Órdenes en tránsito cubren la necesidad en >30% de los productos | −10 |
+| Concentración alta en >50% de los productos | −10 |
+| Aumento promedio del costo > 20% | −15 |
+| Algún producto con margen negativo | −15 |
+| Proveedor no recurrente | −10 |
+| Utilización < 70% *(solo importación)* | −15 |
+| Consolidado: mismo punto de consolidación | +5 |
+| Consolidado: proveedores incompatibles / sin excepción aprobada | −15 / −20 |
 
-**Resultados:**
-- Score ≥65 → COMPRAR
-- Score ≥45 → COMPRAR CON AJUSTES
-- Score ≥30 → ESPERAR
-- Score <30 → NO COMPRAR
+**Resultado:** ≥65 COMPRAR · ≥45 COMPRAR CON AJUSTES · ≥30 ESPERAR · <30 NO COMPRAR.
+**Confianza:** proveedor no recurrente → Baja; puntaje ≥60 o <30 → Alta; resto → Media.
+**Estado del margen:** ≥ objetivo Saludable; ≥ mínimo Bajo observación; ≥10% En riesgo; <10% Negativo. **Acción:** Negativo → Retirar; En riesgo → Ajustar precio.
 
-**Confianza:**
-- Proveedor no recurrente → Baja
-- Score ≥60 o <30 → Alta
-- Resto → Media
+**Validación de los ejemplos precargados:**
 
----
+| Ejemplo | Puntaje | Resultado |
+|---|---|---|
+| Importación — COMPRAR | 70 | COMPRAR |
+| Importación — CON AJUSTES | 50 | COMPRAR CON AJUSTES |
+| Importación — NO COMPRAR | −20 | NO COMPRAR |
+| Local — COMPRAR | 95 | COMPRAR |
+| Local — CON AJUSTES | 60 | COMPRAR CON AJUSTES |
+| Local — NO COMPRAR | −10 | NO COMPRAR |
 
-## 4. DATOS DE DEMOSTRACIÓN CONFIGURADOS
+### 4.13 Cálculo de necesidad de compra
+- Stock disponible = stock total − reservado; stock efectivo = disponible + órdenes en tránsito.
+- Cobertura = stock / consumo mensual (el consumo se separa en venta, instalación y proyecto).
+- Si el stock efectivo está bajo el punto de reorden o la cobertura es menor que el objetivo, la cantidad sugerida es la necesaria para llegar a la cobertura objetivo.
+- Se ajusta por proyección comercial (cuando supera el consumo histórico) y por stock por vencer (<90 días).
+- **Urgencia:** crítica (<2 meses o por vencer), necesaria (< objetivo) u opcional.
+- **Rotación proyectada:** clasificación Excelente (≤3m), Aceptable (≤6m), Riesgo moderado (≤9m) o Sobre-stock.
 
-### Proveedores (6)
-| # | Proveedor | País | Región | Recurrente | Moneda | Incoterm | Importaciones |
-|---|-----------|------|--------|-----------|--------|----------|---------------|
-| 1 | Danosa S.A. | España | Europa | Sí | EUR | CIF | 14 |
-| 2 | Sika AG | Suiza | Europa | Sí | EUR | FOB | 8 |
-| 3 | BuildTech USA Inc. | EEUU | Estados Unidos | Sí | USD | FCA | 15 |
-| 4 | Shanghai Materials Co. | China | Asia | Sí | USD | FOB | 5 |
-| 5 | Polímeros del Sur S.A. | Colombia | Sudamérica | No | USD | CIF | 0 |
-| 6 | NovaTech Materials GmbH | Alemania | Europa | No | EUR | EXW | 0 |
-
-### Productos (catálogos por proveedor)
-- Danosa: 8 productos (impermeabilización, membranas, accesorios, drenaje).
-- BuildTech USA: 8 productos (impermeabilización, selladores, geotextiles, adhesivos, fijaciones, imprimantes, cintas, drenaje).
-- Sika: derivado de Danosa (+5% costo, +8% precio).
-- Shanghai: derivado de Danosa (primeros 6, -30% costo, -10% precio).
-- Polímeros del Sur: derivado de BuildTech (primeros 4, +30% costo).
-- NovaTech: derivado de Danosa (primeros 5, +15% costo).
-
-### Simulaciones de demostración (10)
-- SIM-2026-001 a SIM-2026-010 con variedad de estados, proveedores, recomendaciones.
-
-### Órdenes de compra (3)
-- OC-2026-038 (Danosa), OC-2026-042 (Sika), OC-2026-045 (BuildTech).
-
-### Registros de tránsito (3)
-- Con datos de embarque, naviera, operador, estados variados.
-
-### Combinaciones históricas (6+ combos)
-- Danosa: 3 combos (Impermeabilización completa, Membranas + Accesorios, Reposición rápida).
-- BuildTech: 3 combos (Mix completo, Geotextiles + Drenaje, Impermeabilización integral).
+### 4.14 Roles (selector, sin autenticación)
+| Rol | Usuario demo | Acceso |
+|---|---|---|
+| Gerencia Comercial | Carlos Méndez | Todas las vistas excepto Reglas |
+| Importaciones / Compras | Ana Solano | Todas las vistas excepto Reglas |
+| Aprobador / Dirección | Roberto Fallas | Todas las vistas excepto Reglas |
+| Administrador | Administrador | Todas, incluida Reglas |
 
 ---
 
-## 5. CARACTERÍSTICAS DE UX/UI IMPLEMENTADAS
+## 5. DATOS DE DEMOSTRACIÓN
 
-- **Layout:** Sidebar fijo + contenido principal + header sticky + footer.
-- **Sidebar colapsable** con toggle.
-- **Diseño responsive:** adaptación a escritorio, tablet y móvil.
-- **Paleta de colores:** azul petróleo (#1a5276), azul claro (#2980b9), naranja (#e67e22), gris, blanco.
-- **Sistema de notificaciones (toast):** success, error, warning, info con animación slide-in.
-- **Modales de confirmación** para acciones destructivas.
-- **Semáforos visuales** para utilización (verde/amarillo/rojo).
-- **Badges de estado** con colores diferenciados por cada estado del ciclo.
-- **Barras de progreso** para peso y volumen.
-- **Wizard con indicador de progreso** visual (pasos completados/activo/pendiente).
-- **Tooltips** informativos.
-- **Filtros y búsqueda** en tablas.
-- **Menú móvil** con botón hamburguesa.
-- **Print styles** para orden de compra.
-- **Animación pulse** en nodo actual de seguimiento logístico.
-- **Drag & drop zone** para carga de proforma.
+### Proveedores (11)
+| ID | Proveedor | Origen | País / ciudad | Recurrente | Moneda | Modo | Mín. / Obj. |
+|---|---|---|---|---|---|---|---|
+| 1 | Proveedor 1 | Internacional | España | Sí | EUR | CIF · 40' | $35k / $45k |
+| 2 | Proveedor 2 | Internacional | Suiza | Sí | EUR | FOB · 40' | $30k / $42k |
+| 3 | Proveedor 3 | Internacional | EEUU | Sí | USD | FCA · Consolidado Miami | $8k / $15k |
+| 4 | Proveedor 4 | Internacional | China | Sí | USD | FOB · 40' | $25k / $40k |
+| 5 | Proveedor 5 | Internacional | Colombia | No | USD | CIF · 20' | $12k / $20k |
+| 6 | Proveedor 6 | Internacional | Alemania | No | EUR | EXW · 40' | $40k / $55k |
+| 7 | Proveedor 7 | Internacional | EEUU | Sí | USD | FCA · Consolidado Miami | $6k / $12k |
+| 8 | Proveedor 8 | Internacional | EEUU | Sí | USD | FCA · Consolidado Miami | $5k / $10k |
+| 9 | Proveedor Local 1 | Local | San José | Sí | CRC | Entrega 3d · crédito 30d · entrega incluida | $1.5k / $4k |
+| 10 | Proveedor Local 2 | Local | Heredia | Sí | USD | Entrega 5d · crédito 45d | $3k / $8k |
+| 11 | Proveedor Local 3 | Local | Cartago | No | CRC | Entrega 7d · contado · entrega incluida | $1k / $3k |
+
+### Catálogos
+- Catálogos propios: proveedores 1, 3 (8 productos cada uno), 7 (4) y 8 (3).
+- Catálogos derivados: 2 (del 1, +5% costo), 4 (del 1, −30% costo), 5 (del 3, +30%), 6 (del 1, +15%).
+- Catálogos locales derivados: 9 (del 3, +12%), 10 (del 1, +15%), 11 (del 7, +25%).
+
+### Otros datos
+- **Simulaciones:** 17 (SIM-2026-001 a 015 de importación; 016 y 017 de compra local).
+- **Órdenes de compra:** 3. **Registros de tránsito:** 3. **Cotizaciones abiertas:** 6 (vigentes, vencida y en evaluación).
+- **Combos históricos:** proveedores 1, 2, 3 y 4. **Usuarios:** 6. **Consumo:** mes actual más 5 meses de historial.
 
 ---
 
-## 6. INTEGRACIÓN REQUERIDA EN PRODUCCIÓN
+## 6. CARACTERÍSTICAS DE UX/UI
+- Sidebar oscuro colapsable, encabezado fijo con buscador, selector de rol, notificaciones y usuario, y pie con el aviso de datos simulados.
+- Paleta: azul petróleo `#1a5276`, azul claro `#2980b9`, naranja `#e67e22`, grises.
+- Notificaciones tipo toast, modales de confirmación, badges de estado, semáforos, barras de progreso y tooltips.
+- Asistente con indicador de progreso; los títulos de los pasos cambian según el modo.
+- Iconografía del origen de los datos: SAP, cálculo e IA.
+- Diseño responsive y estilos de impresión para la OC.
+
+---
+
+## 7. INTEGRACIÓN REQUERIDA EN PRODUCCIÓN
 
 | Sistema | Tipo | Datos | Frecuencia |
-|---------|------|-------|------------|
-| SAP Business One | API (DI API / Service Layer) | Órdenes compra, costos, stock, precios, facturas, maestro de artículos, maestro de proveedores | Tiempo real / batch diario |
+|---|---|---|---|
+| SAP Business One | Service Layer / DI API | Maestro de artículos y proveedores (locales e internacionales), stock por bodega y reservas, consumo, órdenes en tránsito, último costo de compra, precios, OC | Tiempo real / batch diario |
+| Extractor IA de documentos | OCR + LLM (AWS Textract / Azure AI) | Proformas y cotizaciones (PDF, Excel, imagen) → JSON | Por documento |
 
-**Nota:** El tipo de cambio USD/CRC se administra manualmente desde la vista de Configuración del sistema. No requiere integración con servicios externos.
+El tipo de cambio se administra manualmente desde Configuración.
 
 ---
 
-## 7. REQUERIMIENTOS PARA PASO A PRODUCCIÓN
+## 8. REQUERIMIENTOS PARA PASO A PRODUCCIÓN
 
-### Infraestructura
-- Servidor web (Node.js, .NET, Java o similar).
-- Base de datos relacional (PostgreSQL, SQL Server).
-- Servidor de aplicación con API REST.
-- Certificado SSL.
-- Entorno de staging y producción.
+### Infraestructura (AWS como base)
+- Servidor de aplicación con API REST (Node.js, .NET o Java).
+- Base de datos relacional (PostgreSQL o SQL Server).
+- Certificado SSL; ambientes de staging y producción.
+- Conectividad segura con SAP (VPN o red privada).
 
-### Desarrollo necesario
-- Backend con API REST.
-- Modelo de datos relacional.
-- Autenticación y autorización real (usuarios, contraseñas, sesiones/JWT).
-- Integración con SAP Business One (Service Layer o DI API).
-- Parser de proformas (OCR para PDF/imagen, parser para Excel).
-- Logs de auditoría.
-- Migración de localStorage a base de datos.
-- Validaciones server-side.
-- Manejo de errores robusto.
-- Tests unitarios y de integración.
+### Desarrollo
+- Backend con API REST y modelo de datos relacional que incluya `tipoCompra` (importación/local) y líneas de OC.
+- Autenticación y autorización reales (usuarios, contraseñas, JWT, RBAC).
+- Integración con SAP B1 para lectura de datos y creación de OC.
+- Parser de proformas y cotizaciones (OCR para PDF/imagen, parser para Excel).
+- Generación real de PDF de OC en servidor y envío por correo.
+- Logs de auditoría; migración de `localStorage` a base de datos.
+- Validaciones en servidor, manejo de errores, pruebas unitarias y de integración.
 
 ### Seguridad
-- Autenticación con hash de contraseñas.
-- Control de acceso por rol (RBAC) real.
-- Protección CSRF/XSS.
-- Rate limiting.
-- Logs de auditoría inmutables.
+- Hash de contraseñas, RBAC, protección CSRF/XSS, rate limiting y auditoría inmutable.
 
 ---
 
-## 8. EXCLUSIONES DEL ALCANCE
-
-- Desarrollo de app móvil nativa.
-- Machine learning real (el motor usa reglas determinísticas configurables).
-- Integración con operadores logísticos o navieras (seguimiento se registra manualmente).
-- Servicio de correo transaccional (envío de OC al proveedor es manual por correo del usuario).
-- Integración con Directorio Activo / SSO (autenticación propia del sistema).
-- Integración con API de tipo de cambio del BCCR (se ingresa manualmente).
-- Migración de datos históricos de otros sistemas.
-- Capacitación a usuarios finales.
-- Soporte post-implementación (SLA separado).
-- Personalización de SAP Business One.
-- Hardware de usuario final.
-- Exportación real a Excel/PDF (actualmente simulada).
-- Envío real de correos electrónicos.
-- Multi-idioma.
-- Multi-moneda simultánea (solo USD con equivalencia CRC).
+## 9. EXCLUSIONES DEL ALCANCE
+- App móvil nativa.
+- Machine learning real: el motor usa reglas determinísticas configurables.
+- Integración con navieras y operadores logísticos (el seguimiento es manual).
+- Integración con transportistas locales (la entrega local se registra manualmente).
+- Servicio de correo transaccional, integración con SSO / Directorio Activo, API de tipo de cambio del BCCR.
+- Migración de datos históricos de otros sistemas, capacitación y soporte post-implementación.
+- Personalización de SAP Business One, hardware de usuario final.
+- Exportación real a Excel (actualmente simulada), multi-idioma.
+- Multi-moneda simultánea: los cálculos son en USD con equivalencia en CRC, incluso para proveedores locales que facturan en colones.
 
 ---
 
-## 9. SUPUESTOS
-
-- RENTECO ya cuenta con SAP Business One operativo con Service Layer habilitado.
-- Existe conectividad de red entre el sistema y SAP (red local o VPN).
-- El tipo de cambio se actualiza manualmente por un usuario autorizado desde la vista de Configuración.
-- El seguimiento logístico se actualiza manualmente conforme se recibe información del operador.
-- El envío de órdenes de compra al proveedor se realiza por correo electrónico del usuario (no automatizado).
-- Los usuarios acceden desde red corporativa o VPN.
-- La autenticación se gestiona dentro del propio sistema (tabla de usuarios y contraseñas).
-- Los datos del prototipo representan fielmente la estructura de información real de RENTECO.
-- Los catálogos de productos y proveedores son representativos del volumen real.
+## 10. SUPUESTOS
+- RENTECO tiene SAP Business One operativo con Service Layer habilitado.
+- Los proveedores locales están registrados en SAP con su moneda, crédito y condiciones de entrega.
+- Para efectos de costo, el IVA de las compras locales se trata como crédito fiscal.
+- El tipo de cambio se actualiza manualmente por un usuario autorizado.
+- El seguimiento logístico y la confirmación de entrega local se registran manualmente.
+- El envío de la OC al proveedor se hace por correo del usuario.
+- Los datos del prototipo representan la estructura real de la información de RENTECO.
 
 ---
 
-## 10. MÉTRICAS DEL PROTOTIPO ACTUAL
+## 11. MÉTRICAS DEL PROTOTIPO
 
 | Métrica | Valor |
-|---------|-------|
-| Archivos | 3 (index.html, styles.css, app.js) |
-| Líneas de código JS | ~905 |
-| Líneas de CSS | ~280 |
-| Vistas/módulos | 8 principales + sub-vistas |
-| Proveedores | 6 |
-| Productos totales | ~48 (8 por proveedor principal) |
-| Simulaciones demo | 10 |
-| Reglas configuradas | 6 avanzadas + 10 parámetros globales |
-| Órdenes de compra | 3 |
-| Registros de tránsito | 3 |
-| Roles implementados | 4 |
+|---|---|
+| Archivos | 3 (`index.html`, `styles.css`, `app.js`) |
+| Líneas de `app.js` | ~2,230 |
+| Vistas | 12 en el menú + detalle |
+| Modos del asistente | Importación regular, importación consolidada, compra local |
+| Proveedores | 11 (8 internacionales, 3 locales) |
+| Productos | ~70 en 11 catálogos |
+| Simulaciones demo | 17 (15 de importación, 2 locales) |
+| Reglas | 6 avanzadas + 16 parámetros |
+| Órdenes de compra / tránsitos / cotizaciones | 3 / 3 / 6 |
+| Roles / usuarios demo | 4 / 6 |
 
 ---
 
-## 11. RIESGOS IDENTIFICADOS
+## 12. RIESGOS IDENTIFICADOS
 
 | Riesgo | Impacto | Mitigación |
-|--------|---------|------------|
-| Complejidad de integración SAP | Alto | Validar Service Layer con equipo SAP antes de desarrollo |
-| Parser de proformas (OCR) | Medio | Evaluar servicios cloud (Azure AI, AWS Textract) vs. ingreso manual |
+|---|---|---|
+| Complejidad de la integración con SAP | Alto | Validar Service Layer con el equipo SAP antes del desarrollo |
+| Calidad de la extracción de proformas | Medio | Validación humana de lo extraído; servicios cloud de OCR |
+| Cotizaciones abiertas que generan ruido en la proyección | Medio | Control de vigencia y semáforo; penalización por cotización vencida |
+| Diferencias de moneda en compras locales en CRC | Medio | Tipo de cambio controlado; evaluar multi-moneda en producción |
 | Volumen de datos real vs. demo | Medio | Pruebas de carga con datos representativos |
 | Adopción de usuarios | Medio | Capacitación y UAT con usuarios clave |
-| Disponibilidad de SAP | Medio | Caché local + manejo offline parcial |
-| Tipo de cambio manual | Bajo | Proceso operativo definido + alertas de actualización |
+| Tipo de cambio manual | Bajo | Proceso operativo definido y alertas de actualización |
 
 ---
 
-*Documento generado para revisión en reunión de cambios — Agosto 2026*
+*Documento actualizado — Octubre 2026 (v3.1: módulo de Compra Local, vista PDF de la OC al aprobar, origen de proveedores).*
